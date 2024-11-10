@@ -1,4 +1,3 @@
-import { Box } from "@radix-ui/themes";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { EditorToolbar } from "./editor/EditorToolbar";
 import { EditorSidebar } from "./editor/EditorSidebar";
@@ -10,7 +9,7 @@ export const Editor = () => {
   const [showRight, setShowRight] = useState(true);
 
   return (
-    <Box className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen ">
       <EditorToolbar
         showLeft={showLeft}
         showRight={showRight}
@@ -19,12 +18,12 @@ export const Editor = () => {
       />
       <PanelGroup direction="horizontal" className="flex-1">
         {showLeft && (
-          <Panel defaultSize={20} minSize={15}>
-            <EditorSidebar />
-          </Panel>
-        )}
-        {showLeft && showRight && (
-          <PanelResizeHandle className="w-1 hover:bg-blue-500 transition-colors" />
+          <>
+            <Panel defaultSize={20} minSize={15}>
+              <EditorSidebar />
+            </Panel>
+            <PanelResizeHandle className="w-1  hover:bg-blue-500 transition-colors" />
+          </>
         )}
         {showRight && (
           <Panel>
@@ -32,6 +31,6 @@ export const Editor = () => {
           </Panel>
         )}
       </PanelGroup>
-    </Box>
+    </div>
   );
 };

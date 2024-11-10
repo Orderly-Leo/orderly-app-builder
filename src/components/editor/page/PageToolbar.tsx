@@ -1,4 +1,4 @@
-import { Button } from "@radix-ui/themes";
+import { Button } from "@blueprintjs/core";
 import { useState } from "react";
 import { CreatePageWizard } from "./createPageWizard";
 import { PageConfig } from "../../../types/page";
@@ -13,7 +13,9 @@ export const PageToolbar = () => {
 
   return (
     <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-      <Button onClick={() => setShowCreateWizard(true)}>Create Page</Button>
+      <Button intent="primary" onClick={() => setShowCreateWizard(true)}>
+        Create Page
+      </Button>
 
       <CreatePageWizard
         open={showCreateWizard}

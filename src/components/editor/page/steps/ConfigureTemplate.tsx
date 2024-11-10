@@ -1,5 +1,6 @@
-import { Box, Flex, TextField, Text } from "@radix-ui/themes";
+import { FormGroup, InputGroup } from "@blueprintjs/core";
 import { PageTemplate, PageConfig } from "../../../../types/page";
+import { ChangeEvent } from "react";
 
 interface ConfigureTemplateProps {
   template: PageTemplate;
@@ -30,13 +31,11 @@ export const ConfigureTemplate = ({
   };
 
   return (
-    <Flex gap="6">
+    <div className="flex gap-6">
       {/* 左侧预览区域 */}
-      <Box className="w-1/3">
-        <Text size="2" weight="medium" className="mb-3">
-          Template Preview
-        </Text>
-        <Box className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+      <div className="w-1/3">
+        <h4 className="mb-3 font-medium">Template Preview</h4>
+        <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
           {template.thumbnail ? (
             <img
               src={template.thumbnail}
@@ -44,79 +43,73 @@ export const ConfigureTemplate = ({
               className="w-full h-full object-cover"
             />
           ) : (
-            <Flex
-              align="center"
-              justify="center"
-              className="w-full h-full text-gray-400"
-            >
+            <div className="w-full h-full flex items-center justify-center text-gray-400">
               No preview available
-            </Flex>
+            </div>
           )}
-        </Box>
-        <Box className="mt-4">
-          <Text size="3" weight="medium">
-            {template.name}
-          </Text>
-          <Text size="2" color="gray" className="mt-1">
+        </div>
+        <div className="mt-4">
+          <h3 className="text-lg font-medium">{template.name}</h3>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
             {template.description}
-          </Text>
-        </Box>
-      </Box>
+          </p>
+        </div>
+      </div>
 
       {/* 右侧配置表单 */}
-      <Box className="flex-1 space-y-6">
-        <Box>
-          <Text as="label" size="2" weight="medium">
-            Page Name
-          </Text>
-          <TextField.Root
+      <div className="flex-1 space-y-6">
+        <FormGroup label="Page Name" labelFor="page-name">
+          <InputGroup
+            id="page-name"
             value={config.name || ""}
-            onChange={(e) => handleChange("name", e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handleChange("name", e.target.value)
+            }
             placeholder="Enter page name"
           />
-        </Box>
+        </FormGroup>
 
-        <Box>
-          <Text as="label" size="2" weight="medium">
-            Route
-          </Text>
-          <TextField.Root
+        <FormGroup label="Route" labelFor="page-route">
+          <InputGroup
+            id="page-route"
             value={config.route || ""}
-            onChange={(e) => handleChange("route", e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handleChange("route", e.target.value)
+            }
             placeholder="/path/to/page"
           />
-        </Box>
+        </FormGroup>
 
         {Object.entries(template.props || {}).length > 0 && (
-          <Box>
-            <Text size="2" weight="medium" className="mb-3">
-              Page Properties
-            </Text>
-            <Box className="space-y-4">
+          <div>
+            <h4 className="mb-3 font-medium">Page Properties</h4>
+            <div className="space-y-4">
               {Object.entries(template.props || {}).map(([prop, schema]) => (
-                <Box key={prop}>
-                  <Text as="label" size="2" weight="medium">
-                    {prop}
-                    {schema.required && (
-                      <span className="text-red-500 ml-1">*</span>
-                    )}
-                  </Text>
-                  <TextField.Root
+                <FormGroup
+                  key={prop}
+                  label={
+                    <>
+                      {prop}
+                      {schema.required && (
+                        <span className="text-red-500 ml-1">*</span>
+                      )}
+                    </>
+                  }
+                  helperText={schema.description}
+                >
+                  <InputGroup
                     value={config.props?.[prop] || schema.default || ""}
-                    onChange={(e) => handlePropChange(prop, e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handlePropChange(prop, e.target.value)
+                    }
                     placeholder={schema.description}
                   />
-                  {schema.description && (
-                    <Text size="1" color="gray" className="mt-1">
-                      {schema.description}
-                    </Text>
-                  )}
-                </Box>
+                </FormGroup>
               ))}
-            </Box>
-          </Box>
+            </div>
+          </div>
         )}
-      </Box>
-    </Flex>
+      </div>
+    </div>
   );
 };

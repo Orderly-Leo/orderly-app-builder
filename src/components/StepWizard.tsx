@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@radix-ui/themes";
+import { Text } from "@blueprintjs/core";
 import { useState } from "react";
 
 interface Step {
@@ -36,26 +36,24 @@ export const StepWizard: React.FC<StepWizardProps> = ({
   const CurrentStepComponent = steps[currentStep].component;
 
   return (
-    <Flex className="flex flex-1 min-h-full">
-      <ul className="min-w-[200px] bg-gray-100 dark:bg-gray-800 p-5">
+    <div className="flex flex-1 min-h-full">
+      <div className="min-w-[200px] bg-gray-100 dark:bg-gray-800 p-5">
         {steps.map((step, index) => (
-          <li key={index}>
-            <Text
-              className={`my-2 rounded-lg cursor-default
+          <div
+            key={index}
+            className={`px-4 py-3 my-2 rounded-lg cursor-default
               ${index === currentStep ? "bg-blue-600 text-white" : ""}
               ${index < currentStep ? "text-blue-600" : ""}`}
-              size="2"
-            >
-              {step.title}
-            </Text>
-          </li>
+          >
+            <Text>{step.title}</Text>
+          </div>
         ))}
-      </ul>
-      <Box className="flex-1 p-10 overflow-y-auto">
+      </div>
+      <div className="flex-1 p-10 overflow-y-auto">
         <div className="w-full max-w-[600px] mx-auto">
           <CurrentStepComponent onNext={handleNext} onBack={handleBack} />
         </div>
-      </Box>
-    </Flex>
+      </div>
+    </div>
   );
 };

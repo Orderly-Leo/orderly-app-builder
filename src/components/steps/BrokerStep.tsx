@@ -1,5 +1,5 @@
-import { TextField, Button, Heading, Box } from "@radix-ui/themes";
-import { useState } from "react";
+import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
+import { ChangeEvent, useState } from "react";
 
 interface BrokerStepProps {
   onNext: (data: any) => void;
@@ -16,31 +16,35 @@ export const BrokerStep: React.FC<BrokerStepProps> = ({ onNext }) => {
   };
 
   return (
-    <Box>
-      <Heading size="4" className="mb-4">
-        Enter Broker Information
-      </Heading>
-      <Box className="flex flex-col gap-4 my-5">
-        <TextField.Root
+    <div className="space-y-6">
+      <h2 className="text-xl font-semibold mb-6">Enter Broker Information</h2>
+      <FormGroup label="Broker ID" labelFor="broker-id">
+        <InputGroup
+          id="broker-id"
           value={brokerId}
-          onChange={(e) => setBrokerId(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setBrokerId(e.target.value)
+          }
           placeholder="Enter your broker ID"
-          size="3"
         />
-        <TextField.Root
+      </FormGroup>
+      <FormGroup label="Broker Name" labelFor="broker-name">
+        <InputGroup
+          id="broker-name"
           value={brokerName}
-          onChange={(e) => setBrokerName(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setBrokerName(e.target.value)
+          }
           placeholder="Enter your broker name"
-          size="3"
         />
-      </Box>
+      </FormGroup>
       <Button
+        intent="primary"
         onClick={handleSubmit}
         disabled={!brokerId.trim() || !brokerName.trim()}
-        size="3"
       >
         Next
       </Button>
-    </Box>
+    </div>
   );
 };

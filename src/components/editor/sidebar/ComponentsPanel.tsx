@@ -1,8 +1,12 @@
+import { Card, H4, Text } from "@blueprintjs/core";
+
 export const ComponentsPanel = () => {
   return (
-    <div className="text-white">
-      <h3 className="text-sm font-medium mb-2">Components</h3>
-      {/* Components content */}
+    <div className="p-4">
+      <H4>Available Components</H4>
+      <Card className="mt-4">
+        <Text>Component library will be displayed here</Text>
+      </Card>
     </div>
   );
 };
