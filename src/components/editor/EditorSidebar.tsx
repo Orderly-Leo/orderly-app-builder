@@ -1,32 +1,38 @@
-import { Tabs, Tab, Icon } from "@blueprintjs/core";
-import { PagesPanel } from "./sidebar/PagesPanel";
-import { ThemePanel } from "./sidebar/ThemePanel";
-import { ComponentsPanel } from "./sidebar/ComponentsPanel";
-import { SettingsPanel } from "../settings/SettingsPanel";
+import { AppWindow, Component, Palette, Settings } from "lucide-react";
+import { NavLink, Outlet } from "react-router-dom";
 
 export const EditorSidebar = () => {
+  const navItems = [
+    { to: "pages", icon: <AppWindow />, label: "Pages" },
+    { to: "theme", icon: <Palette />, label: "Theme" },
+    { to: "components", icon: <Component />, label: "Components" },
+    { to: "settings", icon: <Settings />, label: "Settings" },
+  ];
+
   return (
-    <Tabs id="EditorTabs" className="h-full">
-      <Tab
-        id="pages"
-        title={<Icon icon="applications" />}
-        panel={<PagesPanel />}
-      />
-      <Tab
-        id="theme"
-        title={<Icon icon="color-fill" />}
-        panel={<ThemePanel />}
-      />
-      <Tab
-        id="components"
-        title={<Icon icon="widget" />}
-        panel={<ComponentsPanel />}
-      />
-      <Tab
-        id="settings"
-        title={<Icon icon="cog" />}
-        panel={<SettingsPanel />}
-      />
-    </Tabs>
+    <div className="h-full flex">
+      <nav className="w-14 border-r border-gray-200">
+        {navItems.map(({ to, icon, label }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              `flex items-center justify-center h-14 border-l-2 hover:bg-gray-100 
+              ${
+                isActive
+                  ? "border-blue-500 text-blue-500 bg-blue-50"
+                  : "border-transparent text-gray-600"
+              }`
+            }
+            title={label}
+          >
+            {icon}
+          </NavLink>
+        ))}
+      </nav>
+      <div className="flex-1">
+        <Outlet />
+      </div>
+    </div>
   );
 };

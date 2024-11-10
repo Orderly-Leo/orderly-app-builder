@@ -11,11 +11,13 @@
     "tailwind": "tailwindcss -i ./src/index.css -o ./src/styles/tailwind.css --watch"
   },
   "dependencies": {
-    "@blueprintjs/core": "5.7.2",
-    "@blueprintjs/icons": "5.7.2",
+    "@blueprintjs/core": "5.14.0",
+    "@blueprintjs/icons": "5.14.0",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-shell": "^2",
+    "lucide-react": "^0.456.0",
     "react": "^18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-resizable-panels": "^2.1.6",
     "react-router": "6",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@tauri-apps/cli": "^2",
     "@types/react": "^18.2.15",
+    "@types/react-color": "^3.0.12",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.20",

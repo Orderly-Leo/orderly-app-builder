@@ -49,7 +49,7 @@
 }
 
 .bp5-button.bp5-intent-primary {
-  background-color: var(--button-primary-bg) !important;
+  /* background-color: var(--button-primary-bg) !important; */
   background-image: none !important;
 }
 

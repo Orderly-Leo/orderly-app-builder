@@ -13,7 +13,11 @@ export const PageToolbar = () => {
 
   return (
     <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-      <Button intent="primary" onClick={() => setShowCreateWizard(true)}>
+      <Button
+        intent="primary"
+        outlined
+        onClick={() => setShowCreateWizard(true)}
+      >
         Create Page
       </Button>
 
