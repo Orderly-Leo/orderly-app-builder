@@ -1,44 +1,67 @@
-import { Card, Icon, Text } from "@blueprintjs/core";
+import { Box, Card, Flex, Text } from "@radix-ui/themes";
 import { PageConfig } from "../../../types/page";
 
 interface PageListProps {
-  pages?: PageConfig[];
+  selectedPageId?: string | null;
+  onPageSelect?: (page: PageConfig) => void;
 }
 
-export const PageList = ({ pages = [] }: PageListProps) => {
+export const PageList = ({ selectedPageId, onPageSelect }: PageListProps) => {
+  // 示例数据，实际应该从状态管理或API获取
+  const pages: PageConfig[] = [
+    {
+      id: "1",
+      name: "Home",
+      route: "/",
+      template: "blank",
+      props: {},
+    },
+    {
+      id: "2",
+      name: "Dashboard",
+      route: "/dashboard",
+      template: "dashboard",
+      props: {
+        title: "My Dashboard",
+        layout: "grid",
+      },
+    },
+  ];
+
   if (pages.length === 0) {
     return (
-      <div className="p-6 text-center text-gray-500">
-        <Icon icon="document" size={20} className="mb-2" />
+      <Flex
+        align="center"
+        justify="center"
+        direction="column"
+        gap="2"
+        className="h-full text-gray-400 p-4"
+      >
         <Text>No pages created yet</Text>
-      </div>
+      </Flex>
     );
   }
 
   return (
-    <div className="space-y-2 p-4">
+    <Box className="p-2">
       {pages.map((page) => (
         <Card
           key={page.id}
-          interactive
-          className="flex items-center justify-between"
+          className={`mb-2 cursor-pointer transition-colors ${
+            selectedPageId === page.id
+              ? "border-blue-500 bg-blue-50"
+              : "hover:bg-gray-50"
+          }`}
+          onClick={() => onPageSelect?.(page)}
         >
-          <div>
-            <Text className="font-medium">{page.name}</Text>
-            <Text className="text-gray-500 text-sm">{page.route}</Text>
-          </div>
-          <div className="flex gap-2">
-            <Icon
-              icon="edit"
-              className="cursor-pointer text-gray-500 hover:text-gray-700"
-            />
-            <Icon
-              icon="trash"
-              className="cursor-pointer text-gray-500 hover:text-red-500"
-            />
-          </div>
+          <Flex direction="column" gap="1">
+            <Text weight="medium">{page.name}</Text>
+            <Text size="1" color="gray">
+              {page.route}
+            </Text>
+          </Flex>
         </Card>
       ))}
-    </div>
+    </Box>
   );
 };

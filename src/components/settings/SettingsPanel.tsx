@@ -1,6 +1,7 @@
-import { InputGroup } from "@blueprintjs/core";
 import { useState } from "react";
 import { SettingsCategory } from "./SettingsCategory";
+import { TextField } from "@radix-ui/themes";
+import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 
 // Group type definition
 interface SettingsGroup {
@@ -111,13 +112,16 @@ export const SettingsPanel = () => {
   return (
     <div className="h-full flex flex-col">
       <div className="p-4 border-b border-gray-200">
-        <InputGroup
-          leftIcon="search"
+        <TextField.Root
           placeholder="Search settings..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full"
-        />
+        >
+          <TextField.Slot>
+            <MagnifyingGlassIcon />
+          </TextField.Slot>
+        </TextField.Root>
       </div>
 
       <div className="flex-1 flex overflow-hidden">

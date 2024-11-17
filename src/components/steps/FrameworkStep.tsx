@@ -1,96 +1,75 @@
-import { Button, FormGroup, Radio, RadioGroup, Icon } from "@blueprintjs/core";
-import { ChangeEvent, useState } from "react";
-import { IconName } from "@blueprintjs/icons";
+import { Box, Button, Flex, Text } from "@radix-ui/themes";
+import { useState } from "react";
+import { SiNextdotjs, SiRemix, SiCreatereactapp } from "react-icons/si";
+
 interface FrameworkStepProps {
   onNext: (data: any) => void;
   onBack: () => void;
+  formData: any;
 }
 
 export const FrameworkStep: React.FC<FrameworkStepProps> = ({
   onNext,
   onBack,
+  formData,
 }) => {
-  const [framework, setFramework] = useState("");
+  const [framework, setFramework] = useState(formData.framework);
 
   const frameworks = [
-    { id: "next", name: "Next.js", icon: "lightning" as IconName },
-    { id: "remix", name: "Remix", icon: "repeat" as IconName },
-    { id: "gatsby", name: "Gatsby", icon: "graph" as IconName },
+    { id: "next", name: "Next.js", icon: <SiNextdotjs size={24} /> },
+    { id: "remix", name: "Remix", icon: <SiRemix size={24} /> },
+    {
+      id: "crd",
+      name: "Create React App",
+      icon: <SiCreatereactapp size={24} />,
+    },
   ];
 
   const handleSubmit = () => {
     if (framework) {
-      onNext({ framework });
+      onNext({ framework }); // This should now work as it's properly passed from context
     }
   };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold mb-6">Choose React Framework</h2>
-      <FormGroup>
-        <RadioGroup
-          selectedValue={framework}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setFramework(e.currentTarget.value)
-          }
-        >
-          <div className="grid grid-cols-3 gap-4">
-            {frameworks.map((fw) => (
-              <label
-                key={fw.id}
-                htmlFor={`framework-${fw.id}`}
-                className={`
-                  relative p-4 border rounded-lg cursor-pointer hover:border-blue-500 transition-all
-                  ${
-                    framework === fw.id
-                      ? "border-2 border-blue-500 bg-blue-50 ring-2 ring-blue-200"
-                      : "border-gray-200"
-                  }
-                `}
-              >
-                <input
-                  id={`framework-${fw.id}`}
-                  name="framework"
-                  type="radio"
-                  value={fw.id}
-                  checked={framework === fw.id}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setFramework(e.target.value)
-                  }
-                  className="hidden"
-                />
-                {framework === fw.id && (
-                  <div className="absolute top-2 right-2">
-                    <Icon icon="small-tick" intent="primary" size={16} />
-                  </div>
-                )}
-                <div className="flex flex-col items-center space-y-3 pt-2">
-                  <Icon
-                    icon={fw.icon}
-                    size={28}
-                    className={framework === fw.id ? "text-blue-500" : ""}
-                  />
-                  <span
-                    className={`font-medium ${
-                      framework === fw.id ? "text-blue-600" : ""
-                    }`}
-                  >
-                    {fw.name}
-                  </span>
-                </div>
-              </label>
-            ))}
-          </div>
-        </RadioGroup>
-      </FormGroup>
-      <div className="flex justify-between">
-        <Button minimal onClick={onBack}>
+    <Flex direction="column" gap="6">
+      <Text size="5" weight="bold">
+        Choose React Framework
+      </Text>
+      <Flex direction="column" gap="3">
+        {frameworks.map((fw) => (
+          <Box
+            key={fw.id}
+            onClick={() => setFramework(fw.id)}
+            style={{
+              padding: "16px",
+              border: `1px solid ${
+                framework === fw.id ? "var(--accent-9)" : "var(--gray-6)"
+              }`,
+              borderRadius: "var(--radius-3)",
+              cursor: "pointer",
+              backgroundColor:
+                framework === fw.id ? "var(--accent-3)" : "transparent",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <Flex align="center" gap="3">
+              {fw.icon}
+              <Text size="3" weight={framework === fw.id ? "bold" : "regular"}>
+                {fw.name}
+              </Text>
+            </Flex>
+          </Box>
+        ))}
+      </Flex>
+      <Flex gap="3" justify="between">
+        <Button variant="soft" onClick={onBack}>
           Back
         </Button>
-        <Button intent="primary" onClick={handleSubmit} disabled={!framework}>
+        <Button onClick={handleSubmit} disabled={!framework}>
           Next
         </Button>
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 };

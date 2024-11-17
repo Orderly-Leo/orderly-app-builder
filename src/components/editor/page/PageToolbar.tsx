@@ -1,31 +1,42 @@
-import { Button } from "@blueprintjs/core";
-import { useState } from "react";
-import { CreatePageWizard } from "./createPageWizard";
-import { PageConfig } from "../../../types/page";
+import { Box, Button, Flex } from "@radix-ui/themes";
+import { Plus } from "lucide-react";
+import { Window } from "@tauri-apps/api/window";
 
-export const PageToolbar = () => {
-  const [showCreateWizard, setShowCreateWizard] = useState(false);
+interface PageToolbarProps {
+  onCreateClick: () => void;
+}
 
-  const handleCreatePage = (pageConfig: PageConfig) => {
-    console.log("Created page:", pageConfig);
-    // 处理创建页面的逻辑
+export const PageToolbar = ({ onCreateClick }: PageToolbarProps) => {
+  const handleOpenWindow = () => {
+    const appWindow = new Window("tauri", {
+      // url: "https://tauri.app",
+      title: "Tauri",
+      width: 800,
+      height: 600,
+    });
+
+    appWindow.once("tauri://created", function () {
+      // window successfully created
+      console.log("window successfully created");
+    });
+    appWindow.once("tauri://error", function (e) {
+      // an error happened creating the window
+      console.error("an error happened creating the window", e);
+    });
   };
 
   return (
-    <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-      <Button
-        intent="primary"
-        outlined
-        onClick={() => setShowCreateWizard(true)}
-      >
-        Create Page
-      </Button>
-
-      <CreatePageWizard
-        open={showCreateWizard}
-        onOpenChange={setShowCreateWizard}
-        onComplete={handleCreatePage}
-      />
-    </div>
+    <Flex p="2" className="border-b border-gray-200">
+      <Box flexGrow="1">Pages</Box>
+      <Box>
+        <Button size="1" variant="outline" onClick={onCreateClick}>
+          <Plus size={14} />
+          Create
+        </Button>
+        <Button size="1" variant="outline" onClick={handleOpenWindow} ml="2">
+          Create new window
+        </Button>
+      </Box>
+    </Flex>
   );
 };

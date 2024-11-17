@@ -7,6 +7,7 @@ fn greet(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_cli::init())
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![greet])
         .run(tauri::generate_context!())
@@ -14,3 +15,8 @@ pub fn run() {
 
        
 }
+
+// #[tauri::command]
+// fn parse_css_json(css: String) -> String {
+    
+// }

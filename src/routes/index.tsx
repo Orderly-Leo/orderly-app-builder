@@ -6,9 +6,12 @@ import { BrokerStep } from "../components/steps/BrokerStep";
 import { FrameworkStep } from "../components/steps/FrameworkStep";
 import { WalletStep } from "../components/steps/WalletStep";
 import { PagesPanel } from "../components/editor/sidebar/PagesPanel";
-import { ThemePanel } from "../components/editor/sidebar/ThemePanel";
 import { ComponentsPanel } from "../components/editor/sidebar/ComponentsPanel";
 import { SettingsPanel } from "../components/settings/SettingsPanel";
+import { PageDetail } from "../components/editor/page/PageDetail";
+import { CreatePageWizard } from "../components/editor/page/createPageWizard";
+import { ThemeConfigs } from "../components/editor/theme/ThemeConfigs";
+import { ConfigPanel } from "../components/config/configPanel";
 
 const steps = [
   { title: "Broker ID", component: BrokerStep },
@@ -47,14 +50,40 @@ export const router = createBrowserRouter([
           {
             path: "pages",
             element: <PagesPanel />,
+            children: [
+              {
+                path: "create",
+                element: (
+                  <CreatePageWizard onComplete={() => {}} onCancel={() => {}} />
+                ),
+              },
+              {
+                path: ":pageId",
+                element: (
+                  <PageDetail
+                    page={{
+                      id: "",
+                      name: "",
+                      route: "",
+                      template: "",
+                      props: {},
+                    }}
+                  />
+                ),
+              },
+            ],
           },
           {
             path: "theme",
-            element: <ThemePanel />,
+            element: <ThemeConfigs />,
           },
           {
             path: "components",
             element: <ComponentsPanel />,
+          },
+          {
+            path: "config",
+            element: <ConfigPanel />,
           },
           {
             path: "settings",

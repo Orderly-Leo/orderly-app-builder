@@ -1,5 +1,8 @@
-import { Text } from "@blueprintjs/core";
-import { useState } from "react";
+import { Text, Flex, Box } from "@radix-ui/themes";
+import {
+  StepWizardProvider,
+  useStepWizard,
+} from "../contexts/StepWizardContext";
 
 interface Step {
   title: string;
@@ -11,49 +14,44 @@ interface StepWizardProps {
   onComplete: (data: any) => void;
 }
 
-export const StepWizard: React.FC<StepWizardProps> = ({
+const StepWizardContent: React.FC<StepWizardProps> = ({
   steps,
   onComplete,
 }) => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({});
-
-  const handleNext = (stepData: any) => {
-    const newFormData = { ...formData, ...stepData };
-    setFormData(newFormData);
-
-    if (currentStep === steps.length - 1) {
-      onComplete(newFormData);
-    } else {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  const handleBack = () => {
-    setCurrentStep(currentStep - 1);
-  };
-
+  const { currentStep, onNext, onPrevious, formData } = useStepWizard();
   const CurrentStepComponent = steps[currentStep].component;
 
   return (
-    <div className="flex flex-1 min-h-full">
-      <div className="min-w-[200px] bg-gray-100 dark:bg-gray-800 p-5">
+    <Flex className="flex-1 min-h-full h-screen">
+      <Box className="min-w-[200px] bg-gray-100 p-5 h-full">
         {steps.map((step, index) => (
-          <div
+          <Box
             key={index}
             className={`px-4 py-3 my-2 rounded-lg cursor-default
               ${index === currentStep ? "bg-blue-600 text-white" : ""}
               ${index < currentStep ? "text-blue-600" : ""}`}
           >
             <Text>{step.title}</Text>
-          </div>
+          </Box>
         ))}
-      </div>
-      <div className="flex-1 p-10 overflow-y-auto">
-        <div className="w-full max-w-[600px] mx-auto">
-          <CurrentStepComponent onNext={handleNext} onBack={handleBack} />
-        </div>
-      </div>
-    </div>
+      </Box>
+      <Box className="flex-1 p-10 overflow-y-auto">
+        <Box className="w-full max-w-[600px] mx-auto">
+          <CurrentStepComponent
+            onNext={onNext}
+            onBack={onPrevious}
+            formData={formData}
+          />
+        </Box>
+      </Box>
+    </Flex>
+  );
+};
+
+export const StepWizard: React.FC<StepWizardProps> = (props) => {
+  return (
+    <StepWizardProvider>
+      <StepWizardContent {...props} />
+    </StepWizardProvider>
   );
 };

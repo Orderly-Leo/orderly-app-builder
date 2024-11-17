@@ -1,4 +1,5 @@
-import { Button, HTMLSelect } from "@blueprintjs/core";
+import { Button, Select, Flex } from "@radix-ui/themes";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 interface PreviewToolbarProps {
   currentUrl: string;
@@ -14,25 +15,21 @@ export const PreviewToolbar = ({
   onRefresh,
 }: PreviewToolbarProps) => {
   return (
-    <div className="flex items-center gap-2 p-2 border-b border-gray-200">
-      <HTMLSelect
-        value={currentUrl}
-        onChange={(e) => onUrlChange(e.target.value)}
-        className="flex-1"
-      >
-        {urls.map((url) => (
-          <option key={url} value={url}>
-            {url}
-          </option>
-        ))}
-      </HTMLSelect>
+    <Flex gap="2" p="2" className="border-b border-gray-200">
+      <Select.Root value={currentUrl} onValueChange={onUrlChange}>
+        <Select.Trigger className="flex-1" />
+        <Select.Content>
+          {urls.map((url) => (
+            <Select.Item key={url} value={url}>
+              {url}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select.Root>
 
-      <Button
-        icon="refresh"
-        minimal={true}
-        onClick={onRefresh}
-        title="Refresh preview"
-      />
-    </div>
+      <Button variant="ghost" onClick={onRefresh} title="Refresh preview">
+        <ReloadIcon />
+      </Button>
+    </Flex>
   );
 };

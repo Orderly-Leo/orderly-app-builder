@@ -1,13 +1,18 @@
-import { Button, FormGroup, RadioGroup, Icon } from "@blueprintjs/core";
-import { ChangeEvent, useState } from "react";
+import { Box, Button, Flex, Text } from "@radix-ui/themes";
+import { useState } from "react";
 
 interface WalletStepProps {
   onNext: (data: any) => void;
   onBack: () => void;
+  formData: any;
 }
 
-export const WalletStep: React.FC<WalletStepProps> = ({ onNext, onBack }) => {
-  const [wallet, setWallet] = useState("");
+export const WalletStep: React.FC<WalletStepProps> = ({
+  onNext,
+  onBack,
+  formData,
+}) => {
+  const [wallet, setWallet] = useState(formData.wallet);
 
   const wallets = [
     { id: "metamask", name: "MetaMask" },
@@ -17,79 +22,49 @@ export const WalletStep: React.FC<WalletStepProps> = ({ onNext, onBack }) => {
 
   const handleSubmit = () => {
     if (wallet) {
-      onNext({ wallet });
+      // onNext({ wallet });
     }
   };
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold mb-6">Select Wallet Connector</h2>
-      <FormGroup>
-        <RadioGroup
-          selectedValue={wallet}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setWallet(e.currentTarget.value)
-          }
-        >
-          <div className="grid grid-cols-3 gap-4">
-            {wallets.map((w) => (
-              <label
-                key={w.id}
-                htmlFor={`wallet-${w.id}`}
-                className={`
-                  relative p-4 border rounded-lg cursor-pointer hover:border-blue-500 transition-all
-                  ${
-                    wallet === w.id
-                      ? "border-2 border-blue-500 bg-blue-50 ring-2 ring-blue-200"
-                      : "border-gray-200"
-                  }
-                `}
-              >
-                <input
-                  id={`wallet-${w.id}`}
-                  name="wallet"
-                  type="radio"
-                  value={w.id}
-                  checked={wallet === w.id}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    setWallet(e.target.value)
-                  }
-                  className="hidden"
-                />
-                {wallet === w.id && (
-                  <div className="absolute top-2 right-2">
-                    <Icon icon="small-tick" intent="primary" size={16} />
-                  </div>
-                )}
-                <div className="flex flex-col items-center space-y-3 pt-2">
-                  <img
-                    src={`/icons/${w.id}.svg`}
-                    alt={w.name}
-                    className={`w-8 h-8 ${
-                      wallet === w.id ? "text-blue-500" : ""
-                    }`}
-                  />
-                  <span
-                    className={`font-medium ${
-                      wallet === w.id ? "text-blue-600" : ""
-                    }`}
-                  >
-                    {w.name}
-                  </span>
-                </div>
-              </label>
-            ))}
-          </div>
-        </RadioGroup>
-      </FormGroup>
-      <div className="flex justify-between">
-        <Button minimal onClick={onBack}>
+    <Flex direction="column" gap="6">
+      <Text size="5" weight="bold">
+        Select Wallet Connector
+      </Text>
+      <Flex direction="column" gap="3">
+        {wallets.map((w) => (
+          <Box
+            key={w.id}
+            onClick={() => setWallet(w.id)}
+            style={{
+              padding: "16px",
+              border: `1px solid ${
+                wallet === w.id ? "var(--accent-9)" : "var(--gray-6)"
+              }`,
+              borderRadius: "var(--radius-3)",
+              cursor: "pointer",
+              backgroundColor:
+                wallet === w.id ? "var(--accent-3)" : "transparent",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <Flex align="center" gap="3">
+              <Box className="w-6 h-6">{/* 如果有图标可以在这里添加 */}</Box>
+              <Text size="3" weight={wallet === w.id ? "bold" : "regular"}>
+                {w.name}
+              </Text>
+            </Flex>
+          </Box>
+        ))}
+      </Flex>
+      <Flex gap="3" justify="between">
+        <Button variant="soft" onClick={onBack}>
           Back
         </Button>
-        <Button intent="primary" onClick={handleSubmit} disabled={!wallet}>
+        <Button onClick={handleSubmit} disabled={!wallet}>
           Complete
         </Button>
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 };

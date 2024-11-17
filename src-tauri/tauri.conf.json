@@ -21,6 +21,23 @@
       "csp": null
     }
   },
+  "plugins": {
+    "cli": {
+      "description": "Orderly App Builder CLI",
+      "args": [
+        {
+          "description": "Build the app",
+          "short": "b",
+          "name": "build"
+        },
+        {
+          "description": "Serve the app",
+          "short": "s",
+          "name": "serve"
+        }
+      ]
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",

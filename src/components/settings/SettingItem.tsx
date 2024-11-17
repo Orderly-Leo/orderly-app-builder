@@ -1,4 +1,4 @@
-import { Switch, HTMLSelect, NumericInput, FormGroup } from "@blueprintjs/core";
+import { Switch, Select, TextField, Box, Text } from "@radix-ui/themes";
 
 interface SettingItemProps {
   id: string;
@@ -21,27 +21,26 @@ export const SettingItem = ({
   const renderControl = () => {
     switch (type) {
       case "boolean":
-        return (
-          <Switch
-            checked={value}
-            onChange={(e) => onChange(e.currentTarget.checked)}
-          />
-        );
+        return <Switch checked={value} onCheckedChange={onChange} />;
       case "select":
         return (
-          <HTMLSelect
-            value={value}
-            options={options || []}
-            onChange={(e) => onChange(e.currentTarget.value)}
-          />
+          <Select.Root value={value} onValueChange={onChange}>
+            <Select.Trigger />
+            <Select.Content>
+              {options?.map((option) => (
+                <Select.Item key={option.value} value={option.value}>
+                  {option.label}
+                </Select.Item>
+              ))}
+            </Select.Content>
+          </Select.Root>
         );
       case "number":
         return (
-          <NumericInput
+          <TextField.Root
+            type="number"
             value={value}
-            onValueChange={onChange}
-            min={0}
-            stepSize={1}
+            onChange={(e) => onChange(Number(e.target.value))}
           />
         );
       default:
@@ -50,8 +49,14 @@ export const SettingItem = ({
   };
 
   return (
-    <FormGroup label={label} helperText={description} className="mb-0">
-      {renderControl()}
-    </FormGroup>
+    <Box>
+      <Text as="label" size="2" weight="medium">
+        {label}
+      </Text>
+      <Text as="p" size="1" color="gray">
+        {description}
+      </Text>
+      <Box mt="2">{renderControl()}</Box>
+    </Box>
   );
 };

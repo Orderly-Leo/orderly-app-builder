@@ -1,4 +1,5 @@
-import { H5 } from "@blueprintjs/core";
+
+import { Heading } from "@radix-ui/themes";
 import { SettingItem } from "./SettingItem";
 
 interface SettingsCategoryProps {
@@ -21,7 +22,7 @@ export const SettingsCategory = ({
 }: SettingsCategoryProps) => {
   return (
     <div className="mb-6">
-      <H5 className="mb-4">{title}</H5>
+      <Heading className="mb-4">{title}</Heading>
       <div className="space-y-4">
         {settings.map((setting) => (
           <SettingItem

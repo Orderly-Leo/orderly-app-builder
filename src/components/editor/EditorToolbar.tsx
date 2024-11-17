@@ -1,4 +1,5 @@
-import { Button, Icon } from "@blueprintjs/core";
+import { Button, Flex } from "@radix-ui/themes";
+import { EyeOpenIcon, EyeNoneIcon } from "@radix-ui/react-icons";
 
 interface EditorToolbarProps {
   showLeft: boolean;
@@ -14,19 +15,13 @@ export const EditorToolbar = ({
   onToggleRight,
 }: EditorToolbarProps) => {
   return (
-    <div className="h-12 border-b border-[#333333] px-2 flex items-center">
-      <Button
-        minimal
-        icon={showLeft ? "eye-open" : "eye-off"}
-        onClick={onToggleLeft}
-        className={!showLeft ? "text-gray-500" : "text-gray-300"}
-      />
-      <Button
-        minimal
-        icon={showRight ? "eye-open" : "eye-off"}
-        onClick={onToggleRight}
-        className={!showRight ? "text-gray-500" : "text-gray-300"}
-      />
-    </div>
+    <Flex align="center" p="2" className="border-b border-[#333333]">
+      <Button variant="ghost" onClick={onToggleLeft}>
+        {showLeft ? <EyeOpenIcon /> : <EyeNoneIcon />}
+      </Button>
+      <Button variant="ghost" onClick={onToggleRight}>
+        {showRight ? <EyeOpenIcon /> : <EyeNoneIcon />}
+      </Button>
+    </Flex>
   );
 };

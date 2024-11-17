@@ -1,28 +1,60 @@
-import { useId, useState } from "react";
-import {
-  Tabs,
-  Tab,
-  FormGroup,
-  InputGroup,
-  type TabId,
-  TabPanel,
-} from "@blueprintjs/core";
+import { useState } from "react";
+import { Box, Tabs, TextField, Text, Flex } from "@radix-ui/themes";
 import { ColorPicker } from "./ColorPicker";
-import { ThemeConfig } from "../../../types/theme";
+import { ThemeConfig } from "./type";
+import { Colors } from "./colors";
 
 const defaultTheme: ThemeConfig = {
   colors: {
-    primary: "#3E63DD",
-    secondary: "#6B7280",
-    success: "#2ECC71",
-    warning: "#F1C40F",
-    danger: "#E74C3C",
-    info: "#3498DB",
-    background: "#FFFFFF",
-    surface: "#F9FAFB",
-    text: "#1F2937",
-    border: "#E5E7EB",
+    Primary: {
+      darken: "#993ed6",
+      default: "#3E63DD",
+      lighten: "#cf8cff",
+      contrast: "#FFFFFF",
+    },
+    Error: {
+      darken: "#EF4444",
+      default: "#EF4444",
+      lighten: "#EF4444",
+      contrast: "#FFFFFF",
+    },
+    Success: {
+      darken: "#10B981",
+      default: "#10B981",
+      lighten: "#10B981",
+      contrast: "#FFFFFF",
+    },
+    Warning: {
+      darken: "#D25F00",
+      default: "#FF7D00",
+      lighten: "#FF9A2E",
+      contrast: "#FFFFFF",
+    },
+    Base: {
+      "100": "#F9FAFB",
+      "200": "#F3F4F6",
+      "300": "#E5E7EB",
+      "400": "#D1D5DB",
+      "500": "#9CA3AF",
+      "600": "#6B7280",
+      "700": "#4B5563",
+      "800": "#374151",
+      "900": "#1F2937",
+    },
   },
+  // colors: {
+
+  //   // primary: "#3E63DD",
+  //   // secondary: "#6B7280",
+  //   // success: "#2ECC71",
+  //   // warning: "#F1C40F",
+  //   // danger: "#E74C3C",
+  //   // info: "#3498DB",
+  //   // background: "#FFFFFF",
+  //   // surface: "#F9FAFB",
+  //   // text: "#1F2937",
+  //   // border: "#E5E7EB",
+  // },
   typography: {
     fontFamily: "Inter, system-ui, sans-serif",
     fontSize: {
@@ -68,8 +100,6 @@ const defaultTheme: ThemeConfig = {
 
 export const ThemeEditor = () => {
   const [theme, setTheme] = useState<ThemeConfig>(defaultTheme);
-  const TABS_PARENT_ID = useId();
-  const [selectedTabId, setSelectedTabId] = useState<TabId>("Home");
 
   const handleColorChange =
     (key: keyof ThemeConfig["colors"]) => (color: string) => {
@@ -82,158 +112,72 @@ export const ThemeEditor = () => {
       });
     };
 
-  const handleTypographyChange = (
-    category: keyof ThemeConfig["typography"],
-    key: string,
-    value: string | number
-  ) => {
-    setTheme({
-      ...theme,
-      typography: {
-        ...theme.typography,
-        [category]: {
-          ...theme.typography[category],
-          [key]: value,
-        },
-      },
-    });
-  };
-
   return (
-    <div className="p-4">
-      <TabPanel
-        id={selectedTabId}
-        selectedTabId={selectedTabId}
-        parentId={TABS_PARENT_ID}
-        panel={<p>The current panel id is: "{selectedTabId}"</p>}
-      />
-      <Tabs
-        id={TABS_PARENT_ID}
-        onChange={setSelectedTabId}
-        selectedTabId={selectedTabId}
-      >
-        <Tab id="colors" title="Colors" />
-        <Tab id="typography" title="Typography" />
-      </Tabs>
-      {/* <Tabs
-        id="ThemeEditorTabs"
-        className="theme-editor-tabs"
-        vertical={false}
-        renderActiveTabPanelOnly={true}
-      >
-        <Tab
-          id="colors"
-          title="Colors"
-          panel={
-            <div className="grid grid-cols-2 gap-4">
-              {Object.entries(theme.colors).map(([key, value]) => (
-                <FormGroup
-                  key={key}
-                  label={key.charAt(0).toUpperCase() + key.slice(1)}
-                >
-                  <ColorPicker
-                    color={value}
-                    onChange={handleColorChange(
-                      key as keyof ThemeConfig["colors"]
-                    )}
+    <Box p="4" className="bg-gray-100">
+      <Tabs.Root defaultValue="colors">
+        <Tabs.List>
+          <Tabs.Trigger value="colors">Colors</Tabs.Trigger>
+          <Tabs.Trigger value="typography">Typography</Tabs.Trigger>
+          <Tabs.Trigger value="spacing">Spacing</Tabs.Trigger>
+        </Tabs.List>
+
+        <Box py="4" mx={"auto"} maxWidth={"85%"}>
+          <Tabs.Content value="colors">
+            <Colors colors={theme.colors} />
+          </Tabs.Content>
+
+          <Tabs.Content value="typography">
+            <Flex direction="column" gap="4">
+              <Box>
+                <Text as="label" size="2" weight="medium">
+                  Font Family
+                </Text>
+                <TextField.Root>
+                  <TextField.Root
+                    value={theme.typography.fontFamily}
+                    onChange={(e) =>
+                      setTheme({
+                        ...theme,
+                        typography: {
+                          ...theme.typography,
+                          fontFamily: e.target.value,
+                        },
+                      })
+                    }
                   />
-                </FormGroup>
-              ))}
-            </div>
-          }
-        />
-        <Tab
-          id="typography"
-          title="Typography"
-          panel={
-            <div>
-              <FormGroup label="Font Family">
-                <InputGroup
-                  value={theme.typography.fontFamily}
-                  onChange={(e) =>
-                    setTheme({
-                      ...theme,
-                      typography: {
-                        ...theme.typography,
-                        fontFamily: e.target.value,
-                      },
-                    })
-                  }
-                />
-              </FormGroup>
-              <div className="mt-4">
-                <h3 className="text-lg font-medium mb-2">Font Sizes</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {Object.entries(theme.typography.fontSize).map(
-                    ([key, value]) => (
-                      <FormGroup key={key} label={key}>
-                        <InputGroup
-                          value={value}
-                          onChange={(e) =>
-                            handleTypographyChange(
-                              "fontSize",
-                              key,
-                              e.target.value
-                            )
-                          }
-                        />
-                      </FormGroup>
-                    )
-                  )}
-                </div>
-              </div>
-            </div>
-          }
-        />
-        <Tab
-          id="spacing"
-          title="Spacing"
-          panel={
-            <div>
-              <FormGroup label="Base Unit">
-                <InputGroup
-                  type="number"
-                  value={theme.spacing.unit}
-                  onChange={(e) =>
-                    setTheme({
-                      ...theme,
-                      spacing: {
-                        ...theme.spacing,
-                        unit: Number(e.target.value),
-                      },
-                    })
-                  }
-                />
-              </FormGroup>
-              <div className="mt-4">
-                <h3 className="text-lg font-medium mb-2">Scale</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {Object.entries(theme.spacing.scale).map(([key, value]) => (
-                    <FormGroup key={key} label={key}>
-                      <InputGroup
-                        type="number"
-                        value={value}
-                        onChange={(e) =>
-                          setTheme({
-                            ...theme,
-                            spacing: {
-                              ...theme.spacing,
-                              scale: {
-                                ...theme.spacing.scale,
-                                [key]: Number(e.target.value),
-                              },
-                            },
-                          })
-                        }
-                      />
-                    </FormGroup>
-                  ))}
-                </div>
-              </div>
-            </div>
-          }
-        />
-      </Tabs> */}
-    </div>
+                </TextField.Root>
+              </Box>
+              {/* Add other typography settings */}
+            </Flex>
+          </Tabs.Content>
+
+          <Tabs.Content value="spacing">
+            <Flex direction="column" gap="4">
+              <Box>
+                <Text as="label" size="2" weight="medium">
+                  Base Unit
+                </Text>
+                <TextField.Root>
+                  <TextField.Root
+                    type="number"
+                    value={theme.spacing.unit}
+                    onChange={(e) =>
+                      setTheme({
+                        ...theme,
+                        spacing: {
+                          ...theme.spacing,
+                          unit: Number(e.target.value),
+                        },
+                      })
+                    }
+                  />
+                </TextField.Root>
+              </Box>
+              {/* Add other spacing settings */}
+            </Flex>
+          </Tabs.Content>
+        </Box>
+      </Tabs.Root>
+    </Box>
   );
 };

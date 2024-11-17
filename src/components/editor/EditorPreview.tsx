@@ -1,4 +1,4 @@
-import { NonIdealState } from "@blueprintjs/core";
+import { Box, Text, Flex } from "@radix-ui/themes";
 import { PreviewToolbar } from "./preview/PreviewToolbar";
 import { useState, useRef } from "react";
 
@@ -6,7 +6,6 @@ export const EditorPreview = () => {
   const [currentUrl, setCurrentUrl] = useState("/preview");
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // 示例 URL 列表，实际应从项目配置中获取
   const urls = ["/preview", "/preview/about", "/preview/contact"];
 
   const handleRefresh = () => {
@@ -16,7 +15,7 @@ export const EditorPreview = () => {
   };
 
   return (
-    <div className="h-full w-full flex flex-col">
+    <Flex direction="column" className="h-full w-full">
       <PreviewToolbar
         currentUrl={currentUrl}
         urls={urls}
@@ -32,12 +31,17 @@ export const EditorPreview = () => {
           title="Preview"
         />
       ) : (
-        <NonIdealState
-          icon="document"
-          title="No Preview Available"
-          description="Select a page to preview"
-        />
+        <Flex
+          align="center"
+          justify="center"
+          direction="column"
+          gap="2"
+          className="h-full"
+        >
+          <Text size="5">No Preview Available</Text>
+          <Text color="gray">Select a page to preview</Text>
+        </Flex>
       )}
-    </div>
+    </Flex>
   );
 };

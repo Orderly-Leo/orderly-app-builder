@@ -1,19 +1,17 @@
 import { useState } from "react";
-import { Button, Classes, Dialog } from "@blueprintjs/core";
+import { Button, Box, Flex, Text } from "@radix-ui/themes";
 import { PageTemplate, PageConfig } from "../../../types/page";
 import { SelectTemplate } from "./steps/SelectTemplate";
 import { ConfigureTemplate } from "./steps/ConfigureTemplate";
 
 interface CreatePageWizardProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
   onComplete: (pageConfig: PageConfig) => void;
+  onCancel: () => void;
 }
 
 export const CreatePageWizard = ({
-  open,
-  onOpenChange,
   onComplete,
+  onCancel,
 }: CreatePageWizardProps) => {
   const [step, setStep] = useState(0);
   const [selectedTemplate, setSelectedTemplate] = useState<PageTemplate | null>(
@@ -44,22 +42,22 @@ export const CreatePageWizard = ({
       props: config.props || {},
     };
     onComplete(finalConfig);
-    onOpenChange(false);
-    // Reset state
-    setStep(0);
-    setSelectedTemplate(null);
-    setPageConfig({});
   };
 
   return (
-    <Dialog
-      isOpen={open}
-      onClose={() => onOpenChange(false)}
-      title="Create New Page"
-      className={Classes.DIALOG}
-      style={{ width: 800, maxHeight: "80vh" }}
-    >
-      <div className={Classes.DIALOG_BODY}>
+    <Box className="h-full flex flex-col">
+      <Flex
+        justify="between"
+        align="center"
+        p="4"
+        className="border-b border-gray-200"
+      >
+        <Text size="5" weight="bold">
+          Create New Page
+        </Text>
+      </Flex>
+
+      <Box className="flex-1 overflow-auto">
         {step === 0 ? (
           <SelectTemplate
             selectedTemplate={selectedTemplate}
@@ -72,34 +70,30 @@ export const CreatePageWizard = ({
             onChange={setPageConfig}
           />
         )}
-      </div>
+      </Box>
 
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          {step === 1 && (
-            <Button minimal onClick={handleBack}>
-              Back
-            </Button>
-          )}
-          {step === 0 ? (
-            <Button
-              intent="primary"
-              onClick={handleNext}
-              disabled={!selectedTemplate}
-            >
-              Next
-            </Button>
-          ) : (
-            <Button
-              intent="primary"
-              onClick={() => handleComplete(pageConfig)}
-              disabled={!pageConfig.route || !pageConfig.name}
-            >
-              Create
-            </Button>
-          )}
-        </div>
-      </div>
-    </Dialog>
+      <Flex gap="3" justify="end" p="4" className="border-t border-gray-200">
+        <Button variant="soft" onClick={onCancel}>
+          Cancel
+        </Button>
+        {step === 1 && (
+          <Button variant="soft" onClick={handleBack}>
+            Back
+          </Button>
+        )}
+        {step === 0 ? (
+          <Button onClick={handleNext} disabled={!selectedTemplate}>
+            Next
+          </Button>
+        ) : (
+          <Button
+            onClick={() => handleComplete(pageConfig)}
+            disabled={!pageConfig.route || !pageConfig.name}
+          >
+            Create
+          </Button>
+        )}
+      </Flex>
+    </Box>
   );
 };

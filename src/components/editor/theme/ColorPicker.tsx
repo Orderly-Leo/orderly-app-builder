@@ -1,5 +1,4 @@
-import { InputGroup, Button, Popover } from "@blueprintjs/core";
-import { SketchPicker } from "react-color";
+import { Box, TextField, Flex } from "@radix-ui/themes";
 
 interface ColorPickerProps {
   color: string;
@@ -8,32 +7,22 @@ interface ColorPickerProps {
 
 export const ColorPicker = ({ color, onChange }: ColorPickerProps) => {
   return (
-    <div className="flex gap-2">
-      <InputGroup
+    <Flex gap="2" align="center">
+      <TextField.Root
+        className="flex-1"
         value={color}
-        onChange={(e) => onChange(e.target.value)}
-        rightElement={
-          <Popover
-            content={
-              <SketchPicker
-                color={color}
-                onChange={(color) => onChange(color.hex)}
-              />
-            }
-          >
-            <Button
-              minimal
-              style={{
-                backgroundColor: color,
-                width: 20,
-                height: 20,
-                margin: 7,
-                borderRadius: 4,
-              }}
-            />
-          </Popover>
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange(e.target.value)
         }
-      />
-    </div>
+      ></TextField.Root>
+      <Box asChild className="w-8 h-8 rounded cursor-pointer overflow-hidden">
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full h-full border-0 p-0 m-0"
+        />
+      </Box>
+    </Flex>
   );
 };

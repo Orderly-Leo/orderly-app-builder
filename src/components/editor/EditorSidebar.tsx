@@ -6,6 +6,7 @@ export const EditorSidebar = () => {
     { to: "pages", icon: <AppWindow />, label: "Pages" },
     { to: "theme", icon: <Palette />, label: "Theme" },
     { to: "components", icon: <Component />, label: "Components" },
+    { to: "config", icon: <Component />, label: "Config" },
     { to: "settings", icon: <Settings />, label: "Settings" },
   ];
 
@@ -17,7 +18,7 @@ export const EditorSidebar = () => {
             key={to}
             to={to}
             className={({ isActive }) =>
-              `flex items-center justify-center h-14 border-l-2 hover:bg-gray-100 
+              `flex items-center justify-center h-14 border-l-2 hover:bg-gray-100
               ${
                 isActive
                   ? "border-blue-500 text-blue-500 bg-blue-50"
