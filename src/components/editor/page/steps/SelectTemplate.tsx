@@ -3,30 +3,45 @@ import { PageTemplate } from "../../../../types/page";
 
 const templates: PageTemplate[] = [
   {
-    id: "blank",
-    name: "Blank Page",
+    id: "trading",
+    name: "TradingPage",
+    description:
+      "TradingPage is an App page containing full trading functionalities, and includes the following components:",
+    thumbnail: "/templates/dashboard.png",
+    props: {
+      symbol: "ETH",
+      tradingViewConfig: {
+        scriptSRC: "",
+      },
+      referral: {
+        saveRefCode: true,
+      },
+      // title: {
+      //   type: "string",
+      //   description: "Dashboard title",
+      //   default: "Dashboard",
+      //   required: true,
+      // },
+      // layout: {
+      //   type: "string",
+      //   description: "Layout type",
+      //   default: "grid",
+      // },
+    },
+  },
+  {
+    id: "market",
+    name: "Market Page",
     description: "Start with a blank page",
     thumbnail: "/templates/blank.png",
     props: {},
   },
   {
-    id: "dashboard",
-    name: "Dashboard",
-    description: "A dashboard layout with multiple sections",
-    thumbnail: "/templates/dashboard.png",
-    props: {
-      title: {
-        type: "string",
-        description: "Dashboard title",
-        default: "Dashboard",
-        required: true,
-      },
-      layout: {
-        type: "string",
-        description: "Layout type",
-        default: "grid",
-      },
-    },
+    id: "blank",
+    name: "Blank Page",
+    description: "Start with a blank page",
+    thumbnail: "/templates/blank.png",
+    props: {},
   },
 ];
 
@@ -40,9 +55,9 @@ export const SelectTemplate = ({
   onSelect,
 }: SelectTemplateProps) => {
   return (
-    <Flex gap="6">
+    <Flex>
       {/* 左侧模板列表 */}
-      <Box className="w-1/3 border-r border-gray-200 pr-4">
+      <Box className="w-[240px] px-4">
         <Text size="3" weight="medium" mb="4">
           Page Components
         </Text>
@@ -67,7 +82,7 @@ export const SelectTemplate = ({
       {/* 右侧预览和详情 */}
       <Box className="flex-1">
         {selectedTemplate ? (
-          <Flex direction="column" gap="4">
+          <Flex direction="column">
             {/* 预览图 */}
             <Box className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
               {selectedTemplate.thumbnail ? (
@@ -88,17 +103,17 @@ export const SelectTemplate = ({
             </Box>
 
             {/* 模板详情 */}
-            <Box>
-              <Text size="5" weight="medium">
+            <Box py={"3"}>
+              <Text size="5" weight="medium" as="p">
                 {selectedTemplate.name}
               </Text>
-              <Text color="gray" mt="1">
+              <Text color="gray" mt="1" size={"1"}>
                 {selectedTemplate.description}
               </Text>
             </Box>
 
             {/* 属性预览 */}
-            {Object.keys(selectedTemplate.props || {}).length > 0 && (
+            {/* {Object.keys(selectedTemplate.props || {}).length > 0 && (
               <Box>
                 <Text size="3" weight="medium" mb="2">
                   Available Properties:
@@ -128,7 +143,7 @@ export const SelectTemplate = ({
                   )}
                 </Flex>
               </Box>
-            )}
+            )} */}
           </Flex>
         ) : (
           <Flex

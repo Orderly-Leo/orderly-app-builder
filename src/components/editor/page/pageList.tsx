@@ -1,32 +1,10 @@
 import { Box, Card, Flex, Text } from "@radix-ui/themes";
-import { PageConfig } from "../../../types/page";
+import { useAtom } from "jotai";
+import { pagesAtom, selectedPageIdAtom } from "../../../store/pageStore";
 
-interface PageListProps {
-  selectedPageId?: string | null;
-  onPageSelect?: (page: PageConfig) => void;
-}
-
-export const PageList = ({ selectedPageId, onPageSelect }: PageListProps) => {
-  // 示例数据，实际应该从状态管理或API获取
-  const pages: PageConfig[] = [
-    {
-      id: "1",
-      name: "Home",
-      route: "/",
-      template: "blank",
-      props: {},
-    },
-    {
-      id: "2",
-      name: "Dashboard",
-      route: "/dashboard",
-      template: "dashboard",
-      props: {
-        title: "My Dashboard",
-        layout: "grid",
-      },
-    },
-  ];
+export const PageList = () => {
+  const [pages] = useAtom(pagesAtom);
+  const [selectedPageId, setSelectedPageId] = useAtom(selectedPageIdAtom);
 
   if (pages.length === 0) {
     return (
@@ -52,7 +30,7 @@ export const PageList = ({ selectedPageId, onPageSelect }: PageListProps) => {
               ? "border-blue-500 bg-blue-50"
               : "hover:bg-gray-50"
           }`}
-          onClick={() => onPageSelect?.(page)}
+          onClick={() => setSelectedPageId(page.id)}
         >
           <Flex direction="column" gap="1">
             <Text weight="medium">{page.name}</Text>

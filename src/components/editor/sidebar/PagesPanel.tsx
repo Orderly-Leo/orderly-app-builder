@@ -11,7 +11,7 @@ export const PagesPanel = () => {
     <Flex className="h-full">
       {/* 左侧列表区域 */}
       <Box className="w-60 border-r border-gray-200">
-        <PageToolbar onCreateClick={() => navigate("create")} />
+        <PageToolbar onCreateClick={() => navigate("/create")} />
         <Box className="overflow-auto h-[calc(100%-48px)]">
           <PageList
             selectedPageId={pageId}

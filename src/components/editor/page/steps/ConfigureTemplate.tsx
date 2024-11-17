@@ -20,23 +20,10 @@ export const ConfigureTemplate = ({
     });
   };
 
-  const handlePropChange = (prop: string, value: any) => {
-    onChange({
-      ...config,
-      props: {
-        ...config.props,
-        [prop]: value,
-      },
-    });
-  };
-
   return (
-    <Flex gap="6">
+    <Flex>
       {/* 左侧预览区域 */}
-      <Box className="w-1/3">
-        <Text as="h4" size="3" weight="medium" mb="3">
-          Template Preview
-        </Text>
+      <Box className="w-1/3" p={"4"}>
         <Box className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
           {template.thumbnail ? (
             <img
@@ -57,40 +44,41 @@ export const ConfigureTemplate = ({
       </Box>
 
       {/* 右侧配置表单 */}
-      <Flex direction="column" gap="6" className="flex-1">
+      <Flex direction="column" gap="3" className="flex-1 px-4">
         <Box>
           <Text as="label" size="2" weight="medium" mb="2">
             Page Name
           </Text>
-          <TextField.Root>
-            <TextField.Root
-              value={config.name || ""}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                handleChange("name", e.target.value)
-              }
-              placeholder="Enter page name"
-            />
-          </TextField.Root>
+          <TextField.Root
+            value={config.name || ""}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handleChange("name", e.target.value)
+            }
+            placeholder="Enter page name"
+          />
         </Box>
 
         <Box>
           <Text as="label" size="2" weight="medium" mb="2">
             Route
           </Text>
-          <TextField.Root>
-            <TextField.Root
-              value={config.route || ""}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                handleChange("route", e.target.value)
-              }
-              placeholder="/path/to/page"
-            />
-          </TextField.Root>
+          <TextField.Root
+            value={config.route || ""}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handleChange("route", e.target.value)
+            }
+            placeholder="/path/to/page"
+          />
+        </Box>
+        <Box>
+          <Text as="label" size="2" weight="medium" mb="2">
+            Use the global layout
+          </Text>
         </Box>
 
-        {Object.entries(template.props || {}).length > 0 && (
+        {/* {Object.entries(template.props || {}).length > 0 && (
           <Box>
-            <Text as="h4" size="3" weight="medium" mb="3">
+            <Text size="3" weight="medium" mb="3">
               Page Properties
             </Text>
             <Flex direction="column" gap="4">
@@ -104,15 +92,13 @@ export const ConfigureTemplate = ({
                       </Text>
                     )}
                   </Text>
-                  <TextField.Root>
-                    <TextField.Root
-                      value={config.props?.[prop] || schema.default || ""}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        handlePropChange(prop, e.target.value)
-                      }
-                      placeholder={schema.description}
-                    />
-                  </TextField.Root>
+                  <TextField.Root
+                    value={config.props?.[prop] || schema.default || ""}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handlePropChange(prop, e.target.value)
+                    }
+                    placeholder={schema.description}
+                  />
                   {schema.description && (
                     <Text size="1" color="gray" mt="1">
                       {schema.description}
@@ -122,7 +108,7 @@ export const ConfigureTemplate = ({
               ))}
             </Flex>
           </Box>
-        )}
+        )} */}
       </Flex>
     </Flex>
   );

@@ -4,6 +4,19 @@ export const config = {
     brokerName: "Demo",
     configStore: "custom",
   },
+  mainNavMenus: {
+    logo: {
+      src: "",
+      alt: "",
+    },
+    mainMenus: [
+      {
+        id: "",
+        name: "",
+        href: "",
+      },
+    ],
+  },
   pages: {
     trading: {
       symbol: "ETH-USDC-PREP",

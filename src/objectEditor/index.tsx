@@ -12,6 +12,7 @@ export type ObjectEditorProps = {
 };
 
 export const ObjectEditor: FC<ObjectEditorProps> = (props) => {
+  console.log(props.object);
   return (
     <ObjectEditorProvider
       onFieldChange={props.onFieldChange}

@@ -4,12 +4,13 @@ export interface PageTemplate {
   description: string;
   thumbnail?: string;
   props?: {
-    [key: string]: {
-      type: "string" | "number" | "boolean" | "object" | "array";
-      description?: string;
-      default?: any;
-      required?: boolean;
-    };
+    [key: string]: any;
+    // [key: string]: {
+    //   type: "string" | "number" | "boolean" | "object" | "array";
+    //   description?: string;
+    //   default?: any;
+    //   required?: boolean;
+    // };
   };
 }
 

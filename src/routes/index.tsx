@@ -29,6 +29,10 @@ export const router = createBrowserRouter([
         element: <Navigate to="/editor/pages" replace />,
       },
       {
+        path: "create",
+        element: <CreatePageWizard />,
+      },
+      {
         path: "bootstrap",
         element: (
           <StepWizard
@@ -53,23 +57,11 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: "create",
-                element: (
-                  <CreatePageWizard onComplete={() => {}} onCancel={() => {}} />
-                ),
+                element: <CreatePageWizard />,
               },
               {
                 path: ":pageId",
-                element: (
-                  <PageDetail
-                    page={{
-                      id: "",
-                      name: "",
-                      route: "",
-                      template: "",
-                      props: {},
-                    }}
-                  />
-                ),
+                element: <PageDetail />,
               },
             ],
           },

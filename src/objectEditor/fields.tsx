@@ -21,7 +21,6 @@ export const ObjectFields: FC<{ object: any[] }> = (props) => {
                 field={item}
                 label={item.label}
                 path={item.path}
-                description={item.description || ""}
               />
             )}
             {!item.children && (
@@ -30,7 +29,6 @@ export const ObjectFields: FC<{ object: any[] }> = (props) => {
                 field={item}
                 path={item.path}
                 label={item.label}
-                description={item.description || ""}
               />
             )}
           </div>
