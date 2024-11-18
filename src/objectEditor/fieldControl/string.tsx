@@ -10,7 +10,6 @@ export const StringControl: FC<StringControlProps> = (props) => {
   const { value, onChange } = props;
   return (
     <TextField.Root
-      size={"1"}
       value={value}
       onChange={(e) => onChange?.(e.target.value)}
     />

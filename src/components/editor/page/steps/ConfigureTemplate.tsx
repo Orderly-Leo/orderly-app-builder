@@ -1,9 +1,9 @@
 import { TextField, Flex, Text, Box } from "@radix-ui/themes";
-import { PageTemplate, PageConfig } from "../../../../types/page";
+import { PageComponent, PageConfig } from "../../../../types/page";
 import { ChangeEvent } from "react";
 
 interface ConfigureTemplateProps {
-  template: PageTemplate;
+  template: PageComponent;
   config: Partial<PageConfig>;
   onChange: (config: Partial<PageConfig>) => void;
 }

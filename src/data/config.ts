@@ -17,17 +17,25 @@ export const config = {
       },
     ],
   },
-  pages: {
-    trading: {
-      symbol: "ETH-USDC-PREP",
-      tradingViewConfig: {
-        scriptPath: "",
-      },
-      referral: {
-        saveRefCode: false,
+  walletConnector: {
+    onboard: {
+      evmInitial: {
+        apiKey: "",
+        skipInit: false,
       },
     },
-    market: {},
-    portfolio: {},
   },
+  // pages: {
+  //   trading: {
+  //     symbol: "ETH-USDC-PREP",
+  //     tradingViewConfig: {
+  //       scriptPath: "",
+  //     },
+  //     referral: {
+  //       saveRefCode: false,
+  //     },
+  //   },
+  //   market: {},
+  //   portfolio: {},
+  // },
 };

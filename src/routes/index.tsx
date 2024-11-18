@@ -12,11 +12,13 @@ import { PageDetail } from "../components/editor/page/PageDetail";
 import { CreatePageWizard } from "../components/editor/page/createPageWizard";
 import { ThemeConfigs } from "../components/editor/theme/ThemeConfigs";
 import { ConfigPanel } from "../components/config/configPanel";
+import { PagesStep } from "../components/steps/PagesStep";
 
 const steps = [
   { title: "Broker ID", component: BrokerStep },
   { title: "React Framework", component: FrameworkStep },
   { title: "Wallet Connector", component: WalletStep },
+  { title: "Pages", component: PagesStep },
 ];
 
 export const router = createBrowserRouter([
@@ -26,7 +28,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/editor/pages" replace />,
+        element: <Navigate to="/bootstrap" replace />,
       },
       {
         path: "create",

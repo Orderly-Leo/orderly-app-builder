@@ -22,7 +22,7 @@ export const WalletStep: React.FC<WalletStepProps> = ({
 
   const handleSubmit = () => {
     if (wallet) {
-      // onNext({ wallet });
+      onNext({ wallet });
     }
   };
 
@@ -62,7 +62,7 @@ export const WalletStep: React.FC<WalletStepProps> = ({
           Back
         </Button>
         <Button onClick={handleSubmit} disabled={!wallet}>
-          Complete
+          Next
         </Button>
       </Flex>
     </Flex>

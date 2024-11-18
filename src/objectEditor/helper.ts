@@ -139,14 +139,40 @@ export const objectParse = (
       };
     }
 
+    // 处理数组类型
     if (Array.isArray(value)) {
       return {
         key,
         label,
         name: label,
         type: "array",
-        value,
         path: currentPath.join("."),
+        children: value.map((item, index) => {
+          if (typeof item === "object" && item !== null) {
+            // 如果数组元素是对象，递归处理
+            return {
+              key: index.toString(),
+              label: `Item ${index}`,
+              name: `Item ${index}`,
+              type: "object",
+              path: [...currentPath, index.toString()].join("."),
+              children: objectParse(item, index.toString(), [
+                ...currentPath,
+                index.toString(),
+              ]),
+            };
+          } else {
+            // 如果是基本类型，直接返回
+            return {
+              key: index.toString(),
+              label: `Item ${index}`,
+              name: `Item ${index}`,
+              type: typeof item,
+              value: item,
+              path: [...currentPath, index.toString()].join("."),
+            };
+          }
+        }),
       };
     }
 

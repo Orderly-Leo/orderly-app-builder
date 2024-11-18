@@ -3,6 +3,7 @@ import {
   StepWizardProvider,
   useStepWizard,
 } from "../contexts/StepWizardContext";
+import { PagesStep } from "./steps/PagesStep";
 
 interface Step {
   title: string;

@@ -1,13 +1,18 @@
 import { Card, Flex, Text, Box } from "@radix-ui/themes";
-import { PageTemplate } from "../../../../types/page";
+import { PageComponent } from "../../../../types/page";
 
-const templates: PageTemplate[] = [
+const pageComponents: PageComponent[] = [
   {
     id: "trading",
     name: "TradingPage",
+    packages: ["@orderly.network/trading"],
     description:
       "TradingPage is an App page containing full trading functionalities, and includes the following components:",
     thumbnail: "/templates/dashboard.png",
+    defaultConfig: {
+      pageName: "Trading",
+      route: "/trading",
+    },
     props: {
       symbol: "ETH",
       tradingViewConfig: {
@@ -16,24 +21,18 @@ const templates: PageTemplate[] = [
       referral: {
         saveRefCode: true,
       },
-      // title: {
-      //   type: "string",
-      //   description: "Dashboard title",
-      //   default: "Dashboard",
-      //   required: true,
-      // },
-      // layout: {
-      //   type: "string",
-      //   description: "Layout type",
-      //   default: "grid",
-      // },
     },
   },
   {
     id: "market",
     name: "Market Page",
+    packages: ["@orderly.network/trading"],
     description: "Start with a blank page",
     thumbnail: "/templates/blank.png",
+    defaultConfig: {
+      pageName: "Market",
+      route: "/market",
+    },
     props: {},
   },
   {
@@ -41,13 +40,17 @@ const templates: PageTemplate[] = [
     name: "Blank Page",
     description: "Start with a blank page",
     thumbnail: "/templates/blank.png",
+    defaultConfig: {
+      pageName: "Untitled page",
+      route: "/untitled",
+    },
     props: {},
   },
 ];
 
 interface SelectTemplateProps {
-  selectedTemplate: PageTemplate | null;
-  onSelect: (template: PageTemplate) => void;
+  selectedTemplate: PageComponent | null;
+  onSelect: (template: PageComponent) => void;
 }
 
 export const SelectTemplate = ({
@@ -62,7 +65,7 @@ export const SelectTemplate = ({
           Page Components
         </Text>
         <Flex direction="column" gap="2">
-          {templates.map((template) => (
+          {pageComponents.map((template) => (
             <Card
               key={template.id}
               className={`cursor-pointer transition-colors
