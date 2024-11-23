@@ -1,14 +1,6 @@
-import {
-  Box,
-  Card,
-  Flex,
-  Text,
-  TextField,
-  Checkbox,
-  Button,
-} from "@radix-ui/themes";
+import { Box, Card, Flex, Text, TextField, Checkbox } from "@radix-ui/themes";
 import { useState } from "react";
-import { type StepProps } from "./types";
+import { Button } from "../ui/button";
 
 interface PageType {
   id: string;
@@ -70,14 +62,27 @@ const availablePages: PageType[] = [
   },
 ];
 
-export const PagesStep = ({ onNext, onBack, data }: StepProps) => {
+export const PagesStep = ({
+  onNext,
+  onBack,
+  formData,
+}: {
+  onNext: (data: any) => void;
+  onBack: () => void;
+  formData: any;
+}) => {
   const [pages, setPages] = useState<SelectedPage[]>(
-    availablePages.map((page) => ({
-      ...page,
-      isSelected: false,
-      customName: page.defaultConfig.pageName,
-      customRoute: page.defaultConfig.route,
-    }))
+    availablePages.map((page) => {
+      const isSelected = formData.pages.some(
+        (selectedPage: any) => selectedPage.type === page.id
+      );
+      return {
+        ...page,
+        isSelected,
+        customName: page.defaultConfig.pageName,
+        customRoute: page.defaultConfig.route,
+      };
+    })
   );
 
   const handleTogglePage = (pageId: string) => {
@@ -110,7 +115,7 @@ export const PagesStep = ({ onNext, onBack, data }: StepProps) => {
       }));
 
     onNext({
-      ...data,
+      // ...formData,
       pages: selectedPages,
     });
   };
@@ -119,14 +124,14 @@ export const PagesStep = ({ onNext, onBack, data }: StepProps) => {
 
   return (
     <Box>
-      <Box mb="5">
+      {/* <Box mb="5">
         <Text size="5" weight="bold" as="p">
           Select Pages
         </Text>
         <Text size="2" color="gray" as="p">
           Choose the pages you want to include in your project
         </Text>
-      </Box>
+      </Box> */}
 
       <Flex direction="column" gap="4">
         {pages.map((page) => (
@@ -217,7 +222,7 @@ export const PagesStep = ({ onNext, onBack, data }: StepProps) => {
       </Flex>
 
       <Flex justify="between" mt="6" gap="3">
-        <Button variant="soft" onClick={onBack}>
+        <Button variant="ghost" onClick={onBack}>
           Back
         </Button>
         <Button onClick={handleNext} disabled={!hasSelectedPages}>

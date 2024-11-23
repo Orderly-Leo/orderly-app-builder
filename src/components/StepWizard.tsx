@@ -1,58 +1,116 @@
-import { Text, Flex, Box } from "@radix-ui/themes";
-import {
-  StepWizardProvider,
-  useStepWizard,
-} from "../contexts/StepWizardContext";
+import { atom, useAtom } from "jotai";
+import { StepWizardProvider } from "../contexts/StepWizardContext";
 import { PagesStep } from "./steps/PagesStep";
+import { BrokerStep } from "./steps/BrokerStep";
+import { FrameworkStep } from "./steps/FrameworkStep";
+import { WalletStep } from "./steps/WalletStep";
+import { atomWithImmer } from "jotai-immer";
+import { ProjectPathStep } from "./steps/ProjectPathStep";
+import { WizardLayout } from "./WizardLayout";
 
 interface Step {
   title: string;
   component: React.ComponentType<any>;
+  description: string;
 }
 
-interface StepWizardProps {
-  steps: Step[];
-  onComplete: (data: any) => void;
-}
+interface StepWizardProps {}
 
-const StepWizardContent: React.FC<StepWizardProps> = ({
-  steps,
-  onComplete,
-}) => {
-  const { currentStep, onNext, onPrevious, formData } = useStepWizard();
-  const CurrentStepComponent = steps[currentStep].component;
+const steps = [
+  { title: "Broker ID", id: 1, component: BrokerStep, description: "" },
+  {
+    title: "React Framework",
+    id: 2,
+    component: FrameworkStep,
+    description: "",
+  },
+  { title: "Wallet Connector", id: 3, component: WalletStep, description: "" },
+  {
+    title: "Pages",
+    id: 4,
+    component: PagesStep,
+    description: "Choose the pages you want to include in your project",
+  },
+  {
+    title: "Project Path",
+    id: 5,
+    component: ProjectPathStep,
+    description: "Select the path for your application",
+  },
+];
+
+const formDataAtom = atomWithImmer({
+  data: {
+    brokerId: "",
+    brokerName: "",
+    framework: "",
+    walletConnector: "",
+    pages: [],
+    projectPath: "/Users/leo/project/test",
+  },
+});
+
+const currentStepIndexAtom = atom(0);
+
+const currentStepAtom = atom((get) => {
+  const index = get(currentStepIndexAtom);
+  return steps[index];
+});
+
+const currentComponentAtom = atom((get) => get(currentStepAtom)?.component);
+const currentDescriptionAtom = atom((get) => {
+  return {
+    title: get(currentStepAtom)?.title,
+    description: get(currentStepAtom)?.description,
+  };
+});
+
+const StepWizardContent: React.FC<StepWizardProps> = ({}) => {
+  const [CurrentStepComponent] = useAtom(currentComponentAtom);
+  const [currentDescription] = useAtom(currentDescriptionAtom);
+
+  const [currentIndex, setCurrentIndex] = useAtom(currentStepIndexAtom);
+  const [formData, setFormData] = useAtom(formDataAtom);
+
+  const onNext = (stepData: Record<string, any>) => {
+    setFormData((draft) => {
+      draft.data = { ...draft.data, ...stepData };
+    });
+    setCurrentIndex(currentIndex + 1);
+  };
+  const onPrevious = () => {
+    setCurrentIndex(currentIndex - 1);
+  };
 
   return (
-    <Flex className="flex-1 min-h-full h-screen">
-      <Box className="min-w-[200px] bg-gray-100 p-5 h-full">
-        {steps.map((step, index) => (
-          <Box
-            key={index}
-            className={`px-4 py-3 my-2 rounded-lg cursor-default
-              ${index === currentStep ? "bg-blue-600 text-white" : ""}
-              ${index < currentStep ? "text-blue-600" : ""}`}
-          >
-            <Text>{step.title}</Text>
-          </Box>
-        ))}
-      </Box>
-      <Box className="flex-1 p-10 overflow-y-auto">
-        <Box className="w-full max-w-[600px] mx-auto">
-          <CurrentStepComponent
-            onNext={onNext}
-            onBack={onPrevious}
-            formData={formData}
-          />
-        </Box>
-      </Box>
-    </Flex>
+    <div className="min-h-screen p-8 bg-gradient-to-b from-[#1a1333] to-[#2d1d3f]">
+      <div>
+        <img
+          className="w-auto h-7 relative object-contain dark:block"
+          src="https://mintlify.s3-us-west-1.amazonaws.com/orderly/logo/dark.svg"
+          alt="dark logo"
+        />
+      </div>
+      <WizardLayout
+        steps={steps}
+        currentIndex={currentIndex}
+        currentDescription={currentDescription}
+      >
+        <CurrentStepComponent
+          onNext={onNext}
+          onBack={onPrevious}
+          formData={formData.data}
+          onComplete={() => {}}
+        />
+      </WizardLayout>
+    </div>
   );
 };
 
 export const StepWizard: React.FC<StepWizardProps> = (props) => {
   return (
     <StepWizardProvider>
-      <StepWizardContent {...props} />
+      <StepWizardContent />
     </StepWizardProvider>
   );
 };

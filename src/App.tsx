@@ -2,7 +2,7 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
 import "@radix-ui/themes/styles.css";
 
-import "./styles/tailwind.css";
+// import "./styles/tailwind.css";
 import { Theme } from "@radix-ui/themes";
 
 function App() {

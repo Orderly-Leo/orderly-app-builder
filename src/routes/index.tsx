@@ -15,10 +15,10 @@ import { ConfigPanel } from "../components/config/configPanel";
 import { PagesStep } from "../components/steps/PagesStep";
 
 const steps = [
-  { title: "Broker ID", component: BrokerStep },
-  { title: "React Framework", component: FrameworkStep },
-  { title: "Wallet Connector", component: WalletStep },
-  { title: "Pages", component: PagesStep },
+  { title: "Broker ID", component: BrokerStep, description: "" },
+  { title: "React Framework", component: FrameworkStep, description: "" },
+  { title: "Wallet Connector", component: WalletStep, description: "" },
+  { title: "Pages", component: PagesStep, description: "" },
 ];
 
 export const router = createBrowserRouter([

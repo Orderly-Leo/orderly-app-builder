@@ -1,6 +1,7 @@
-import { Box, Button, Flex, Text } from "@radix-ui/themes";
+import { Box, Flex, Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { SiNextdotjs, SiRemix, SiCreatereactapp } from "react-icons/si";
+import { Button } from "../ui/button";
 
 interface FrameworkStepProps {
   onNext: (data: any) => void;
@@ -33,9 +34,9 @@ export const FrameworkStep: React.FC<FrameworkStepProps> = ({
 
   return (
     <Flex direction="column" gap="6">
-      <Text size="5" weight="bold">
+      {/* <Text size="5" weight="bold">
         Choose React Framework
-      </Text>
+      </Text> */}
       <Flex direction="column" gap="3">
         {frameworks.map((fw) => (
           <Box
@@ -44,12 +45,11 @@ export const FrameworkStep: React.FC<FrameworkStepProps> = ({
             style={{
               padding: "16px",
               border: `1px solid ${
-                framework === fw.id ? "var(--accent-9)" : "var(--gray-6)"
+                framework === fw.id ? "#6b21a8" : "var(--gray-6)"
               }`,
               borderRadius: "var(--radius-3)",
               cursor: "pointer",
-              backgroundColor:
-                framework === fw.id ? "var(--accent-3)" : "transparent",
+              backgroundColor: framework === fw.id ? "#f3e8ff" : "transparent",
               transition: "all 0.2s ease",
             }}
           >
@@ -63,7 +63,7 @@ export const FrameworkStep: React.FC<FrameworkStepProps> = ({
         ))}
       </Flex>
       <Flex gap="3" justify="between">
-        <Button variant="soft" onClick={onBack}>
+        <Button variant="ghost" onClick={onBack}>
           Back
         </Button>
         <Button onClick={handleSubmit} disabled={!framework}>

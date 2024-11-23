@@ -1,5 +1,6 @@
-import { Box, Button, Flex, Text } from "@radix-ui/themes";
+import { Box, Flex, Text } from "@radix-ui/themes";
 import { useState } from "react";
+import { Button } from "../ui/button";
 
 interface WalletStepProps {
   onNext: (data: any) => void;
@@ -12,7 +13,7 @@ export const WalletStep: React.FC<WalletStepProps> = ({
   onBack,
   formData,
 }) => {
-  const [wallet, setWallet] = useState(formData.wallet);
+  const [wallet, setWallet] = useState(formData.walletConnector);
 
   const wallets = [
     { id: "metamask", name: "MetaMask" },
@@ -22,15 +23,15 @@ export const WalletStep: React.FC<WalletStepProps> = ({
 
   const handleSubmit = () => {
     if (wallet) {
-      onNext({ wallet });
+      onNext({ walletConnector: wallet });
     }
   };
 
   return (
     <Flex direction="column" gap="6">
-      <Text size="5" weight="bold">
+      {/* <Text size="5" weight="bold">
         Select Wallet Connector
-      </Text>
+      </Text> */}
       <Flex direction="column" gap="3">
         {wallets.map((w) => (
           <Box
@@ -58,7 +59,7 @@ export const WalletStep: React.FC<WalletStepProps> = ({
         ))}
       </Flex>
       <Flex gap="3" justify="between">
-        <Button variant="soft" onClick={onBack}>
+        <Button variant="ghost" onClick={onBack}>
           Back
         </Button>
         <Button onClick={handleSubmit} disabled={!wallet}>
