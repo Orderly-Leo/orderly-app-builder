@@ -1,4 +1,4 @@
-import { TextField } from "@radix-ui/themes";
+import { Input } from "@/components/ui/input";
 import { FC } from "react";
 
 type StringControlProps = {
@@ -8,10 +8,5 @@ type StringControlProps = {
 
 export const StringControl: FC<StringControlProps> = (props) => {
   const { value, onChange } = props;
-  return (
-    <TextField.Root
-      value={value}
-      onChange={(e) => onChange?.(e.target.value)}
-    />
-  );
+  return <Input value={value} onChange={(e) => onChange?.(e.target.value)} />;
 };

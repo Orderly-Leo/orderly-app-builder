@@ -3,6 +3,7 @@ import { EditorToolbar } from "./editor/EditorToolbar";
 import { EditorSidebar } from "./editor/EditorSidebar";
 import { EditorPreview } from "./editor/EditorPreview";
 import { useState } from "react";
+import { EditorLayout } from "./editor/EditorLayout";
 
 export const Editor = () => {
   // const [showLeft, setShowLeft] = useState(true);
@@ -10,7 +11,8 @@ export const Editor = () => {
 
   return (
     <div className="h-screen">
-      <EditorSidebar />
+      <EditorLayout />
+      {/* <EditorSidebar /> */}
     </div>
   );
 

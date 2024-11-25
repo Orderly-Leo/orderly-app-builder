@@ -17,7 +17,7 @@ export const FrameworkStep: React.FC<FrameworkStepProps> = ({
   const [framework, setFramework] = useState(formData.framework);
 
   const frameworks = [
-    { id: "next", name: "Next.js", icon: <SiNextdotjs size={24} /> },
+    { id: "nextjs", name: "Next.js", icon: <SiNextdotjs size={24} /> },
     { id: "remix", name: "Remix", icon: <SiRemix size={24} /> },
     {
       id: "crd",
@@ -33,43 +33,43 @@ export const FrameworkStep: React.FC<FrameworkStepProps> = ({
   };
 
   return (
-    <Flex direction="column" gap="6">
+    <div className="flex flex-col gap-6">
       {/* <Text size="5" weight="bold">
         Choose React Framework
       </Text> */}
-      <Flex direction="column" gap="3">
+      <div className="flex flex-col gap-3">
         {frameworks.map((fw) => (
-          <Box
+          <div
             key={fw.id}
             onClick={() => setFramework(fw.id)}
+            className="p-4 rounded-md cursor-pointer"
             style={{
               padding: "16px",
               border: `1px solid ${
                 framework === fw.id ? "#6b21a8" : "var(--gray-6)"
               }`,
-              borderRadius: "var(--radius-3)",
-              cursor: "pointer",
+
               backgroundColor: framework === fw.id ? "#f3e8ff" : "transparent",
               transition: "all 0.2s ease",
             }}
           >
-            <Flex align="center" gap="3">
+            <div className="flex items-center gap-3">
               {fw.icon}
               <Text size="3" weight={framework === fw.id ? "bold" : "regular"}>
                 {fw.name}
               </Text>
-            </Flex>
-          </Box>
+            </div>
+          </div>
         ))}
-      </Flex>
-      <Flex gap="3" justify="between">
+      </div>
+      <div className="flex items-center justify-between gap-3">
         <Button variant="ghost" onClick={onBack}>
           Back
         </Button>
         <Button onClick={handleSubmit} disabled={!framework}>
           Next
         </Button>
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 };

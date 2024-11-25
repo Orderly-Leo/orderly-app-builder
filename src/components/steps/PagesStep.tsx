@@ -1,66 +1,9 @@
-import { Box, Card, Flex, Text, TextField, Checkbox } from "@radix-ui/themes";
+import { Box, Flex, Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { Button } from "../ui/button";
-
-interface PageType {
-  id: string;
-  name: string;
-  description: string;
-  thumbnail?: string;
-  defaultConfig: {
-    pageName: string;
-    route: string;
-  };
-}
-
-interface SelectedPage extends PageType {
-  isSelected: boolean;
-  customName: string;
-  customRoute: string;
-}
-
-const availablePages: PageType[] = [
-  {
-    id: "trading",
-    name: "Trading Page",
-    description: "Full-featured trading interface with orderbook and charts",
-    thumbnail: "/pages/trading.png",
-    defaultConfig: {
-      pageName: "Trading",
-      route: "/trading",
-    },
-  },
-  {
-    id: "market",
-    name: "Market Overview",
-    description: "Display market data and statistics",
-    thumbnail: "/pages/market.png",
-    defaultConfig: {
-      pageName: "Markets",
-      route: "/markets",
-    },
-  },
-  {
-    id: "portfolio",
-    name: "Portfolio",
-    description: "User portfolio and asset management",
-    thumbnail: "/pages/portfolio.png",
-    defaultConfig: {
-      pageName: "Portfolio",
-      route: "/portfolio",
-    },
-  },
-  {
-    id: "settings",
-    name: "Settings",
-    description: "User preferences and account settings",
-    thumbnail: "/pages/settings.png",
-    defaultConfig: {
-      pageName: "Settings",
-      route: "/settings",
-    },
-  },
-];
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { availablePages, SelectedPage } from "@/data/pages";
+import { Checkbox } from "../ui/checkbox";
 
 export const PagesStep = ({
   onNext,
@@ -74,7 +17,7 @@ export const PagesStep = ({
   const [pages, setPages] = useState<SelectedPage[]>(
     availablePages.map((page) => {
       const isSelected = formData.pages.some(
-        (selectedPage: any) => selectedPage.type === page.id
+        (selectedPage: any) => selectedPage.id === page.id
       );
       return {
         ...page,
@@ -109,7 +52,7 @@ export const PagesStep = ({
     const selectedPages = pages
       .filter((page) => page.isSelected)
       .map((page) => ({
-        type: page.id,
+        id: page.id,
         name: page.customName,
         route: page.customRoute,
       }));
@@ -123,7 +66,7 @@ export const PagesStep = ({
   const hasSelectedPages = pages.some((page) => page.isSelected);
 
   return (
-    <Box>
+    <div>
       {/* <Box mb="5">
         <Text size="5" weight="bold" as="p">
           Select Pages
@@ -133,102 +76,68 @@ export const PagesStep = ({
         </Text>
       </Box> */}
 
-      <Flex direction="column" gap="4">
-        {pages.map((page) => (
-          <Card
-            key={page.id}
-            className={`transition-all ${
-              page.isSelected
-                ? "border-blue-500 bg-blue-50"
-                : "hover:border-blue-300"
-            }`}
-          >
-            <Flex gap="4">
-              {/* Thumbnail */}
-              <Box className="w-[200px] aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                {page.thumbnail ? (
-                  <img
-                    src={page.thumbnail}
-                    alt={page.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
+      <div>
+        <ScrollArea className="w-full whitespace-nowrap">
+          <div className="flex w-max space-x-4 h-[240px]">
+            {pages.map((page) => (
+              <div key={page.id} className="flex-none w-[calc(80%-16px)]">
+                <div className="relative h-full">
+                  {/* Thumbnail */}
+                  <div className="w-full h-full bg-gray-100 rounded-lg overflow-hidden">
+                    {page.thumbnail ? (
+                      <img
+                        src={page.thumbnail}
+                        alt={page.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <Flex
+                        align="center"
+                        justify="center"
+                        className="w-full h-full "
+                      >
+                        No preview
+                      </Flex>
+                    )}
+                  </div>
+
+                  {/* Content */}
                   <Flex
-                    align="center"
-                    justify="center"
-                    className="w-full h-full text-gray-400"
+                    direction="column"
+                    gap="2"
+                    className="absolute left-0 bottom-0 p-4"
                   >
-                    No preview
-                  </Flex>
-                )}
-              </Box>
-
-              {/* Content */}
-              <Flex direction="column" className="flex-1" gap="2">
-                <Flex align="center" gap="2">
-                  <Checkbox
-                    checked={page.isSelected}
-                    id={page.id}
-                    onClick={() => handleTogglePage(page.id)}
-                  />
-                  <Text weight="medium" as="label" htmlFor={page.id}>
-                    {page.name}
-                  </Text>
-                </Flex>
-                <Text size="1" color="gray">
-                  {page.description}
-                </Text>
-
-                {page.isSelected && (
-                  <Flex direction="column" gap="2" mt="2">
-                    <Box>
-                      <Text as="label" size="1" weight="medium">
-                        Page Name
-                      </Text>
-                      <TextField.Root
-                        size="1"
-                        value={page.customName}
-                        onChange={(e) =>
-                          handleCustomization(
-                            page.id,
-                            "customName",
-                            e.target.value
-                          )
-                        }
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        checked={page.isSelected}
+                        id={page.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleTogglePage(page.id);
+                        }}
                       />
-                    </Box>
-                    <Box>
-                      <Text as="label" size="1" weight="medium">
-                        Route
+                      <Text weight="medium" as="label" htmlFor={page.id}>
+                        {page.name}
                       </Text>
-                      <TextField.Root
-                        size="1"
-                        value={page.customRoute}
-                        onChange={(e) =>
-                          handleCustomization(
-                            page.id,
-                            "customRoute",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </Box>
+                    </div>
+                    {/* <Text>{page.description}</Text> */}
                   </Flex>
-                )}
-              </Flex>
-            </Flex>
-          </Card>
-        ))}
-      </Flex>
+                </div>
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </div>
 
-      <Flex justify="between" mt="6" gap="3">
+      <div className="flex items-center justify-between mt-6 gap-3">
         <Button variant="ghost" onClick={onBack}>
           Back
         </Button>
         <Button onClick={handleNext} disabled={!hasSelectedPages}>
           Next
         </Button>
-      </Flex>
-    </Box>
+      </div>
+    </div>
   );
 };

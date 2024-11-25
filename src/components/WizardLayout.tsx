@@ -25,9 +25,9 @@ export const WizardLayout: React.FC<WizardLayoutProps> = ({
   return (
     <div className="h-full flex gap-8">
       <aside className="w-1/4 text-white">
-        <ul className="space-y-4 text-sm sticky top-10">
+        <ul className="space-y-4 text-sm sticky top-16">
           {steps.map((step, index) => (
-            <li key={index} className="flex items-start gap-2 justify-end">
+            <li key={index} className="flex items-start gap-1 justify-end">
               {currentIndex > index ? (
                 <CircleCheck className="text-green-500" size={16} />
               ) : null}

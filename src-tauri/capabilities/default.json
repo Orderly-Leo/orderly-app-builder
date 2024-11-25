@@ -2,10 +2,51 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Capability for the main window",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "core:default",
     "shell:allow-open",
-    "core:window:allow-create"
+    "core:window:allow-create",
+    "dialog:allow-open",
+    "fs:default",
+    "fs:write-all",
+    {
+      "identifier": "fs:scope",
+      "allow": [{ "path": "$HOME/**" }]
+    },
+    
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "name": "run-npx",
+          "cmd": "npx",
+          "args": [
+            "create-next-app@latest",
+            "--example",
+            "--yes",
+            {
+              "validator": "\\S+"
+            }
+          ]
+        },{
+          "name": "install-dependencies",
+          "cmd": "pnpm",
+          "args": ["install"]
+        }
+      ]
+    },
+    {
+      "identifier": "shell:allow-spawn",
+      "allow": [
+        {
+          "name": "run-npx",
+          "cmd": "npx",
+          "args": true
+        }
+      ]
+    }
   ]
 }

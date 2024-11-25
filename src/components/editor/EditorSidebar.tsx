@@ -12,18 +12,14 @@ export const EditorSidebar = () => {
 
   return (
     <div className="h-full flex">
-      <nav className="w-14 border-r border-gray-200">
+      <nav className="w-14 border-r border-gray-200 h-full sticky top-0 bottom-0">
         {navItems.map(({ to, icon, label }) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) =>
               `flex items-center justify-center h-14 border-l-2 hover:bg-gray-100
-              ${
-                isActive
-                  ? "border-blue-500 text-blue-500 bg-blue-50"
-                  : "border-transparent text-gray-600"
-              }`
+              ${isActive ? "font-bold" : ""}`
             }
             title={label}
           >

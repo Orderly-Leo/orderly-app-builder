@@ -15,6 +15,7 @@
         "title": "Orderly App Builder",
         "width": 800,
         "height": 600
+      
       }
     ],
     "security": {
@@ -36,6 +37,9 @@
           "name": "serve"
         }
       ]
+    },
+    "fs": {
+      "requireLiteralLeadingDot": false
     }
   },
   "bundle": {

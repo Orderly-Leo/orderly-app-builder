@@ -12,8 +12,9 @@ export const Layout = () => {
 
 const TestBar = () => {
   return (
-    <Flex className="fixed bottom-0 right-0">
+    <Flex className="fixed bottom-0 right-0 text-white">
       <Link to={"/bootstrap"}>Bootstrap</Link>
+      <Link to={"/editor"}>Editor</Link>
     </Flex>
   );
 };

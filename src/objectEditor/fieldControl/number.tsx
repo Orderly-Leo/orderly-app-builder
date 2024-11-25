@@ -1,4 +1,4 @@
-import { TextField } from "@radix-ui/themes";
+import { Input } from "@/components/ui/input";
 import { FC } from "react";
 
 export const NumberControl: FC<{
@@ -7,10 +7,9 @@ export const NumberControl: FC<{
 }> = (props) => {
   const { value, onChange } = props;
   return (
-    <TextField.Root
+    <Input
       type="number"
       value={value}
-      size={"1"}
       onChange={(e) => onChange(Number(e.target.value))}
     />
   );

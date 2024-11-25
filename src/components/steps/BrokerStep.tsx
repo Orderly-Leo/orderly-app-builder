@@ -4,6 +4,7 @@ import { useStepWizard } from "../../contexts/StepWizardContext";
 import { Input } from "../ui/input";
 import { Typography } from "../ui/typography";
 import { Button } from "../ui/button";
+import { InputLabel } from "../ui/inputLabel";
 
 interface BrokerStepProps {
   onComplete: (data: any) => void;
@@ -29,11 +30,9 @@ export const BrokerStep: React.FC<BrokerStepProps> = ({
   };
 
   return (
-    <Flex direction="column" gap="6">
-      <Box>
-        <Text as="label" size="2" weight="medium" mb="2">
-          Broker ID
-        </Text>
+    <div className="flex flex-col gap-6">
+      <div>
+        <InputLabel>Broker ID</InputLabel>
         <Input
           value={brokerId}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -41,11 +40,9 @@ export const BrokerStep: React.FC<BrokerStepProps> = ({
           }
           placeholder="Enter your broker ID"
         />
-      </Box>
-      <Box>
-        <Text as="label" size="2" weight="medium" mb="2">
-          Broker Name
-        </Text>
+      </div>
+      <div>
+        <InputLabel>Broker Name</InputLabel>
 
         <Input
           value={brokerName}
@@ -54,7 +51,7 @@ export const BrokerStep: React.FC<BrokerStepProps> = ({
           }
           placeholder="Enter your broker name"
         />
-      </Box>
+      </div>
       <div className="flex justify-end">
         <Button
           onClick={handleSubmit}
@@ -63,6 +60,6 @@ export const BrokerStep: React.FC<BrokerStepProps> = ({
           Next
         </Button>
       </div>
-    </Flex>
+    </div>
   );
 };
