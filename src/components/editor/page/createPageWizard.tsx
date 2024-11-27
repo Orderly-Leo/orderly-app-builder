@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Box, Flex, Text } from "@radix-ui/themes";
+import { Box, Flex } from "@radix-ui/themes";
 import { PageComponent, PageConfig } from "../../../types/page";
 import { SelectTemplate } from "./steps/SelectTemplate";
 import { ConfigureTemplate } from "./steps/ConfigureTemplate";
@@ -9,6 +9,9 @@ import { pagesAtom, pageActions } from "../../../store/pageStore";
 import { useNavigate } from "react-router-dom";
 import { CreatePageProcesse } from "./steps/CreatePageProcesse";
 import { SelectPages } from "./steps/SelectPages";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 export const CreatePageWizard = () => {
   const navigate = useNavigate();
@@ -53,7 +56,8 @@ export const CreatePageWizard = () => {
   };
 
   const handleCancel = () => {
-    navigate("/editor/pages");
+    // navigate("/editor/pages");
+    navigate(-1);
   };
 
   const handleComponentSelect = (componentId: string) => {
@@ -120,37 +124,49 @@ export const CreatePageWizard = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="shrink-0 border-b border-gray-200">
-        <Flex justify="between" align="center" p="4">
-          <Text size="5" weight="bold">
-            Create New Page
-          </Text>
-        </Flex>
+    <div className="h-screen flex flex-col">
+      <div className="shrink-0 ">
+        <div className="flex justify-between items-center p-4">
+          <div className="flex items-center gap-2">
+            <ArrowLeft
+              size={18}
+              className="cursor-pointer"
+              onClick={() => navigate(-1)}
+            />
+            <div className="text-xl font-medium">Create New Page</div>
+          </div>
+        </div>{" "}
+        <Separator />
       </div>
 
       <div className="flex-1 overflow-y-auto">
         <Box>{renderStep()}</Box>
       </div>
 
-      <div className="shrink-0 border-t border-gray-200">
-        <Flex gap="3" justify="end" p="4">
-          <Button variant="soft" onClick={handleCancel}>
-            Cancel
-          </Button>
-          {step > 0 && (
-            <Button variant="soft" onClick={handleBack}>
-              Back
-            </Button>
-          )}
-          {step < 3 ? (
-            <Button onClick={handleNext} disabled={!selectedTemplate}>
-              Next
-            </Button>
-          ) : (
-            <Button onClick={handleComplete}>Create</Button>
-          )}
-        </Flex>
+      <div className="shrink-0">
+        <Separator />
+        <div className="p-3">
+          <div className="flex justify-between gap-3">
+            {step === 0 && (
+              <Button variant="ghost" onClick={handleCancel}>
+                Cancel
+              </Button>
+            )}
+
+            {step > 0 && (
+              <Button variant="ghost" onClick={handleBack}>
+                Back
+              </Button>
+            )}
+            {step < 3 ? (
+              <Button onClick={handleNext} disabled={!selectedTemplate}>
+                Next
+              </Button>
+            ) : (
+              <Button onClick={handleComplete}>Create</Button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

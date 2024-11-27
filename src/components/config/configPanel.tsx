@@ -2,11 +2,7 @@ import { ObjectEditor } from "../../objectEditor";
 
 import { config } from "../../data/config";
 import { Container } from "@radix-ui/themes";
-import {
-  objectParse,
-  objectTypes,
-  updateObject,
-} from "../../objectEditor/helper";
+import { objectParse, updateObject } from "../../objectEditor/helper";
 import { useAtom } from "jotai";
 import { atomWithImmer } from "jotai-immer";
 import { configArgTypes } from "../../types/config";

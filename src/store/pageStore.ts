@@ -6,8 +6,8 @@ import { PageConfig } from "../types/page";
 export const pagesAtom = atomWithImmer<PageConfig[]>([
   {
     id: "1",
-    name: "Home",
-    route: "/",
+    name: "Trading",
+    route: "/trading",
     template: "blank",
     props: {},
   },

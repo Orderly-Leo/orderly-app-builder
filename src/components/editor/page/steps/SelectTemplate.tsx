@@ -1,4 +1,5 @@
-import { Card, Flex, Text, Box } from "@radix-ui/themes";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { PageComponent } from "../../../../types/page";
 
 const pageComponents: PageComponent[] = [
@@ -58,36 +59,40 @@ export const SelectTemplate = ({
   onSelect,
 }: SelectTemplateProps) => {
   return (
-    <Flex>
-      {/* 左侧模板列表 */}
-      <Box className="w-[240px] px-4">
-        <Text size="3" weight="medium" mb="4">
-          Page Components
-        </Text>
-        <Flex direction="column" gap="2">
-          {pageComponents.map((template) => (
-            <Card
-              key={template.id}
-              className={`cursor-pointer transition-colors
-                ${
-                  selectedTemplate?.id === template.id
-                    ? "border-blue-500 bg-blue-50"
-                    : "hover:border-blue-300"
-                }`}
-              onClick={() => onSelect(template)}
-            >
-              <Text weight="medium">{template.name}</Text>
-            </Card>
-          ))}
-        </Flex>
-      </Box>
+    <div className="flex">
+      {/* Sidebar */}
+      <div className="w-[240px] border-r">
+        <div className="space-y-4 py-4">
+          <div className="px-3 py-2">
+            <h2 className="mb-2 px-4 text-xs text-gray-500 font-semibold">
+              Page Components
+            </h2>
+            <div className="space-y-1">
+              {pageComponents.map((template) => (
+                <Button
+                  key={template.id}
+                  variant="ghost"
+                  className={cn(
+                    "w-full justify-start px-4",
+                    selectedTemplate?.id === template.id &&
+                      "bg-accent text-accent-foreground"
+                  )}
+                  onClick={() => onSelect(template)}
+                >
+                  {template.name}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
 
-      {/* 右侧预览和详情 */}
-      <Box className="flex-1">
+      {/* Main Content */}
+      <div className="flex-1 p-8">
         {selectedTemplate ? (
-          <Flex direction="column">
-            {/* 预览图 */}
-            <Box className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+          <div className="space-y-6">
+            {/* Preview Image */}
+            <div className="aspect-video rounded-lg overflow-hidden bg-muted">
               {selectedTemplate.thumbnail ? (
                 <img
                   src={selectedTemplate.thumbnail}
@@ -95,69 +100,28 @@ export const SelectTemplate = ({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <Flex
-                  align="center"
-                  justify="center"
-                  className="w-full h-full text-gray-400"
-                >
+                <div className="flex items-center justify-center w-full h-full text-muted-foreground">
                   No preview available
-                </Flex>
+                </div>
               )}
-            </Box>
+            </div>
 
-            {/* 模板详情 */}
-            <Box py={"3"}>
-              <Text size="5" weight="medium" as="p">
+            {/* Template Details */}
+            <div className="space-y-2">
+              <h3 className="text-2xl font-semibold">
                 {selectedTemplate.name}
-              </Text>
-              <Text color="gray" mt="1" size={"1"}>
+              </h3>
+              <p className="text-sm text-muted-foreground">
                 {selectedTemplate.description}
-              </Text>
-            </Box>
-
-            {/* 属性预览 */}
-            {/* {Object.keys(selectedTemplate.props || {}).length > 0 && (
-              <Box>
-                <Text size="3" weight="medium" mb="2">
-                  Available Properties:
-                </Text>
-                <Flex direction="column" gap="2">
-                  {Object.entries(selectedTemplate.props || {}).map(
-                    ([key, prop]) => (
-                      <Card key={key}>
-                        <Flex justify="between" align="center">
-                          <Text weight="medium">
-                            {key}
-                            {prop.required && (
-                              <Text color="red" ml="1">
-                                *
-                              </Text>
-                            )}
-                          </Text>
-                          <Text color="gray">{prop.type}</Text>
-                        </Flex>
-                        {prop.description && (
-                          <Text color="gray" size="2" mt="1">
-                            {prop.description}
-                          </Text>
-                        )}
-                      </Card>
-                    )
-                  )}
-                </Flex>
-              </Box>
-            )} */}
-          </Flex>
+              </p>
+            </div>
+          </div>
         ) : (
-          <Flex
-            align="center"
-            justify="center"
-            className="h-full text-gray-400"
-          >
+          <div className="flex h-full items-center justify-center text-muted-foreground">
             Select a template to see details
-          </Flex>
+          </div>
         )}
-      </Box>
-    </Flex>
+      </div>
+    </div>
   );
 };

@@ -1,3 +1,9 @@
+import { LayoutProps } from "./props/layout";
+
 export const PageProps = () => {
-  return <div>PageProps</div>;
+  return (
+    <div>
+      <LayoutProps />
+    </div>
+  );
 };

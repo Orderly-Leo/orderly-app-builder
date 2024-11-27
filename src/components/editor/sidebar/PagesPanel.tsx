@@ -3,19 +3,44 @@ import { PageList } from "../page/pageList";
 import { PageToolbar } from "../page/PageToolbar";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { PageProps } from "../page/pageProps";
+import { currentPagesAtom, pagesAtom, pathsAtom } from "../page/pages.atom";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 
 export const PagesPanel = () => {
   const navigate = useNavigate();
-  const { pageId } = useParams();
+  const params = useParams();
+
+  // const [pages] = useAtom(pagesAtom);
+
+  const [pages] = useAtom(currentPagesAtom);
+
+  const [_, setPaths] = useAtom(pathsAtom);
+
+  useEffect(() => {
+    if (params["*"]) {
+      setPaths(params["*"].split("/"));
+    } else {
+      setPaths([]);
+    }
+  }, [params]);
 
   // return <PageList />;
 
   return (
     <div className="grid grid-cols-3">
       <div className="col-span-2">
-        <PageList />
+        <PageToolbar
+          onCreateClick={function (): void {
+            // throw new Error("Function not implemented.");
+            navigate("/create/page");
+          }}
+        />
+        <div className="p-4">
+          <PageList pages={pages} parentPath={params["*"]} />
+        </div>
       </div>
-      <div>
+      <div className="sticky top-[64px]">
         <PageProps />
       </div>
     </div>

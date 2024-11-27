@@ -1,10 +1,12 @@
-import { Box, Card, Flex, Text } from "@radix-ui/themes";
-import { useAtom } from "jotai";
-import { pagesAtom, selectedPageIdAtom } from "../../../store/pageStore";
+import { Flex, Text } from "@radix-ui/themes";
+// import { pagesAtom, selectedPageIdAtom } from "../../../store/pageStore";
+import { NavLink } from "react-router-dom";
+import { Card } from "@/components/ui/card";
+import { FC } from "react";
 
-export const PageList = () => {
-  const [pages] = useAtom(pagesAtom);
-  const [selectedPageId, setSelectedPageId] = useAtom(selectedPageIdAtom);
+export const PageList: FC<{ pages: any[]; parentPath?: string }> = (props) => {
+  const { pages, parentPath } = props;
+  // const [selectedPageId, setSelectedPageId] = useAtom(selectedPageIdAtom);
 
   if (pages.length === 0) {
     return (
@@ -20,26 +22,25 @@ export const PageList = () => {
     );
   }
 
+  if (!Array.isArray(pages)) {
+    return <div>Page details</div>;
+  }
+
   return (
-    <Box className="p-2">
-      {pages.map((page) => (
-        <Card
-          key={page.id}
-          className={`mb-2 cursor-pointer transition-colors ${
-            selectedPageId === page.id
-              ? "border-blue-500 bg-blue-50"
-              : "hover:bg-gray-50"
-          }`}
-          onClick={() => setSelectedPageId(page.id)}
-        >
-          <Flex direction="column" gap="1">
-            <Text weight="medium">{page.name}</Text>
-            <Text size="1" color="gray">
-              {page.route}
-            </Text>
-          </Flex>
-        </Card>
-      ))}
-    </Box>
+    <div className="flex flex-col gap-3">
+      {pages.map((page) => {
+        const path = parentPath ? `${parentPath}/${page.route}` : page.route;
+        return (
+          <NavLink to={path} key={page.id}>
+            <Card className="shadow-none p-3">
+              <Flex direction="column" gap="1">
+                <div className="font-medium">{page.name}</div>
+                <div className="text-sm text-gray-500">{path}</div>
+              </Flex>
+            </Card>
+          </NavLink>
+        );
+      })}
+    </div>
   );
 };

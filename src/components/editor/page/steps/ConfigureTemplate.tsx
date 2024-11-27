@@ -1,6 +1,9 @@
 import { TextField, Flex, Text, Box } from "@radix-ui/themes";
 import { PageComponent, PageConfig } from "../../../../types/page";
 import { ChangeEvent } from "react";
+import { Input } from "@/components/ui/input";
+import { InputLabel } from "@/components/ui/inputLabel";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface ConfigureTemplateProps {
   template: PageComponent;
@@ -21,10 +24,10 @@ export const ConfigureTemplate = ({
   };
 
   return (
-    <Flex>
+    <div className="flex">
       {/* 左侧预览区域 */}
-      <Box className="w-1/3" p={"4"}>
-        <Box className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+      <div className="w-1/3 p-4">
+        <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
           {template.thumbnail ? (
             <img
               src={template.thumbnail}
@@ -40,76 +43,42 @@ export const ConfigureTemplate = ({
               No preview available
             </Flex>
           )}
-        </Box>
-      </Box>
+        </div>
+      </div>
 
       {/* 右侧配置表单 */}
-      <Flex direction="column" gap="3" className="flex-1 px-4">
-        <Box>
-          <Text as="label" size="2" weight="medium" mb="2">
-            Page Name
-          </Text>
-          <TextField.Root
+      <div className="flex-1 p-4 flex flex-col gap-4">
+        <div>
+          <InputLabel>Page Name</InputLabel>
+          <Input
             value={config.name || ""}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleChange("name", e.target.value)
             }
             placeholder="Enter page name"
           />
-        </Box>
+        </div>
 
-        <Box>
-          <Text as="label" size="2" weight="medium" mb="2">
-            Route
-          </Text>
-          <TextField.Root
+        <div>
+          <InputLabel>Route</InputLabel>
+          <Input
             value={config.route || ""}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleChange("route", e.target.value)
             }
             placeholder="/path/to/page"
           />
-        </Box>
-        <Box>
-          <Text as="label" size="2" weight="medium" mb="2">
-            Use the global layout
-          </Text>
-        </Box>
+        </div>
 
-        {/* {Object.entries(template.props || {}).length > 0 && (
-          <Box>
-            <Text size="3" weight="medium" mb="3">
-              Page Properties
-            </Text>
-            <Flex direction="column" gap="4">
-              {Object.entries(template.props || {}).map(([prop, schema]) => (
-                <Box key={prop}>
-                  <Text as="label" size="2" weight="medium" mb="2">
-                    {prop}
-                    {schema.required && (
-                      <Text color="red" ml="1">
-                        *
-                      </Text>
-                    )}
-                  </Text>
-                  <TextField.Root
-                    value={config.props?.[prop] || schema.default || ""}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      handlePropChange(prop, e.target.value)
-                    }
-                    placeholder={schema.description}
-                  />
-                  {schema.description && (
-                    <Text size="1" color="gray" mt="1">
-                      {schema.description}
-                    </Text>
-                  )}
-                </Box>
-              ))}
-            </Flex>
-          </Box>
-        )} */}
-      </Flex>
-    </Flex>
+        <div className="flex items-center gap-2">
+          <Checkbox id="inheritLayout" />
+          <label htmlFor="inheritLayout">Inherit Parent Layout</label>
+          {/* <Switch
+            checked={config.inheritLayout || false}
+            onCheckedChange={(checked) => handleChange("inheritLayout", checked)}
+          /> */}
+        </div>
+      </div>
+    </div>
   );
 };

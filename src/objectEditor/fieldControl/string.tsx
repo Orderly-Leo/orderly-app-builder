@@ -8,5 +8,11 @@ type StringControlProps = {
 
 export const StringControl: FC<StringControlProps> = (props) => {
   const { value, onChange } = props;
-  return <Input value={value} onChange={(e) => onChange?.(e.target.value)} />;
+  return (
+    <Input
+      value={value}
+      onChange={(e) => onChange?.(e.target.value)}
+      className="max-w-xs"
+    />
+  );
 };

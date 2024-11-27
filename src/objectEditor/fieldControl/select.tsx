@@ -1,4 +1,12 @@
-import { Select } from "@radix-ui/themes";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { FC } from "react";
 
 export const SelectControl: FC<{
@@ -7,16 +15,22 @@ export const SelectControl: FC<{
   onChange: (value: any) => void;
 }> = (props) => {
   const { value, options, onChange } = props;
+  // return <div>Select</div>;
   return (
-    <Select.Root value={value} onValueChange={onChange}>
-      <Select.Trigger />
-      <Select.Content>
-        {options?.map((option) => (
-          <Select.Item key={option.value} value={option.value}>
-            {option.label}
-          </Select.Item>
-        ))}
-      </Select.Content>
-    </Select.Root>
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Select a fruit" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Fruits</SelectLabel>
+          {options?.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 };

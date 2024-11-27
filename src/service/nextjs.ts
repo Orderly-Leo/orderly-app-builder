@@ -3,9 +3,18 @@ import { BaseFrameworkHandler } from "./baseFramework";
 import { CreateProjectInputs } from "./projectManager";
 import { Command } from "@tauri-apps/plugin-shell";
 import { CreateProjectIds } from "@/components/steps/types";
+import { join } from "@tauri-apps/api/path";
 
 export class Nextjs extends BaseFrameworkHandler {
-  constructor(projectPath: string, projectName: string) {
+  constructor(
+    projectPath: string,
+    projectName: string,
+    options: {
+      paths: {
+        css: string;
+      };
+    }
+  ) {
     super(projectPath, projectName);
   }
   run(): void {
@@ -117,6 +126,17 @@ export class Nextjs extends BaseFrameworkHandler {
         e
       );
     }
+  }
+
+  async loadCSS() {
+    const cssPath = await join(
+      this.fullProjectPath,
+      "src",
+      "app",
+      "globals.css"
+    );
+    const css = await this.readFile(cssPath);
+    console.log(css);
   }
 
   private async clearPages(inputs: CreateProjectInputs) {}

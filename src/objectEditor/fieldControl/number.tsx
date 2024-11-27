@@ -11,6 +11,7 @@ export const NumberControl: FC<{
       type="number"
       value={value}
       onChange={(e) => onChange(Number(e.target.value))}
+      className="max-w-xs"
     />
   );
 };

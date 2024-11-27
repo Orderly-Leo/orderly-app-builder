@@ -19,33 +19,35 @@ export const SettingItem = ({
   onChange,
 }: SettingItemProps) => {
   const renderControl = () => {
-    switch (type) {
-      case "boolean":
-        return <Switch checked={value} onCheckedChange={onChange} />;
-      case "select":
-        return (
-          <Select.Root value={value} onValueChange={onChange}>
-            <Select.Trigger />
-            <Select.Content>
-              {options?.map((option) => (
-                <Select.Item key={option.value} value={option.value}>
-                  {option.label}
-                </Select.Item>
-              ))}
-            </Select.Content>
-          </Select.Root>
-        );
-      case "number":
-        return (
-          <TextField.Root
-            type="number"
-            value={value}
-            onChange={(e) => onChange(Number(e.target.value))}
-          />
-        );
-      default:
-        return null;
-    }
+    return <div>Select error</div>;
+    // switch (type) {
+
+    //   case "boolean":
+    //     return <Switch checked={value} onCheckedChange={onChange} />;
+    //   case "select":
+    //     return (
+    //       <Select.Root value={value} onValueChange={onChange}>
+    //         <Select.Trigger />
+    //         <Select.Content>
+    //           {options?.map((option) => (
+    //             <Select.Item key={option.value} value={option.value}>
+    //               {option.label}
+    //             </Select.Item>
+    //           ))}
+    //         </Select.Content>
+    //       </Select.Root>
+    //     );
+    //   case "number":
+    //     return (
+    //       <TextField.Root
+    //         type="number"
+    //         value={value}
+    //         onChange={(e) => onChange(Number(e.target.value))}
+    //       />
+    //     );
+    //   default:
+    //     return null;
+    // }
   };
 
   return (

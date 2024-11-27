@@ -25,6 +25,14 @@ export const config = {
       },
     },
   },
+  projectConfig: {
+    paths: {
+      themeCSS: "src/globals.css",
+      src: "src",
+      public: "public",
+      components: "src/components",
+    },
+  },
   // pages: {
   //   trading: {
   //     symbol: "ETH-USDC-PREP",

@@ -4,7 +4,7 @@ import { Flex, Heading, Text } from "@radix-ui/themes";
 
 export const ObjectFields: FC<{ object: any[] }> = (props) => {
   return (
-    <Flex direction="column" gap="4">
+    <div className="flex flex-col gap-4">
       {props.object.map((item) => {
         return (
           <div key={item.key}>
@@ -34,21 +34,21 @@ export const ObjectFields: FC<{ object: any[] }> = (props) => {
           </div>
         );
       })}
-    </Flex>
+    </div>
   );
 };
 
 const SectionHeader: FC<{ title: string; id: string }> = (props) => {
   return (
-    <div className="sticky top-0 bg-white py-2" id={props.id}>
-      <Heading className="mb-4">{props.title}</Heading>
+    <div className="sticky top-[60px] bg-white py-3 mb-3" id={props.id}>
+      <div className="text-xl font-medium">{props.title}</div>
     </div>
   );
 };
 
 const Fields: FC<{ fields: any[] }> = (props) => {
   return (
-    <Flex direction="column" gap="3">
+    <div className="flex flex-col gap-4">
       {props.fields.map((field) => {
         if (field.type === "object" && field.children) {
           return (
@@ -69,7 +69,7 @@ const Fields: FC<{ fields: any[] }> = (props) => {
               field={field}
               path={field.path}
               label={field.label}
-              description={field.description || ""}
+              // description={field.description || ""}
             />
           );
         }
@@ -81,10 +81,10 @@ const Fields: FC<{ fields: any[] }> = (props) => {
             field={field}
             path={field.path}
             label={field.label}
-            description={field.description || ""}
+            // description={field.description || ""}
           />
         );
       })}
-    </Flex>
+    </div>
   );
 };

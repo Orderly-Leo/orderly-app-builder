@@ -18,10 +18,10 @@ export const ObjectEditor: FC<ObjectEditorProps> = (props) => {
       onFieldChange={props.onFieldChange}
       argTypes={props.argTypes}
     >
-      <Flex>
+      <div className="grid grid-cols-[220px_1fr]">
         <ObjectCategory object={props.object} />
         <ObjectFields object={props.object} />
-      </Flex>
+      </div>
     </ObjectEditorProvider>
   );
 };

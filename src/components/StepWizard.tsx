@@ -38,7 +38,7 @@ const StepWizardContent: React.FC<StepWizardProps> = ({}) => {
   };
 
   return (
-    <div className="min-h-screen p-8 bg-gradient-to-b from-[#1a1333] to-[#28163A]">
+    <div className="min-h-screen p-8 step-wizard-container">
       {/* <div>
         <img
           className="w-auto h-7 relative object-contain dark:block"

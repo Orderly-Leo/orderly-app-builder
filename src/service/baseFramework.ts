@@ -3,6 +3,7 @@ import { IFramework } from "./framework";
 import { CreateProjectInputs } from "./projectManager";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { Command } from "@tauri-apps/plugin-shell";
+import { CustomError } from "@/types/customError";
 
 export abstract class BaseFrameworkHandler implements IFramework {
   constructor(projectPath: string, projectName: string) {
@@ -21,6 +22,7 @@ export abstract class BaseFrameworkHandler implements IFramework {
   abstract createProject(inputs: CreateProjectInputs): Promise<any>;
   // abstract createAppFromTemplate(inputs: CreateProjectInputs): Promise<any>;
   abstract updateProjectFiles(inputs: CreateProjectInputs): Promise<any>;
+  abstract loadCSS(): Promise<any>;
 
   onData(data: string) {
     console.log("!!!", data);
@@ -52,7 +54,7 @@ export abstract class BaseFrameworkHandler implements IFramework {
     return `${this.projectPath}/${this.projectName}/package.json`;
   }
 
-  private get fullProjectPath() {
+  protected get fullProjectPath() {
     return `${this.projectPath}/${this.projectName}`;
   }
 
@@ -106,10 +108,22 @@ export abstract class BaseFrameworkHandler implements IFramework {
       const result = await command.execute();
 
       if (result.code !== 0) {
-        throw new CustomError();
+        throw new CustomError(
+          "install-dependencies",
+          "Failed to install dependencies",
+          result.stderr
+        );
       }
-    } catch (e) {
-      throw new CustomError(e);
+    } catch (e: any) {
+      throw new CustomError(
+        "install-dependencies",
+        "Failed to install dependencies",
+        e.message
+      );
     }
+  }
+
+  protected async readFile(path: string) {
+    return await readTextFile(path);
   }
 }

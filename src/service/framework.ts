@@ -14,4 +14,6 @@ export interface IFramework {
   updateProjectFiles(inputs: CreateProjectInputs): Promise<any>;
 
   installDependencies(inputs: CreateProjectInputs): Promise<any>;
+
+  loadCSS(): Promise<any>;
 }

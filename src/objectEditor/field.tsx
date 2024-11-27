@@ -1,9 +1,10 @@
 import { FC, useMemo } from "react";
 import { useFieldControls } from "./editorProvider";
 import { UndefinedControl } from "./fieldControl/undefined";
-import { Box, Flex, Text } from "@radix-ui/themes";
+import { Box } from "@radix-ui/themes";
 import { view, lensPath } from "ramda";
 import { Description } from "./description";
+import { InputLabel } from "@/components/ui/inputLabel";
 
 export const Field: FC<{
   name: string;
@@ -40,15 +41,13 @@ export const Field: FC<{
   }
 
   return (
-    <Box>
-      <Text as="label" size="2" weight="medium">
-        {label}
-      </Text>
+    <div className="hover:bg-gray-50 p-2 rounded-md -mx-2">
+      <InputLabel>{label}</InputLabel>
       <Description description={argType?.description} />
 
-      <Box mt="2">
+      <div>
         <Control {...field} onChange={onChange} />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };

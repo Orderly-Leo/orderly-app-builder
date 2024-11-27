@@ -13,13 +13,7 @@ import { CreatePageWizard } from "../components/editor/page/createPageWizard";
 import { ThemeConfigs } from "../components/editor/theme/ThemeConfigs";
 import { ConfigPanel } from "../components/config/configPanel";
 import { PagesStep } from "../components/steps/PagesStep";
-
-const steps = [
-  { title: "Broker ID", component: BrokerStep, description: "" },
-  { title: "React Framework", component: FrameworkStep, description: "" },
-  { title: "Wallet Connector", component: WalletStep, description: "" },
-  { title: "Pages", component: PagesStep, description: "" },
-];
+import { ThemesPanel } from "../components/editor/theme/ThemesPanel";
 
 export const router = createBrowserRouter([
   {
@@ -30,20 +24,17 @@ export const router = createBrowserRouter([
         index: true,
         element: <Navigate to="/bootstrap" replace />,
       },
-      {
-        path: "create",
-        element: <CreatePageWizard />,
-      },
+      // {
+      //   path: "create",
+      //   element: <CreatePageWizard />,
+      // },
       {
         path: "bootstrap",
-        element: (
-          <StepWizard
-            steps={steps}
-            onComplete={(data) => {
-              console.log("Wizard completed with data:", data);
-            }}
-          />
-        ),
+        element: <StepWizard />,
+      },
+      {
+        path: "create/page",
+        element: <CreatePageWizard />,
       },
       {
         path: "editor",
@@ -54,22 +45,28 @@ export const router = createBrowserRouter([
             element: <Navigate to="/editor/pages" replace />,
           },
           {
-            path: "pages",
+            path: "pages/*",
             element: <PagesPanel />,
             children: [
-              {
-                path: "create",
-                element: <CreatePageWizard />,
-              },
-              {
-                path: ":pageId",
-                element: <PageDetail />,
-              },
+              // {
+              //   path: ":pageId",
+              //   element: <PageDetail />,
+              // },
             ],
           },
           {
-            path: "theme",
-            element: <ThemeConfigs />,
+            path: "themes",
+            // element: <ThemesPanel />,
+            children: [
+              {
+                index: true,
+                element: <ThemesPanel />,
+              },
+              {
+                path: ":themeName",
+                element: <ThemeConfigs />,
+              },
+            ],
           },
           {
             path: "components",
