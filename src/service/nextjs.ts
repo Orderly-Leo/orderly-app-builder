@@ -6,6 +6,7 @@ import { CreateProjectIds } from "@/components/steps/types";
 import { join } from "@tauri-apps/api/path";
 
 export class Nextjs extends BaseFrameworkHandler {
+  private cssPath: string;
   constructor(
     projectPath: string,
     projectName: string,
@@ -16,6 +17,7 @@ export class Nextjs extends BaseFrameworkHandler {
     }
   ) {
     super(projectPath, projectName);
+    this.cssPath = options.paths.css;
   }
   run(): void {
     throw new Error("Method not implemented.");
@@ -28,6 +30,11 @@ export class Nextjs extends BaseFrameworkHandler {
   }
   generateFiles(config: any): Promise<any> {
     throw new Error("Method not implemented.");
+  }
+
+  async getFullCSSPath() {
+    if (!this.cssPath) return null;
+    return await join(this.fullProjectPath, this.cssPath);
   }
   async createProject(inputs: CreateProjectInputs): Promise<any> {
     /**
@@ -129,14 +136,17 @@ export class Nextjs extends BaseFrameworkHandler {
   }
 
   async loadCSS() {
-    const cssPath = await join(
-      this.fullProjectPath,
-      "src",
-      "app",
-      "globals.css"
-    );
+    const cssPath = await this.getFullCSSPath();
+
+    console.log("css path", cssPath);
+
+    if (!cssPath) return;
+
     const css = await this.readFile(cssPath);
-    console.log(css);
+    const cssData = await this.parseCSS(css);
+    console.log("css data", cssData);
+
+    return cssData;
   }
 
   private async clearPages(inputs: CreateProjectInputs) {}

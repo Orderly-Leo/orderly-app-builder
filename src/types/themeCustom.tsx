@@ -1,6 +1,7 @@
 export const themeCustomArgTypes = {
   colors: {
-    Primary: {
+    type: "colors",
+    primary: {
       default: {
         description: "The default color of the primary color",
       },

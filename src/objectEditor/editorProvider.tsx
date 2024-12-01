@@ -29,7 +29,7 @@ export const useFieldControls = () => {
 
 export const ObjectEditorProvider: FC<
   PropsWithChildren<{
-    onFieldChange?: (key: string, value: any) => void;
+    // onFieldChange?: (key: string, value: any) => void;
     argTypes?: any;
   }>
 > = (props) => {
@@ -37,7 +37,7 @@ export const ObjectEditorProvider: FC<
     <ObjectEditorContext.Provider
       value={{
         fieldControls: defaultFieldControls,
-        onFieldChange: props.onFieldChange,
+        // onFieldChange: props.onFieldChange,
         argTypes: props.argTypes,
       }}
     >

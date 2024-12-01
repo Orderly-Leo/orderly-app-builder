@@ -1,40 +1,75 @@
-import { FC } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { Field } from "./field";
-import { Flex, Heading, Text } from "@radix-ui/themes";
+import { FormProvider, useForm } from "react-hook-form";
+import { objectParse } from "./helper";
 
-export const ObjectFields: FC<{ object: any[] }> = (props) => {
+export const ObjectFields: FC<{
+  object: any[];
+  classes?: {
+    fields?: string;
+    field?: string;
+    sectionHeader?: string;
+  };
+}> = (props) => {
+  const methods = useForm({
+    defaultValues: props.object,
+  });
+  const { classes } = props;
+
+  // console.log(props.object);
+
+  useEffect(() => {
+    const subscription = methods.watch((value, { name, type }) =>
+      console.log(value, name, type)
+    );
+    return () => subscription.unsubscribe();
+  }, [methods.watch]);
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
+
   return (
-    <div className="flex flex-col gap-4">
-      {props.object.map((item) => {
-        return (
-          <div key={item.key}>
-            <SectionHeader
-              title={item.label}
-              id={item.path.replace(".", "_")}
-            />
-            {item.type === "object" && item.children && (
-              <Fields fields={item.children} />
-            )}
-            {item.type === "colors" && item.children && (
-              <Field
-                name={item.key}
-                field={item}
-                label={item.label}
-                path={item.path}
-              />
-            )}
-            {!item.children && (
-              <Field
-                name={item.key}
-                field={item}
-                path={item.path}
-                label={item.label}
-              />
-            )}
-          </div>
-        );
-      })}
-    </div>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <div className="flex flex-col gap-4 px-2">
+          {props.object.map((item) => {
+            return (
+              <div key={item.key}>
+                {(item.type === "object" || item.type === "array") &&
+                  item.children && (
+                    <Fields
+                      fields={item.children}
+                      title={item.label}
+                      id={item.path.replace(".", "_")}
+                      classes={classes}
+                    />
+                  )}
+                {item.type === "colors" && item.children && (
+                  <Field
+                    name={item.key}
+                    field={item}
+                    label={item.label}
+                    path={item.path}
+                    level={item.level}
+                    className={classes?.field}
+                  />
+                )}
+                {!item.children && (
+                  <Field
+                    name={item.key}
+                    field={item}
+                    path={item.path}
+                    label={item.label}
+                    level={item.level}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </form>
+    </FormProvider>
   );
 };
 
@@ -46,22 +81,49 @@ const SectionHeader: FC<{ title: string; id: string }> = (props) => {
   );
 };
 
-const Fields: FC<{ fields: any[] }> = (props) => {
+const Fields: FC<{
+  fields: any[];
+  title: string;
+  id: string;
+  classes?: {
+    fields?: string;
+    field?: string;
+    sectionHeader?: string;
+  };
+}> = (props) => {
+  const { fields, title, id, classes } = props;
   return (
-    <div className="flex flex-col gap-4">
-      {props.fields.map((field) => {
-        if (field.type === "object" && field.children) {
-          return (
-            <div key={field.key}>
-              <Text as="div" weight="medium" mb="2">
-                {field.label}
-              </Text>
-              <Fields fields={field.children} />
-            </div>
-          );
-        }
+    <>
+      <SectionHeader title={title} id={id} />
+      <div className="flex flex-col gap-4">
+        {props.fields.map((field) => {
+          if (field.type === "object" && field.children) {
+            return (
+              <div key={field.key}>
+                <div className="text-lg font-medium mb-2">{field.label}</div>
+                <Fields
+                  fields={field.children}
+                  title={field.label}
+                  id={field.path.replace(".", "_")}
+                />
+              </div>
+            );
+          }
 
-        if (field.type === "colors" && field.children) {
+          if (field.type === "colors" && field.children) {
+            return (
+              <Field
+                key={field.key}
+                name={field.key}
+                field={field}
+                path={field.path}
+                label={field.label}
+                level={field.level}
+                // description={field.description || ""}
+              />
+            );
+          }
+
           return (
             <Field
               key={field.key}
@@ -69,22 +131,12 @@ const Fields: FC<{ fields: any[] }> = (props) => {
               field={field}
               path={field.path}
               label={field.label}
+              level={field.level}
               // description={field.description || ""}
             />
           );
-        }
-
-        return (
-          <Field
-            key={field.key}
-            name={field.key}
-            field={field}
-            path={field.path}
-            label={field.label}
-            // description={field.description || ""}
-          />
-        );
-      })}
-    </div>
+        })}
+      </div>
+    </>
   );
 };

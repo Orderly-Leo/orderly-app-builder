@@ -1,32 +1,35 @@
+import { atomWithImmer } from "jotai-immer";
 import { ThemeConfig } from "./type";
+import { atom } from "jotai";
+import { objectParse, ParsedNode } from "@/objectEditor/helper";
 
 export const themeConfig: ThemeConfig = {
   colors: {
-    Primary: {
+    primary: {
       darken: "#993ed6",
       default: "#3E63DD",
       lighten: "#cf8cff",
       contrast: "#FFFFFF",
     },
-    Error: {
+    error: {
       darken: "#EF4444",
       default: "#EF4444",
       lighten: "#EF4444",
       contrast: "#FFFFFF",
     },
-    Success: {
+    success: {
       darken: "#10B981",
       default: "#10B981",
       lighten: "#10B981",
       contrast: "#FFFFFF",
     },
-    Warning: {
+    warning: {
       darken: "#D25F00",
       default: "#FF7D00",
       lighten: "#FF9A2E",
       contrast: "#FFFFFF",
     },
-    Base: {
+    base: {
       "100": "#F9FAFB",
       "200": "#F3F4F6",
       "300": "#E5E7EB",
@@ -80,3 +83,27 @@ export const themeConfig: ThemeConfig = {
     full: "9999px",
   },
 };
+
+export type Theme = {
+  name: string;
+  // id: string;
+  theme: ThemeConfig;
+};
+
+export const themesAtom = atom<Theme[]>([
+  { name: "default", theme: themeConfig },
+]);
+
+//objectParse(themeConfig)
+// export const themeAtom = atomWithImmer({});
+
+export const currentThemeAtom = atom<Theme>({
+  name: "default",
+  theme: themeConfig,
+});
+
+export const themeObjectAtom = atom<ParsedNode[]>((get) => {
+  const theme = get(currentThemeAtom);
+  return theme.theme;
+  // return objectParse(theme.theme);
+});

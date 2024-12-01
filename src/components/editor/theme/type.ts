@@ -1,10 +1,10 @@
 export interface ThemeConfig {
   colors: {
-    Primary: ColorConfig;
-    Error: ColorConfig;
-    Success: ColorConfig;
-    Warning: ColorConfig;
-    Base: {
+    primary: ColorConfig;
+    error: ColorConfig;
+    success: ColorConfig;
+    warning: ColorConfig;
+    base: {
       [key: string]: string;
     };
   };

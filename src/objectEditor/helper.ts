@@ -96,6 +96,7 @@ const parseConfigNode = (
 };
 
 export interface ParsedNode {
+  level: number;
   key: string;
   label: string;
   name: string;
@@ -109,13 +110,16 @@ export interface ParsedNode {
 export const objectParse = (
   obj: Record<string, any>,
   parentKey: string = "",
-  parentPath: string[] = []
+  parentPath: string[] = [],
+  level: number = 0
 ): ParsedNode[] => {
   return Object.entries(obj).map(([key, value]) => {
     const currentPath = [...parentPath, key];
     const label = key
       .replace(/([A-Z])/g, " $1")
       .replace(/^./, (str) => str.toUpperCase());
+
+    const id = !!parentKey ? `${parentKey}_${key}` : key;
 
     if (value === null || value === undefined) {
       return {
@@ -125,6 +129,8 @@ export const objectParse = (
         type: "text",
         value,
         path: currentPath.join("."),
+        level,
+        id,
       };
     }
 
@@ -136,6 +142,8 @@ export const objectParse = (
         type: typeof value,
         value,
         path: currentPath.join("."),
+        level,
+        id,
       };
     }
 
@@ -147,6 +155,7 @@ export const objectParse = (
         name: label,
         type: "array",
         path: currentPath.join("."),
+        level,
         children: value.map((item, index) => {
           if (typeof item === "object" && item !== null) {
             // 如果数组元素是对象，递归处理
@@ -156,10 +165,13 @@ export const objectParse = (
               name: `Item ${index}`,
               type: "object",
               path: [...currentPath, index.toString()].join("."),
-              children: objectParse(item, index.toString(), [
-                ...currentPath,
-                index.toString(),
-              ]),
+              level: level + 1,
+              children: objectParse(
+                item,
+                `${parentKey}_${key}`,
+                [...currentPath, index.toString()],
+                level + 2
+              ),
             };
           } else {
             // 如果是基本类型，直接返回
@@ -170,84 +182,86 @@ export const objectParse = (
               type: typeof item,
               value: item,
               path: [...currentPath, index.toString()].join("."),
+              level: level + 1,
+              id,
             };
           }
         }),
       };
     }
 
-    // 处理颜色对象（包含 darken、default、lighten、contrast 的对象）
-    if (
-      typeof value === "object" &&
-      ("darken" in value ||
-        "default" in value ||
-        "lighten" in value ||
-        "contrast" in value)
-    ) {
-      return {
-        key,
-        label,
-        type: "colors",
-        name: label,
-        path: currentPath.join("."),
-        children: [
-          {
-            key: "darken",
-            type: "color",
-            label: "Darken",
-            name: label,
-            value: value.darken,
-            path: [...currentPath, "darken"].join("."),
-          },
-          {
-            key: "default",
-            type: "color",
-            label: "Default",
-            name: label,
-            value: value.default,
-            path: [...currentPath, "default"].join("."),
-          },
-          {
-            key: "lighten",
-            type: "color",
-            label: "Lighten",
-            name: label,
-            value: value.lighten,
-            path: [...currentPath, "lighten"].join("."),
-          },
-          {
-            key: "contrast",
-            type: "color",
-            label: "Contrast",
-            name: label,
-            value: value.contrast,
-            path: [...currentPath, "contrast"].join("."),
-          },
-        ],
-      };
-    }
+    // // 处理颜色对象（包含 darken、default、lighten、contrast 的对象）
+    // if (
+    //   typeof value === "object" &&
+    //   ("darken" in value ||
+    //     "default" in value ||
+    //     "lighten" in value ||
+    //     "contrast" in value)
+    // ) {
+    //   return {
+    //     key,
+    //     label,
+    //     type: "colors",
+    //     name: label,
+    //     path: currentPath.join("."),
+    //     children: [
+    //       {
+    //         key: "darken",
+    //         type: "color",
+    //         label: "Darken",
+    //         name: label,
+    //         value: value.darken,
+    //         path: [...currentPath, "darken"].join("."),
+    //       },
+    //       {
+    //         key: "default",
+    //         type: "color",
+    //         label: "Default",
+    //         name: label,
+    //         value: value.default,
+    //         path: [...currentPath, "default"].join("."),
+    //       },
+    //       {
+    //         key: "lighten",
+    //         type: "color",
+    //         label: "Lighten",
+    //         name: label,
+    //         value: value.lighten,
+    //         path: [...currentPath, "lighten"].join("."),
+    //       },
+    //       {
+    //         key: "contrast",
+    //         type: "color",
+    //         label: "Contrast",
+    //         name: label,
+    //         value: value.contrast,
+    //         path: [...currentPath, "contrast"].join("."),
+    //       },
+    //     ],
+    //   };
+    // }
 
-    // 处理基础色值对象（包含数字键的对象，如 100、200、300 等）
-    if (
-      typeof value === "object" &&
-      Object.keys(value).every((k) => /^\d+$/.test(k))
-    ) {
-      return {
-        key,
-        label,
-        name: label,
-        type: "colors",
-        path: currentPath.join("."),
-        children: Object.entries(value).map(([colorKey, colorValue]) => ({
-          key: colorKey,
-          type: "color",
-          label: colorKey,
-          name: label,
-          value: colorValue,
-          path: [...currentPath, colorKey].join("."),
-        })),
-      };
-    }
+    // // 处理基础色值对象（包含数字键的对象，如 100、200、300 等）
+    // if (
+    //   typeof value === "object" &&
+    //   Object.keys(value).every((k) => /^\d+$/.test(k))
+    // ) {
+    //   return {
+    //     key,
+    //     label,
+    //     name: label,
+    //     type: "colors",
+    //     path: currentPath.join("."),
+    //     children: Object.entries(value).map(([colorKey, colorValue]) => ({
+    //       key: colorKey,
+    //       type: "color",
+    //       label: colorKey,
+    //       name: label,
+    //       value: colorValue,
+    //       path: [...currentPath, colorKey].join("."),
+    //     })),
+    //   };
+    // }
 
     // 处理嵌套对象
     return {
@@ -256,7 +270,14 @@ export const objectParse = (
       name: label,
       type: "object",
       path: currentPath.join("."),
-      children: objectParse(value, key, currentPath),
+      level,
+      id: `${parentKey}_${key}`,
+      children: objectParse(
+        value,
+        `${parentKey}_${key}`,
+        currentPath,
+        level + 1
+      ),
     };
   });
 };

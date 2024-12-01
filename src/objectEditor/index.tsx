@@ -1,26 +1,32 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { ObjectEditorProvider } from "./editorProvider";
 import { ObjectFields } from "./fields";
-import { Flex } from "@radix-ui/themes";
 import { ObjectCategory } from "./treeview";
+import { cn } from "@/lib/utils";
+import { objectParse } from "./helper";
 
 export type ObjectEditorProps = {
   object: any;
   generateCode?: (object: any) => string;
   onFieldChange?: (path: string, value: any) => void;
   argTypes?: any;
+  showCategory?: boolean;
 };
 
 export const ObjectEditor: FC<ObjectEditorProps> = (props) => {
-  console.log(props.object);
+  const { showCategory = true } = props;
+
+  const parsedObject = useMemo(() => {
+    return objectParse(props.object);
+  }, [props.object]);
   return (
     <ObjectEditorProvider
-      onFieldChange={props.onFieldChange}
+      // onFieldChange={props.onFieldChange}
       argTypes={props.argTypes}
     >
-      <div className="grid grid-cols-[220px_1fr]">
-        <ObjectCategory object={props.object} />
-        <ObjectFields object={props.object} />
+      <div className={cn(showCategory && "grid grid-cols-[220px_1fr]")}>
+        {showCategory && <ObjectCategory object={parsedObject} />}
+        <ObjectFields object={parsedObject} />
       </div>
     </ObjectEditorProvider>
   );

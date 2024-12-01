@@ -1,18 +1,19 @@
 import { Input } from "@/components/ui/input";
-import { FC } from "react";
+import { FC, forwardRef } from "react";
+import { ChangeHandler } from "react-hook-form";
 
 type StringControlProps = {
   value: string;
-  onChange?: (value: string) => void;
+  name: string;
+  onChange?: ChangeHandler;
 };
 
-export const StringControl: FC<StringControlProps> = (props) => {
-  const { value, onChange } = props;
-  return (
-    <Input
-      value={value}
-      onChange={(e) => onChange?.(e.target.value)}
-      className="max-w-xs"
-    />
-  );
-};
+export const StringControl = forwardRef<HTMLInputElement, StringControlProps>(
+  (props, ref) => {
+    const { onChange, name } = props;
+
+    return (
+      <Input autoComplete="off" name={name} onChange={onChange} ref={ref} />
+    );
+  }
+);

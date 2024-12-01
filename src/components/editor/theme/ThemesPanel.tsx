@@ -1,5 +1,6 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2 } from "lucide-react";
+import { AlertCircle, Pencil, Trash2 } from "lucide-react";
 import { FC } from "react";
 import { Link } from "react-router-dom";
 
@@ -26,6 +27,14 @@ const themes: ColorScheme[] = [
 export const ThemesPanel: FC = () => {
   return (
     <div className="p-6 space-y-8">
+      <Alert variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>
+          Can't found the CSS file, please check the path in orderly.json
+        </AlertDescription>
+      </Alert>
+
       {themes.map((theme) => (
         <div key={theme.name} className="space-y-2 group">
           <div className="flex justify-between items-center">

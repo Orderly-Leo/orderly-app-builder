@@ -1,36 +1,36 @@
 import { useState } from "react";
 import { Box, Tabs, TextField, Text, Flex } from "@radix-ui/themes";
-import { ColorPicker } from "./ColorPicker";
+// import { ColorPicker } from "./ColorPicker";
 import { ThemeConfig } from "./type";
-import { Colors } from "./colors";
+// import { Colors } from "./colors";
 
 const defaultTheme: ThemeConfig = {
   colors: {
-    Primary: {
+    primary: {
       darken: "#993ed6",
       default: "#3E63DD",
       lighten: "#cf8cff",
       contrast: "#FFFFFF",
     },
-    Error: {
+    error: {
       darken: "#EF4444",
       default: "#EF4444",
       lighten: "#EF4444",
       contrast: "#FFFFFF",
     },
-    Success: {
+    success: {
       darken: "#10B981",
       default: "#10B981",
       lighten: "#10B981",
       contrast: "#FFFFFF",
     },
-    Warning: {
+    warning: {
       darken: "#D25F00",
       default: "#FF7D00",
       lighten: "#FF9A2E",
       contrast: "#FFFFFF",
     },
-    Base: {
+    base: {
       "100": "#F9FAFB",
       "200": "#F3F4F6",
       "300": "#E5E7EB",
@@ -42,19 +42,7 @@ const defaultTheme: ThemeConfig = {
       "900": "#1F2937",
     },
   },
-  // colors: {
 
-  //   // primary: "#3E63DD",
-  //   // secondary: "#6B7280",
-  //   // success: "#2ECC71",
-  //   // warning: "#F1C40F",
-  //   // danger: "#E74C3C",
-  //   // info: "#3498DB",
-  //   // background: "#FFFFFF",
-  //   // surface: "#F9FAFB",
-  //   // text: "#1F2937",
-  //   // border: "#E5E7EB",
-  // },
   typography: {
     fontFamily: "Inter, system-ui, sans-serif",
     fontSize: {

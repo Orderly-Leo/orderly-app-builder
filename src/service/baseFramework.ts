@@ -5,6 +5,10 @@ import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { Command } from "@tauri-apps/plugin-shell";
 import { CustomError } from "@/types/customError";
 
+import postcss from "postcss";
+import postcssjs from "postcss-js";
+import { lensPath, view } from "ramda";
+
 export abstract class BaseFrameworkHandler implements IFramework {
   constructor(projectPath: string, projectName: string) {
     this.projectPath = projectPath;
@@ -125,5 +129,19 @@ export abstract class BaseFrameworkHandler implements IFramework {
 
   protected async readFile(path: string) {
     return await readTextFile(path);
+  }
+
+  protected async parseCSS(css: string) {
+    const root = postcss.parse(css);
+    const parsed = postcssjs.objectify(root);
+    // convert cssdata to object
+    const cssData = this.getCSSRoot(parsed);
+    return cssData;
+  }
+
+  // abstract getCSSRoot(obj: Record<string, any>  ): Record<string, any>;
+
+  private getCSSRoot(obj: Record<string, any>) {
+    return view(lensPath(["@layer base", ":root"]), obj);
   }
 }

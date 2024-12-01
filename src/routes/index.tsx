@@ -76,10 +76,10 @@ export const router = createBrowserRouter([
             path: "config",
             element: <ConfigPanel />,
           },
-          {
-            path: "settings",
-            element: <SettingsPanel />,
-          },
+          // {
+          //   path: "settings",
+          //   element: <SettingsPanel />,
+          // },
         ],
       },
     ],
