@@ -1,0 +1,161 @@
+{
+  "../orderly-web/packages/trading/src/pages/trading/trading.page.tsx": [
+    {
+      "displayName": "TradingPage",
+      "description": "",
+      "props": {
+        "symbol": {
+          "defaultValue": null,
+          "description": "",
+          "name": "symbol",
+          "declarations": [
+            {
+              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
+              "name": "TypeLiteral"
+            }
+          ],
+          "required": true,
+          "type": {
+            "name": "string"
+          }
+        },
+        "tradingViewConfig": {
+          "defaultValue": null,
+          "description": "",
+          "name": "tradingViewConfig",
+          "declarations": [
+            {
+              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
+              "name": "TypeLiteral"
+            }
+          ],
+          "required": true,
+          "type": {
+            "name": "TradingViewConfigInterface"
+          }
+        },
+        "onSymbolChange": {
+          "defaultValue": null,
+          "description": "",
+          "name": "onSymbolChange",
+          "declarations": [
+            {
+              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
+              "name": "TypeLiteral"
+            }
+          ],
+          "required": false,
+          "type": {
+            "name": "(symbol: Symbol) => void"
+          }
+        },
+        "disableFeatures": {
+          "defaultValue": null,
+          "description": "",
+          "name": "disableFeatures",
+          "declarations": [
+            {
+              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
+              "name": "TypeLiteral"
+            }
+          ],
+          "required": false,
+          "type": {
+            "name": "TradingFeatures[]"
+          }
+        },
+        "overrideFeatures": {
+          "defaultValue": null,
+          "description": "",
+          "name": "overrideFeatures",
+          "declarations": [
+            {
+              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
+              "name": "TypeLiteral"
+            }
+          ],
+          "required": false,
+          "type": {
+            "name": "Record<TradingFeatures, ReactNode>"
+          }
+        },
+        "sharePnLConfig": {
+          "defaultValue": null,
+          "description": "",
+          "name": "sharePnLConfig",
+          "declarations": [
+            {
+              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
+              "name": "TypeLiteral"
+            }
+          ],
+          "required": false,
+          "type": {
+            "name": "SharePnLConfig & Partial<Omit<SharePnLParams, \"position\" | \"refCode\" | \"leverage\">>"
+          }
+        },
+        "tabletMediaQuery": {
+          "defaultValue": null,
+          "description": "default is  `(max-width: 768px)`",
+          "name": "tabletMediaQuery",
+          "declarations": [
+            {
+              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
+              "name": "TypeLiteral"
+            }
+          ],
+          "required": false,
+          "type": {
+            "name": "string"
+          }
+        },
+        "referral": {
+          "defaultValue": null,
+          "description": "",
+          "name": "referral",
+          "declarations": [
+            {
+              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
+              "name": "TypeLiteral"
+            }
+          ],
+          "required": false,
+          "type": {
+            "name": "ReferralPropsV2"
+          }
+        },
+        "tradingRewards": {
+          "defaultValue": null,
+          "description": "",
+          "name": "tradingRewards",
+          "declarations": [
+            {
+              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
+              "name": "TypeLiteral"
+            }
+          ],
+          "required": false,
+          "type": {
+            "name": "TradingRewardsProps"
+          }
+        },
+        "bottomSheetLeading": {
+          "defaultValue": null,
+          "description": "",
+          "name": "bottomSheetLeading",
+          "declarations": [
+            {
+              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
+              "name": "TypeLiteral"
+            }
+          ],
+          "required": false,
+          "type": {
+            "name": "ReactNode"
+          }
+        }
+      },
+      "methods": []
+    }
+  ]
+}
