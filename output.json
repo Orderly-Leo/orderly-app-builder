@@ -1,161 +1,225 @@
 {
-  "../orderly-web/packages/trading/src/pages/trading/trading.page.tsx": [
-    {
-      "displayName": "TradingPage",
-      "description": "",
-      "props": {
-        "symbol": {
-          "defaultValue": null,
-          "description": "",
-          "name": "symbol",
-          "declarations": [
-            {
-              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
-              "name": "TypeLiteral"
+  "../orderly-web/packages/trading/src/pages/trading/trading.page.tsx": {
+    "components": [
+      {
+        "displayName": "TradingPage",
+        "description": "Perpetual trading page module",
+        "props": {
+          "symbol": {
+            "defaultValue": null,
+            "description": "",
+            "name": "symbol",
+            "required": true,
+            "type": {
+              "name": "string"
             }
-          ],
-          "required": true,
-          "type": {
-            "name": "string"
-          }
-        },
-        "tradingViewConfig": {
-          "defaultValue": null,
-          "description": "",
-          "name": "tradingViewConfig",
-          "declarations": [
-            {
-              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
-              "name": "TypeLiteral"
+          },
+          "tradingViewConfig": {
+            "defaultValue": null,
+            "description": "",
+            "name": "tradingViewConfig",
+            "required": true,
+            "type": {
+              "name": "TradingViewConfigInterface",
+              "definition": {
+                "properties": {
+                  "scriptSRC": {
+                    "type": "string",
+                    "description": "",
+                    "optional": true
+                  },
+                  "library_path": {
+                    "type": "string",
+                    "description": "",
+                    "optional": false
+                  },
+                  "overrides": {
+                    "type": "Record<string, string>",
+                    "description": "",
+                    "optional": true
+                  },
+                  "studiesOverrides": {
+                    "type": "Record<string, string>",
+                    "description": "",
+                    "optional": true
+                  },
+                  "customCssUrl": {
+                    "type": "string",
+                    "description": "",
+                    "optional": true
+                  },
+                  "colorConfig": {
+                    "type": "ColorConfigInterface",
+                    "description": "",
+                    "optional": true,
+                    "definition": {
+                      "properties": {
+                        "chartBG": {
+                          "type": "string",
+                          "description": "",
+                          "optional": true
+                        },
+                        "upColor": {
+                          "type": "string",
+                          "description": "",
+                          "optional": true
+                        },
+                        "downColor": {
+                          "type": "string",
+                          "description": "",
+                          "optional": true
+                        },
+                        "pnlUpColor": {
+                          "type": "string",
+                          "description": "",
+                          "optional": true
+                        },
+                        "pnlDownColor": {
+                          "type": "string",
+                          "description": "",
+                          "optional": true
+                        },
+                        "pnlZoreColor": {
+                          "type": "string",
+                          "description": "",
+                          "optional": true
+                        },
+                        "textColor": {
+                          "type": "string",
+                          "description": "",
+                          "optional": true
+                        },
+                        "qtyTextColor": {
+                          "type": "string",
+                          "description": "",
+                          "optional": true
+                        },
+                        "font": {
+                          "type": "string",
+                          "description": "",
+                          "optional": true
+                        },
+                        "closeIcon": {
+                          "type": "string",
+                          "description": "",
+                          "optional": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
-          ],
-          "required": true,
-          "type": {
-            "name": "TradingViewConfigInterface"
-          }
-        },
-        "onSymbolChange": {
-          "defaultValue": null,
-          "description": "",
-          "name": "onSymbolChange",
-          "declarations": [
-            {
-              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
-              "name": "TypeLiteral"
+          },
+          "onSymbolChange": {
+            "defaultValue": null,
+            "description": "",
+            "name": "onSymbolChange",
+            "required": false,
+            "type": {
+              "name": "(symbol: Symbol) => void"
             }
-          ],
-          "required": false,
-          "type": {
-            "name": "(symbol: Symbol) => void"
-          }
-        },
-        "disableFeatures": {
-          "defaultValue": null,
-          "description": "",
-          "name": "disableFeatures",
-          "declarations": [
-            {
-              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
-              "name": "TypeLiteral"
+          },
+          "disableFeatures": {
+            "defaultValue": null,
+            "description": "",
+            "name": "disableFeatures",
+            "required": false,
+            "type": {
+              "name": "TradingFeatures[]"
             }
-          ],
-          "required": false,
-          "type": {
-            "name": "TradingFeatures[]"
-          }
-        },
-        "overrideFeatures": {
-          "defaultValue": null,
-          "description": "",
-          "name": "overrideFeatures",
-          "declarations": [
-            {
-              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
-              "name": "TypeLiteral"
+          },
+          "overrideFeatures": {
+            "defaultValue": null,
+            "description": "",
+            "name": "overrideFeatures",
+            "required": false,
+            "type": {
+              "name": "Record<TradingFeatures, ReactNode>"
             }
-          ],
-          "required": false,
-          "type": {
-            "name": "Record<TradingFeatures, ReactNode>"
-          }
-        },
-        "sharePnLConfig": {
-          "defaultValue": null,
-          "description": "",
-          "name": "sharePnLConfig",
-          "declarations": [
-            {
-              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
-              "name": "TypeLiteral"
+          },
+          "sharePnLConfig": {
+            "defaultValue": null,
+            "description": "",
+            "name": "sharePnLConfig",
+            "required": false,
+            "type": {
+              "name": "SharePnLConfig & Partial<Omit<SharePnLParams, \"position\" | \"refCode\" | \"leverage\">>"
             }
-          ],
-          "required": false,
-          "type": {
-            "name": "SharePnLConfig & Partial<Omit<SharePnLParams, \"position\" | \"refCode\" | \"leverage\">>"
-          }
-        },
-        "tabletMediaQuery": {
-          "defaultValue": null,
-          "description": "default is  `(max-width: 768px)`",
-          "name": "tabletMediaQuery",
-          "declarations": [
-            {
-              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
-              "name": "TypeLiteral"
+          },
+          "tabletMediaQuery": {
+            "defaultValue": null,
+            "description": "default is  `(max-width: 768px)`",
+            "name": "tabletMediaQuery",
+            "required": false,
+            "type": {
+              "name": "string"
             }
-          ],
-          "required": false,
-          "type": {
-            "name": "string"
-          }
-        },
-        "referral": {
-          "defaultValue": null,
-          "description": "",
-          "name": "referral",
-          "declarations": [
-            {
-              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
-              "name": "TypeLiteral"
+          },
+          "referral": {
+            "defaultValue": null,
+            "description": "",
+            "name": "referral",
+            "required": false,
+            "type": {
+              "name": "ReferralPropsV2",
+              "definition": {
+                "properties": {
+                  "saveRefCode": {
+                    "type": "boolean",
+                    "description": "",
+                    "optional": true,
+                    "definition": {
+                      "type": "union",
+                      "types": [
+                        null,
+                        null
+                      ]
+                    }
+                  },
+                  "onClickReferral": {
+                    "type": "() => void",
+                    "description": "",
+                    "optional": true
+                  },
+                  "onBoundRefCode": {
+                    "type": "(success: boolean, error: any) => void",
+                    "description": "",
+                    "optional": true
+                  }
+                }
+              }
             }
-          ],
-          "required": false,
-          "type": {
-            "name": "ReferralPropsV2"
-          }
-        },
-        "tradingRewards": {
-          "defaultValue": null,
-          "description": "",
-          "name": "tradingRewards",
-          "declarations": [
-            {
-              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
-              "name": "TypeLiteral"
+          },
+          "tradingRewards": {
+            "defaultValue": null,
+            "description": "",
+            "name": "tradingRewards",
+            "required": false,
+            "type": {
+              "name": "TradingRewardsProps",
+              "definition": {
+                "properties": {
+                  "onClickTradingRewards": {
+                    "type": "() => void",
+                    "description": "",
+                    "optional": true
+                  }
+                }
+              }
             }
-          ],
-          "required": false,
-          "type": {
-            "name": "TradingRewardsProps"
-          }
-        },
-        "bottomSheetLeading": {
-          "defaultValue": null,
-          "description": "",
-          "name": "bottomSheetLeading",
-          "declarations": [
-            {
-              "fileName": "orderly/orderly-web/packages/trading/src/types/types.ts",
-              "name": "TypeLiteral"
+          },
+          "bottomSheetLeading": {
+            "defaultValue": null,
+            "description": "",
+            "name": "bottomSheetLeading",
+            "required": false,
+            "type": {
+              "name": "ReactNode"
             }
-          ],
-          "required": false,
-          "type": {
-            "name": "ReactNode"
           }
         }
-      },
-      "methods": []
-    }
-  ]
+      }
+    ]
+  }
 }
