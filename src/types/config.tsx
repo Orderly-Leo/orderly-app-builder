@@ -13,12 +13,22 @@ export const configArgTypes = {
       ),
 
       control: {
-        type: "text",
+        // type: "text",
         placeholder: "Enter broker ID",
       },
     },
     // brokerName: {
     //   description: <h2>Description test</h2>,
     // },
+  },
+  projectConfig: {
+    paths: {
+      themeCSS: {
+        description: "The path to the theme CSS file",
+        control: {
+          type: "file",
+        },
+      },
+    },
   },
 };

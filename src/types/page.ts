@@ -4,11 +4,11 @@ export interface PageComponent {
   description: string;
   thumbnail?: string;
   packages?: string[];
-  defaultConfig: {
+  defaultConfig?: {
     pageName: string;
     route: string;
   };
-  props: Record<string, any>;
+  props?: Record<string, any>;
 }
 
 // export interface PageComponent {

@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Box, Flex } from "@radix-ui/themes";
+import { Box } from "@radix-ui/themes";
 import { PageComponent, PageConfig } from "../../../types/page";
 import { SelectTemplate } from "./steps/SelectTemplate";
 import { ConfigureTemplate } from "./steps/ConfigureTemplate";
-import { SetPageRoute } from "./steps/SetPageRoute";
 import { useAtom } from "jotai";
 import { pagesAtom, pageActions } from "../../../store/pageStore";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +18,7 @@ export const CreatePageWizard = () => {
   const [step, setStep] = useState(0);
   const [selectedTemplate, setSelectedTemplate] =
     useState<PageComponent | null>(null);
-  const [selectedComponents, setSelectedComponents] = useState<string[]>([]);
+  const [selectedComponents] = useState<string[]>([]);
   const [pageConfig, setPageConfig] = useState<Partial<PageConfig>>({});
   const [selectedPages, setSelectedPages] = useState<
     Array<{
@@ -34,8 +33,8 @@ export const CreatePageWizard = () => {
       setPageConfig({
         template: selectedTemplate.id,
         props: {},
-        name: selectedTemplate.defaultConfig.pageName,
-        route: selectedTemplate.defaultConfig.route,
+        name: selectedTemplate.defaultConfig?.pageName || "",
+        route: selectedTemplate.defaultConfig?.route || "",
       });
       setStep(1);
     } else if (step === 1) {
@@ -58,15 +57,6 @@ export const CreatePageWizard = () => {
   const handleCancel = () => {
     // navigate("/editor/pages");
     navigate(-1);
-  };
-
-  const handleComponentSelect = (componentId: string) => {
-    setSelectedComponents((prev) => {
-      if (prev.includes(componentId)) {
-        return prev.filter((id) => id !== componentId);
-      }
-      return [...prev, componentId];
-    });
   };
 
   const handleComplete = () => {
@@ -135,7 +125,7 @@ export const CreatePageWizard = () => {
             />
             <div className="text-xl font-medium">Create New Page</div>
           </div>
-        </div>{" "}
+        </div>
         <Separator />
       </div>
 

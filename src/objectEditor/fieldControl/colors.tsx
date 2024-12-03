@@ -1,4 +1,3 @@
-import { Flex, Text } from "@radix-ui/themes";
 import { FC } from "react";
 
 type ColorsControlProps = {
@@ -10,7 +9,7 @@ type ColorsControlProps = {
 
 export const ColorsControl: FC<ColorsControlProps> = (props) => {
   return (
-    <Flex gapX={"2"} wrap={"wrap"}>
+    <div className="flex gap-2 flex-wrap">
       {props.children.map((child) => {
         return (
           <ColorCell
@@ -22,7 +21,7 @@ export const ColorsControl: FC<ColorsControlProps> = (props) => {
           />
         );
       })}
-    </Flex>
+    </div>
   );
 };
 
@@ -34,7 +33,7 @@ const ColorCell: FC<{
 }> = (props) => {
   const { value, name } = props;
   return (
-    <Flex gapX={"2"}>
+    <div className="flex gap-2">
       <div>
         <input
           type="color"
@@ -45,8 +44,8 @@ const ColorCell: FC<{
           }}
         />
       </div>
-      <Flex direction={"column"}>
-        <Text size={"2"}>{name}</Text>
+      <div className="flex flex-col">
+        <div className="text-sm">{name}</div>
         <input
           className="w-[100px] bg-transparent text-sm bg-gray-300 rounded px-1"
           value={value}
@@ -54,7 +53,7 @@ const ColorCell: FC<{
             props.onChange(e.target.value, props.keyName);
           }}
         />
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 };

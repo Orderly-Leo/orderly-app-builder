@@ -1,6 +1,5 @@
 import { atom } from "jotai";
 import { atomWithImmer } from "jotai-immer";
-import { lensPath } from "ramda";
 
 export const pagesAtom = atomWithImmer<any[]>([
   {

@@ -1,8 +1,5 @@
-import { TextField, Text, Box, Flex } from "@radix-ui/themes";
 import { ChangeEvent, useState } from "react";
-import { useStepWizard } from "../../contexts/StepWizardContext";
 import { Input } from "../ui/input";
-import { Typography } from "../ui/typography";
 import { Button } from "../ui/button";
 import { InputLabel } from "../ui/inputLabel";
 
@@ -12,11 +9,7 @@ interface BrokerStepProps {
   formData: any;
 }
 
-export const BrokerStep: React.FC<BrokerStepProps> = ({
-  onComplete,
-  formData,
-  onNext,
-}) => {
+export const BrokerStep: React.FC<BrokerStepProps> = ({ formData, onNext }) => {
   // const { updateFormData,  formData } = useStepWizard();
   const [brokerId, setBrokerId] = useState(formData.brokerId || "");
   const [brokerName, setBrokerName] = useState(formData.brokerName || "");

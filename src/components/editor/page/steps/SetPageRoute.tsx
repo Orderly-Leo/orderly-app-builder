@@ -5,28 +5,28 @@ const components: PageComponent[] = [
   {
     id: "orderbook",
     name: "Orderbook",
-    category: "Trading",
+    // category: "Trading",
     description: "Display market orderbook with real-time updates",
     thumbnail: "/components/orderbook.png",
   },
   {
     id: "tradingview",
     name: "TradingView Chart",
-    category: "Trading",
+    // category: "Trading",
     description: "Professional trading chart powered by TradingView",
     thumbnail: "/components/chart.png",
   },
   {
     id: "trade-form",
     name: "Trade Form",
-    category: "Trading",
+    // category: "Trading",
     description: "Order placement form with multiple order types",
     thumbnail: "/components/trade-form.png",
   },
   {
     id: "market-trades",
     name: "Market Trades",
-    category: "Trading",
+    // category: "Trading",
     description: "Real-time market trades list",
     thumbnail: "/components/market-trades.png",
   },
@@ -77,9 +77,9 @@ export const SetPageRoute = ({
             <Box p="3">
               <Flex justify="between" align="center" mb="2">
                 <Text weight="medium">{component.name}</Text>
-                <Text size="1" color="gray">
+                {/* <Text size="1" color="gray">
                   {component.category}
-                </Text>
+                </Text> */}
               </Flex>
               <Text size="1" color="gray">
                 {component.description}

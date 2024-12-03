@@ -5,6 +5,9 @@ import TreeView, { flattenTree } from "react-accessible-treeview";
 
 type ObjectCategoryProps = {
   object: any;
+  classes?: {
+    root?: string;
+  };
 };
 
 export const ObjectCategory: FC<ObjectCategoryProps> = (props) => {
@@ -34,8 +37,7 @@ export const ObjectCategory: FC<ObjectCategoryProps> = (props) => {
           aria-label="basic example tree"
           nodeRenderer={(props) => {
             // console.log(props.element);
-            const { element, getNodeProps, level, isBranch, handleSelect } =
-              props;
+            const { element, getNodeProps, level, isBranch } = props;
             if (element.children.length === 0) {
               return null;
             }

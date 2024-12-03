@@ -1,6 +1,7 @@
 import { type CreateProjectInputs } from "./projectManager";
-
+import { type OrderlyConfig } from "./types";
 export interface IFramework {
+  name: string;
   projectPath: string;
   projectName: string;
   // new (projectPath: string, projectName: string): IFramework;
@@ -16,4 +17,7 @@ export interface IFramework {
   installDependencies(inputs: CreateProjectInputs): Promise<any>;
 
   loadCSS(): Promise<any>;
+  collectPages(): Promise<any>;
+
+  generateOrderlyConfig(inputs: CreateProjectInputs): OrderlyConfig;
 }

@@ -3,18 +3,24 @@ import { Field } from "./field";
 import { FormProvider, useForm } from "react-hook-form";
 import { objectParse } from "./helper";
 
-export const ObjectFields: FC<{
-  object: any[];
+export interface ObjectFieldsProps {
+  object: any;
   classes?: {
     fields?: string;
     field?: string;
     sectionHeader?: string;
   };
-}> = (props) => {
+}
+
+export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
   const methods = useForm({
     defaultValues: props.object,
   });
   const { classes } = props;
+
+  const parsedObject = useMemo(() => {
+    return objectParse(props.object);
+  }, [props.object]);
 
   // console.log(props.object);
 
@@ -33,7 +39,7 @@ export const ObjectFields: FC<{
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-4 px-2">
-          {props.object.map((item) => {
+          {parsedObject.map((item) => {
             return (
               <div key={item.key}>
                 {(item.type === "object" || item.type === "array") &&
@@ -42,7 +48,11 @@ export const ObjectFields: FC<{
                       fields={item.children}
                       title={item.label}
                       id={item.path.replace(".", "_")}
-                      classes={classes}
+                      classes={{
+                        root: classes?.fields,
+                        field: classes?.field,
+                        sectionHeader: classes?.sectionHeader,
+                      }}
                     />
                   )}
                 {item.type === "colors" && item.children && (
@@ -86,7 +96,7 @@ const Fields: FC<{
   title: string;
   id: string;
   classes?: {
-    fields?: string;
+    root?: string;
     field?: string;
     sectionHeader?: string;
   };
@@ -95,16 +105,18 @@ const Fields: FC<{
   return (
     <>
       <SectionHeader title={title} id={id} />
-      <div className="flex flex-col gap-4">
-        {props.fields.map((field) => {
+      <div className={`flex flex-col gap-4 ${classes?.root}`}>
+        {fields.map((field) => {
           if (field.type === "object" && field.children) {
+            console.log("-->>>>field", field);
             return (
               <div key={field.key}>
-                <div className="text-lg font-medium mb-2">{field.label}</div>
+                {/* <div className="text-lg font-medium mb-2">{field.label}</div> */}
                 <Fields
                   fields={field.children}
                   title={field.label}
                   id={field.path.replace(".", "_")}
+                  classes={props.classes}
                 />
               </div>
             );

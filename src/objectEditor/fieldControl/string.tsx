@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { FC, forwardRef } from "react";
+import { forwardRef } from "react";
 import { ChangeHandler } from "react-hook-form";
 
 type StringControlProps = {

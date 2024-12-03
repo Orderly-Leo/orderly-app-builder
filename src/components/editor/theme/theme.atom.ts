@@ -1,9 +1,7 @@
-import { atomWithImmer } from "jotai-immer";
-import { ThemeConfig } from "./type";
+import { ThemeItems } from "./type";
 import { atom } from "jotai";
-import { objectParse, ParsedNode } from "@/objectEditor/helper";
 
-export const themeConfig: ThemeConfig = {
+export const themeConfig: ThemeItems = {
   colors: {
     primary: {
       darken: "#993ed6",
@@ -87,7 +85,7 @@ export const themeConfig: ThemeConfig = {
 export type Theme = {
   name: string;
   // id: string;
-  theme: ThemeConfig;
+  theme: ThemeItems;
 };
 
 export const themesAtom = atom<Theme[]>([
@@ -102,7 +100,7 @@ export const currentThemeAtom = atom<Theme>({
   theme: themeConfig,
 });
 
-export const themeObjectAtom = atom<ParsedNode[]>((get) => {
+export const themeObjectAtom = atom((get) => {
   const theme = get(currentThemeAtom);
   return theme.theme;
   // return objectParse(theme.theme);

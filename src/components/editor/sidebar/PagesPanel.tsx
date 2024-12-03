@@ -1,11 +1,11 @@
-import { Box, Flex } from "@radix-ui/themes";
 import { PageList } from "../page/pageList";
 import { PageToolbar } from "../page/PageToolbar";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PageProps } from "../page/pageProps";
-import { currentPagesAtom, pagesAtom, pathsAtom } from "../page/pages.atom";
+import { currentPagesAtom, pathsAtom } from "../page/pages.atom";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
+import { Separator } from "@/components/ui/separator";
 
 export const PagesPanel = () => {
   const navigate = useNavigate();
@@ -28,41 +28,22 @@ export const PagesPanel = () => {
   // return <PageList />;
 
   return (
-    <div className="grid grid-cols-3">
-      <div className="col-span-2">
+    <div className="flex">
+      <div className="w-6/12">
         <PageToolbar
           onCreateClick={function (): void {
             // throw new Error("Function not implemented.");
             navigate("/create/page");
           }}
         />
-        <div className="p-4">
+        <div className="p-4 h-screen overflow-auto">
           <PageList pages={pages} parentPath={params["*"]} />
         </div>
       </div>
-      <div className="sticky top-[64px]">
+      <Separator orientation="vertical" />
+      <div className="flex-1 sticky top-[64px] px-2">
         <PageProps />
       </div>
     </div>
   );
-
-  // return (
-  //   <Flex className="h-full">
-  //     {/* 左侧列表区域 */}
-  //     <Box className="w-60 border-r border-gray-200">
-  //       <PageToolbar onCreateClick={() => navigate("/create")} />
-  //       <Box className="overflow-auto h-[calc(100%-48px)]">
-  //         <PageList
-  //           selectedPageId={pageId}
-  //           onPageSelect={(page) => navigate(`${page.id}`)}
-  //         />
-  //       </Box>
-  //     </Box>
-
-  //     {/* 右侧详情区域 */}
-  //     <Box className="flex-1">
-  //       <Outlet />
-  //     </Box>
-  //   </Flex>
-  // );
 };

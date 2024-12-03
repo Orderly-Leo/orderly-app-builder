@@ -15,11 +15,7 @@ type ProcessStep = {
   error?: string;
 };
 
-export const CreatePageProcesse = ({
-  template,
-  components,
-  onComplete,
-}: CreatePageProcesseProps) => {
+export const CreatePageProcesse = ({ onComplete }: CreatePageProcesseProps) => {
   const [steps, setSteps] = useState<ProcessStep[]>([
     {
       id: "init",

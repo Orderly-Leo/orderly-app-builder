@@ -1,8 +1,7 @@
 import { Box, Flex, Text, Button } from "@radix-ui/themes";
 import { ThemeList } from "../theme/ThemeList";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-import { CodeIcon } from "@radix-ui/react-icons";
-import { Save } from "lucide-react";
+
 import { useTheme } from "../../../contexts/ThemeContext";
 
 export const THEME_GROUPS = [
@@ -43,7 +42,6 @@ export const ThemePanel = () => {
             Theme
           </Text>
           <Button size="1" variant="soft">
-            <CodeIcon size={14} />
             code
           </Button>
         </Flex>
@@ -52,7 +50,7 @@ export const ThemePanel = () => {
           <ThemeList
             groups={THEME_GROUPS}
             selectedGroup={selectedGroup}
-            onGroupSelect={(group) => navigate(`config`)}
+            onGroupSelect={(group) => navigate(`config/${group.id}`)}
             themeConfig={theme}
           />
         </Box>

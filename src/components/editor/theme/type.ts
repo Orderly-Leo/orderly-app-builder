@@ -1,4 +1,4 @@
-export interface ThemeConfig {
+export interface ThemeItems {
   colors: {
     primary: ColorConfig;
     error: ColorConfig;

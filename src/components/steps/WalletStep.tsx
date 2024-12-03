@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@radix-ui/themes";
+import { Box, Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { Button } from "../ui/button";
 

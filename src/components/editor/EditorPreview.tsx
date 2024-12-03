@@ -1,4 +1,4 @@
-import { Box, Text, Flex } from "@radix-ui/themes";
+import { Text, Flex } from "@radix-ui/themes";
 import { PreviewToolbar } from "./preview/PreviewToolbar";
 import { useState, useRef } from "react";
 

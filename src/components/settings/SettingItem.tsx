@@ -1,4 +1,4 @@
-import { Switch, Select, TextField, Box, Text } from "@radix-ui/themes";
+import { Box, Text } from "@radix-ui/themes";
 
 interface SettingItemProps {
   id: string;
@@ -13,11 +13,11 @@ interface SettingItemProps {
 export const SettingItem = ({
   label,
   description,
-  type,
-  value,
-  options,
-  onChange,
-}: SettingItemProps) => {
+}: // type,
+// value,
+// options,
+// onChange,
+SettingItemProps) => {
   const renderControl = () => {
     return <div>Select error</div>;
     // switch (type) {

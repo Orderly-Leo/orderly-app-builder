@@ -24,17 +24,17 @@ const parseConfigNode = (
     : currentPath;
 
   // 特殊处理 colors 类型的节点
-  if (node.type === "colors" && Array.isArray(node.colors)) {
-    const value = getValueFromConfig(config, fullPath);
-    return {
-      ...node,
-      value,
-      colors: node.colors.map((colorItem: any) => ({
-        ...colorItem,
-        value: value?.[colorItem.key],
-      })),
-    };
-  }
+  // if (node.type === "colors" && Array.isArray(node.colors)) {
+  //   const value = getValueFromConfig(config, fullPath);
+  //   return {
+  //     ...node,
+  //     value,
+  //     colors: node.colors.map((colorItem: any) => ({
+  //       ...colorItem,
+  //       value: value?.[colorItem.key],
+  //     })),
+  //   };
+  // }
 
   // 如果有 children，检查是否需要打平
   if (Array.isArray(node.children)) {
@@ -190,79 +190,6 @@ export const objectParse = (
       };
     }
 
-    // // 处理颜色对象（包含 darken、default、lighten、contrast 的对象）
-    // if (
-    //   typeof value === "object" &&
-    //   ("darken" in value ||
-    //     "default" in value ||
-    //     "lighten" in value ||
-    //     "contrast" in value)
-    // ) {
-    //   return {
-    //     key,
-    //     label,
-    //     type: "colors",
-    //     name: label,
-    //     path: currentPath.join("."),
-    //     children: [
-    //       {
-    //         key: "darken",
-    //         type: "color",
-    //         label: "Darken",
-    //         name: label,
-    //         value: value.darken,
-    //         path: [...currentPath, "darken"].join("."),
-    //       },
-    //       {
-    //         key: "default",
-    //         type: "color",
-    //         label: "Default",
-    //         name: label,
-    //         value: value.default,
-    //         path: [...currentPath, "default"].join("."),
-    //       },
-    //       {
-    //         key: "lighten",
-    //         type: "color",
-    //         label: "Lighten",
-    //         name: label,
-    //         value: value.lighten,
-    //         path: [...currentPath, "lighten"].join("."),
-    //       },
-    //       {
-    //         key: "contrast",
-    //         type: "color",
-    //         label: "Contrast",
-    //         name: label,
-    //         value: value.contrast,
-    //         path: [...currentPath, "contrast"].join("."),
-    //       },
-    //     ],
-    //   };
-    // }
-
-    // // 处理基础色值对象（包含数字键的对象，如 100、200、300 等）
-    // if (
-    //   typeof value === "object" &&
-    //   Object.keys(value).every((k) => /^\d+$/.test(k))
-    // ) {
-    //   return {
-    //     key,
-    //     label,
-    //     name: label,
-    //     type: "colors",
-    //     path: currentPath.join("."),
-    //     children: Object.entries(value).map(([colorKey, colorValue]) => ({
-    //       key: colorKey,
-    //       type: "color",
-    //       label: colorKey,
-    //       name: label,
-    //       value: colorValue,
-    //       path: [...currentPath, colorKey].join("."),
-    //     })),
-    //   };
-    // }
-
     // 处理嵌套对象
     return {
       key,
@@ -317,3 +244,81 @@ export function updateObject(
     console.warn("Cant find target");
   }
 }
+
+interface TreeNode {
+  id: number;
+  name: string;
+  parent: number | null;
+  children: number[];
+  level: number;
+  isExpandable?: boolean;
+  value?: any;
+  type?: string;
+  path?: string;
+}
+
+export const flattenTree = (object: ParsedNode | ParsedNode[]) => {
+  const result: TreeNode[] = [
+    {
+      id: 0,
+      name: "root",
+      children: [],
+      parent: null,
+      level: 0,
+    },
+  ];
+
+  let currentId = 1;
+
+  const processNode = (node: ParsedNode, parentId: number, level: number) => {
+    const nodeId = currentId++;
+    const childrenIds: number[] = [];
+
+    // 将当前节点ID添加到父节点的children中
+    if (parentId === 0) {
+      result[0].children.push(nodeId);
+    } else {
+      const parentNode = result.find((n) => n.id === parentId);
+      if (parentNode) {
+        parentNode.children.push(nodeId);
+      }
+    }
+
+    const isExpandable =
+      (node.type === "object" || node.type === "array") &&
+      node.children &&
+      node.children.length > 0;
+
+    // 如果有子节点，先递归处理所有子节点
+    if (node.children && node.children.length > 0) {
+      node.children.forEach((childNode) => {
+        const childId = currentId; // 获取下一个将要使用的ID
+        childrenIds.push(childId);
+        processNode(childNode, nodeId, level + 1);
+      });
+    }
+
+    const treeNode: TreeNode = {
+      id: nodeId,
+      name: node.label || node.name,
+      children: childrenIds,
+      parent: parentId,
+      level,
+      isExpandable,
+      value: node.value,
+      type: node.type,
+      path: node.path,
+    };
+
+    result.push(treeNode);
+  };
+
+  // 处理输入节点
+  if (Array.isArray(object)) {
+    object.forEach((node) => processNode(node, 0, 1));
+  } else {
+    processNode(object, 0, 1);
+  }
+
+  return result;
+};

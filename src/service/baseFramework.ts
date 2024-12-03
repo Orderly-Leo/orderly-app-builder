@@ -8,6 +8,7 @@ import { CustomError } from "@/types/customError";
 import postcss from "postcss";
 import postcssjs from "postcss-js";
 import { lensPath, view } from "ramda";
+import { OrderlyConfig } from "./types";
 
 export abstract class BaseFrameworkHandler implements IFramework {
   constructor(projectPath: string, projectName: string) {
@@ -17,6 +18,7 @@ export abstract class BaseFrameworkHandler implements IFramework {
 
   projectPath: string;
   projectName: string;
+  name!: string;
   protected messages: string[] = [];
   protected errorMessages: string[] = [];
   abstract run(): void;
@@ -27,6 +29,8 @@ export abstract class BaseFrameworkHandler implements IFramework {
   // abstract createAppFromTemplate(inputs: CreateProjectInputs): Promise<any>;
   abstract updateProjectFiles(inputs: CreateProjectInputs): Promise<any>;
   abstract loadCSS(): Promise<any>;
+  abstract collectPages(): Promise<any>;
+  abstract generateOrderlyConfig(inputs: CreateProjectInputs): OrderlyConfig;
 
   onData(data: string) {
     console.log("!!!", data);
@@ -103,7 +107,7 @@ export abstract class BaseFrameworkHandler implements IFramework {
     return pkg;
   }
 
-  async installDependencies(inputs: CreateProjectInputs) {
+  async installDependencies(/**inputs: CreateProjectInputs**/) {
     try {
       const command = Command.create("install-dependencies", ["install"], {
         cwd: this.fullProjectPath,
@@ -126,6 +130,16 @@ export abstract class BaseFrameworkHandler implements IFramework {
       );
     }
   }
+
+  // protected generateOrderlyConfig(inputs: CreateProjectInputs): OrderlyConfig {
+  //   return {
+  //     paths: {
+  //       src: "src",
+  //       public: "public",
+  //       theme: "theme",
+  //     },
+  //   };
+  // }
 
   protected async readFile(path: string) {
     return await readTextFile(path);

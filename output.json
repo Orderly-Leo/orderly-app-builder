@@ -22,6 +22,7 @@
             "type": {
               "name": "TradingViewConfigInterface",
               "definition": {
+                "kind": "interface",
                 "properties": {
                   "scriptSRC": {
                     "type": "string",
@@ -164,6 +165,7 @@
             "type": {
               "name": "ReferralPropsV2",
               "definition": {
+                "kind": "type",
                 "properties": {
                   "saveRefCode": {
                     "type": "boolean",
@@ -172,8 +174,8 @@
                     "definition": {
                       "type": "union",
                       "types": [
-                        null,
-                        null
+                        "false",
+                        "true"
                       ]
                     }
                   },
@@ -199,6 +201,7 @@
             "type": {
               "name": "TradingRewardsProps",
               "definition": {
+                "kind": "type",
                 "properties": {
                   "onClickTradingRewards": {
                     "type": "() => void",
@@ -221,5 +224,64 @@
         }
       }
     ]
+  },
+  "../orderly-web/packages/trading/src/types/types.ts": {
+    "types": {
+      "ColorConfigInterface": {
+        "kind": "interface",
+        "properties": {
+          "chartBG": {
+            "type": "string",
+            "description": "",
+            "optional": true
+          },
+          "upColor": {
+            "type": "string",
+            "description": "",
+            "optional": true
+          },
+          "downColor": {
+            "type": "string",
+            "description": "",
+            "optional": true
+          },
+          "pnlUpColor": {
+            "type": "string",
+            "description": "",
+            "optional": true
+          },
+          "pnlDownColor": {
+            "type": "string",
+            "description": "",
+            "optional": true
+          },
+          "pnlZoreColor": {
+            "type": "string",
+            "description": "",
+            "optional": true
+          },
+          "textColor": {
+            "type": "string",
+            "description": "",
+            "optional": true
+          },
+          "qtyTextColor": {
+            "type": "string",
+            "description": "",
+            "optional": true
+          },
+          "font": {
+            "type": "string",
+            "description": "",
+            "optional": true
+          },
+          "closeIcon": {
+            "type": "string",
+            "description": "",
+            "optional": true
+          }
+        }
+      }
+    }
   }
 }

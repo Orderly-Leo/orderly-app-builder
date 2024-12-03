@@ -1,4 +1,4 @@
-import { Box, Card, Flex, Text } from "@radix-ui/themes";
+import { Card } from "@/components/ui/card";
 import { ThemeConfig } from "../../../types/theme";
 
 interface ThemeGroup {
@@ -18,10 +18,9 @@ export const ThemeList = ({
   groups,
   selectedGroup,
   onGroupSelect,
-  themeConfig,
 }: ThemeListProps) => {
   return (
-    <Box p="2">
+    <div className="p-2">
       {groups.map((group) => (
         <Card
           key={group.id}
@@ -32,14 +31,14 @@ export const ThemeList = ({
           }`}
           onClick={() => onGroupSelect(group)}
         >
-          <Flex direction="column" gap="1">
-            <Text weight="medium">{group.label}</Text>
-            <Text size="1" color="gray">
+          <div className="flex flex-col gap-1">
+            <div className="text-lg font-medium">{group.label}</div>
+            <div className="text-sm text-gray-500">
               {group.items.length} properties
-            </Text>
-          </Flex>
+            </div>
+          </div>
         </Card>
       ))}
-    </Box>
+    </div>
   );
 };

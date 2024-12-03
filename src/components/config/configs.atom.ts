@@ -1,12 +1,30 @@
+import { EditorService } from "@/service/editor";
+import { OrderlyConfig } from "@/service/types";
+import { atom } from "jotai";
 import { atomWithImmer } from "jotai-immer";
 
-const configs = {
-  application: {},
-  project: {
-    path: {
-      themeCss: "/orderly-app-builder",
-    },
-  },
+export type AppConfig = {
+  config: OrderlyConfig | null;
 };
 
-export const configsAtom = atomWithImmer(configs);
+export type AppState = {
+  initialized: boolean;
+};
+
+export const configsAtom = atomWithImmer<AppConfig>({
+  config: null,
+});
+
+export const appStateAtom = atomWithImmer<AppState>({
+  initialized: false,
+});
+
+export const appIsInitializedAtom = atom(
+  (get) => get(appStateAtom).initialized
+);
+
+export const themeCSSPathAtom = atom<string | null>(
+  (get) => get(configsAtom).config?.paths.themeCSS || null
+);
+
+export const editorServiceAtom = atom<EditorService | null>(null);

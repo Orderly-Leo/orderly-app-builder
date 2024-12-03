@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@radix-ui/themes";
+import { Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { SiNextdotjs, SiRemix, SiCreatereactapp } from "react-icons/si";
 import { Button } from "../ui/button";

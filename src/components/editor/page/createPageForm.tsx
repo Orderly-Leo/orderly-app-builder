@@ -1,4 +1,4 @@
-import { Button, Dialog, Flex, Grid, TextField, Text } from "@radix-ui/themes";
+import { Button,  Flex, Grid, TextField, Text } from "@radix-ui/themes";
 import { PageTemplateList } from "./pageTemplateList";
 
 export const CreatePageForm = () => {

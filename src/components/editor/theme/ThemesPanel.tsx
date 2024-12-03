@@ -1,40 +1,49 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, Pencil, Trash2 } from "lucide-react";
+import { useAtom, useAtomValue } from "jotai";
+import { Pencil, Trash2 } from "lucide-react";
 import { FC } from "react";
+import { themesAtom } from "./theme.atom";
 import { Link } from "react-router-dom";
+import { confirm } from "@tauri-apps/plugin-dialog";
 
-interface ColorScheme {
-  name: string;
-  colors: string[];
-}
-
-const themes: ColorScheme[] = [
-  {
-    name: "Traditional Diwali",
-    colors: ["#4B0082", "#800080", "#C71585", "#FFD700", "#FF8C00", "#228B22"],
-  },
-  {
-    name: "Pastel Color Tones",
-    colors: ["#E6D7E8", "#9B8BA5", "#C8A2C8", "#FFE4E1", "#FFE4E1"],
-  },
-  {
-    name: "Darkest-Lightest Greys",
-    colors: ["#1C1C1C", "#2B2B2B", "#3F3F3F", "#4F4F4F", "#5E5E5E"],
-  },
-];
+import {
+  appIsInitializedAtom,
+  editorServiceAtom,
+  themeCSSPathAtom,
+} from "@/components/config/configs.atom";
+import { NoCssPath } from "./noCssPath";
 
 export const ThemesPanel: FC = () => {
+  const [themes, setThemes] = useAtom(themesAtom);
+  const appInitialized = useAtomValue(appIsInitializedAtom);
+  const themeCSSPath = useAtomValue(themeCSSPathAtom);
+  const editorService = useAtomValue(editorServiceAtom);
+
+  if (!appInitialized) {
+    return null;
+  }
+
+  if (!themeCSSPath) {
+    return <NoCssPath />;
+  }
+
+  const deleteTheme = async (name: string) => {
+    console.log("deleteTheme", name);
+    const confirmation = await confirm(
+      "This action will delete the theme. Are you sure?",
+      { title: "Delete Theme", kind: "warning" }
+    );
+    if (confirmation) {
+      setThemes(themes.filter((t) => t.name !== name));
+      // delete theme from local storage
+      editorService?.deleteTheme(name);
+    }
+  };
+
+  console.log("---->>>>>themes", themes);
+
   return (
     <div className="p-6 space-y-8">
-      <Alert variant="destructive">
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>
-          Can't found the CSS file, please check the path in orderly.json
-        </AlertDescription>
-      </Alert>
-
       {themes.map((theme) => (
         <div key={theme.name} className="space-y-2 group">
           <div className="flex justify-between items-center">
@@ -54,19 +63,20 @@ export const ThemesPanel: FC = () => {
                 variant="ghost"
                 size="icon"
                 className="p-0 text-gray-300 group-hover:text-gray-900 transition-colors"
+                onClick={() => deleteTheme(theme.name)}
               >
                 <Trash2 className="w-4 h-4 text-inherit" />
               </Button>
             </div>
           </div>
           <div className="flex rounded-lg overflow-hidden h-24">
-            {theme.colors.map((color, index) => (
+            {/* {theme.colors.map((color, index) => (
               <div
                 key={index}
                 className="flex-1"
                 style={{ backgroundColor: color }}
               />
-            ))}
+            ))} */}
           </div>
         </div>
       ))}

@@ -1,22 +1,26 @@
 "use client";
 
 import * as React from "react";
-import { ArchiveX, Command, File, Inbox, Send, Trash2 } from "lucide-react";
+import {
+  ArchiveX,
+  Command,
+  FileSliders,
+  Layers,
+  Palette,
+  Trash2,
+} from "lucide-react";
 
 // import { NavUser } from "@/components/nav-user";
 // import { Label } from "@/components/ui/label"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
-  SidebarInput,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
 // import { Switch } from "@/components/ui/switch"
@@ -32,19 +36,19 @@ const data = {
     {
       title: "Pages",
       url: "/editor/pages",
-      icon: Inbox,
+      icon: Layers,
       isActive: true,
     },
     {
       title: "Themes",
       url: "/editor/themes",
-      icon: File,
+      icon: Palette,
       isActive: false,
     },
     {
       title: "Settings",
       url: "/editor/config",
-      icon: Send,
+      icon: FileSliders,
       isActive: false,
     },
     {

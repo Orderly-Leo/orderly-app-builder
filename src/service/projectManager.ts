@@ -1,9 +1,10 @@
 import { open } from "@tauri-apps/plugin-dialog";
 import { IFramework } from "./framework";
 import { Nextjs } from "./nextjs";
-import { CustomError } from "@/types/customError";
 import { CreateProjectIds } from "@/components/steps/types";
 import { StepState } from "@/components/steps/StepProgress";
+import { readTextFile, writeTextFile, exists } from "@tauri-apps/plugin-fs";
+import { OrderlyConfig } from "./types";
 
 export enum NPM {
   yarn = "yarn",
@@ -29,21 +30,38 @@ type onProgressEventHandle = (
 ) => void;
 
 export interface ProjectManager {
+  setProjectPath(projectPath: string): void;
+  setProjectName(projectName: string): void;
+  setFrameworkHandler(frameworkHandler: IFramework): void;
+  frameworkHandler: IFramework | null;
   selectPath(): Promise<string | null>;
   createProject(
     inputs: CreateProjectInputs,
     onProgress: onProgressEventHandle
   ): Promise<any>;
+  readOrderlyConfigFile(): Promise<Record<string, any> | null>;
+  writeOrderlyConfigFile(config: Record<string, any>): Promise<void>;
 }
 
 export class ProjectManagerImpl implements ProjectManager {
-  private frameworkHandler?: IFramework;
+  #frameworkHandler?: IFramework;
+  private projectPath?: string;
+  private projectName?: string;
+
   async createProject(
     inputs: CreateProjectInputs,
     onProgress: onProgressEventHandle
   ): Promise<any> {
     try {
-      this.frameworkHandler = ProjectManagerImpl.getFrameworkHandler(inputs);
+      this.setProjectPath(inputs.projectPath);
+      this.setProjectName(inputs.projectName);
+
+      this.setFrameworkHandler(ProjectManagerImpl.getFrameworkHandler(inputs));
+
+      if (!this.frameworkHandler) {
+        throw new Error("Framework handler is not set");
+      }
+
       // step 1: create project from template
       onProgress(
         CreateProjectIds.CREATE_PROJECT,
@@ -99,13 +117,64 @@ export class ProjectManagerImpl implements ProjectManager {
     return file;
   }
 
-  static getFrameworkHandler(inputs: CreateProjectInputs): IFramework {
+  setProjectPath(projectPath: string) {
+    this.projectPath = projectPath;
+  }
+
+  setProjectName(projectName: string) {
+    this.projectName = projectName;
+  }
+
+  setFrameworkHandler(frameworkHandler: IFramework) {
+    this.#frameworkHandler = frameworkHandler;
+  }
+
+  get frameworkHandler() {
+    return this.#frameworkHandler || null;
+  }
+
+  generateOrderlyConfig(inputs: CreateProjectInputs): OrderlyConfig | null {
+    if (!this.frameworkHandler) {
+      return null;
+    }
+    return this.frameworkHandler.generateOrderlyConfig(inputs);
+  }
+
+  static getFrameworkHandler(inputs: {
+    framework: string;
+    projectPath: string;
+    projectName: string;
+  }): IFramework {
     switch (inputs.framework) {
       case "nextjs":
         return new Nextjs(inputs.projectPath, inputs.projectName);
       default:
         throw new Error("Framework not supported");
     }
+  }
+
+  async writeOrderlyConfigFile(config: OrderlyConfig) {
+    if (!this.projectPath || !this.projectName) {
+      throw new Error("Project path or project name is not set");
+    }
+    const orderlyFilePath = `${this.projectPath}/${this.projectName}/.orderly.json`;
+    await writeTextFile(orderlyFilePath, JSON.stringify(config, null, 2));
+  }
+
+  async readOrderlyConfigFile(): Promise<OrderlyConfig | null> {
+    if (!this.projectPath || !this.projectName) {
+      throw new Error("Project path or project name is not set");
+    }
+
+    // check the orderly file exists
+    const orderlyFilePath = `${this.projectPath}/${this.projectName}/.orderly.json`;
+    const orderlyFileExists = await exists(orderlyFilePath);
+    if (!orderlyFileExists) {
+      return null;
+    }
+
+    const config = await readTextFile(orderlyFilePath);
+    return JSON.parse(config);
   }
 }
 

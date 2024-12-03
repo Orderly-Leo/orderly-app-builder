@@ -5,24 +5,30 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { Button } from "../ui/button";
+import { Plus } from "lucide-react";
 
 export function EditorLayout() {
   return (
     <SidebarProvider
+      defaultOpen={false}
       style={
         {
-          "--sidebar-width": "160px",
+          "--sidebar-width": "180px",
         } as React.CSSProperties
       }
     >
       <AppSidebar />
       <SidebarInset>
-        <header className="sticky top-0 z-20 flex shrink-0 items-center gap-2 border-b bg-background/80 backdrop-blur-md p-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
-          <Breadcrumbs />
+        <header className="sticky top-0 z-20 flex shrink-0 items-center border-b bg-background/80 backdrop-blur-md p-4">
+          <div className="flex items-center gap-2 flex-1">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+            <Breadcrumbs />
+          </div>
+          <MainToolbar />
         </header>
         <div className="flex flex-1 flex-col gap-4">
           <Outlet />
@@ -37,3 +43,16 @@ export function EditorLayout() {
     </SidebarProvider>
   );
 }
+
+const MainToolbar = () => {
+  return (
+    <div className="text-sm">
+      <Button size={"sm"} variant="outline" asChild>
+        <Link to="/create/theme">
+          <Plus />
+          Create new theme
+        </Link>
+      </Button>
+    </div>
+  );
+};

@@ -1,8 +1,8 @@
-import { Flex, Text } from "@radix-ui/themes";
 // import { pagesAtom, selectedPageIdAtom } from "../../../store/pageStore";
 import { NavLink } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { FC } from "react";
+import { PageDetail } from "./PageDetail";
 
 export const PageList: FC<{ pages: any[]; parentPath?: string }> = (props) => {
   const { pages, parentPath } = props;
@@ -10,20 +10,14 @@ export const PageList: FC<{ pages: any[]; parentPath?: string }> = (props) => {
 
   if (pages.length === 0) {
     return (
-      <Flex
-        align="center"
-        justify="center"
-        direction="column"
-        gap="2"
-        className="h-full text-gray-400 p-4"
-      >
-        <Text>No pages created yet</Text>
-      </Flex>
+      <div className="h-full text-gray-400 p-4 flex items-center justify-center">
+        <div>No pages created yet</div>
+      </div>
     );
   }
 
   if (!Array.isArray(pages)) {
-    return <div>Page details</div>;
+    return <PageDetail />;
   }
 
   return (
@@ -33,10 +27,8 @@ export const PageList: FC<{ pages: any[]; parentPath?: string }> = (props) => {
         return (
           <NavLink to={path} key={page.id}>
             <Card className="shadow-none p-3">
-              <Flex direction="column" gap="1">
-                <div className="font-medium">{page.name}</div>
-                <div className="text-sm text-gray-500">{path}</div>
-              </Flex>
+              <div className="font-medium">{page.name}</div>
+              <div className="text-sm text-gray-500">{path}</div>
             </Card>
           </NavLink>
         );

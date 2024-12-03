@@ -135,9 +135,7 @@ export const StepProgress: React.FC<StepProgressProps> = ({
   completedItems = [],
   onBack,
 }) => {
-  const [resultState, setResultState] = useState<"success" | "error" | null>(
-    null
-  );
+  const [resultState] = useState<"success" | "error" | null>(null);
 
   return (
     <>
@@ -236,6 +234,9 @@ export const CreateProjectProgress: FC<{
         () => {
           //   setProgress(100);
           //   setCompletedItems(testItems);
+          // projectManager.writeOrderlyConfigFile(
+          //   projectManager.generateOrderlyConfig(formData.data)
+          // );
         },
         (error) => {
           if (error instanceof CustomError) {

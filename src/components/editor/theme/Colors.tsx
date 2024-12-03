@@ -1,16 +1,15 @@
 import { FC } from "react";
-import { ThemeConfig } from "./type";
-import { Box, Flex, Text } from "@radix-ui/themes";
-import { ColorPicker } from "./ColorPicker";
+import { ThemeItems } from "./type";
+import { Flex, Text } from "@radix-ui/themes";
 
 export const Colors: FC<{
-  colors: ThemeConfig["colors"];
+  colors: ThemeItems["colors"];
 }> = (props) => {
   return (
     <Flex direction="column" gap="4">
       {Object.entries(props.colors).map(([key, value]) => {
         console.log(key, value);
-        return <ColorRow key={key} name={key} colors={value} />;
+        return <ColorRow key={key} name={key} colors={value as any} />;
       })}
     </Flex>
   );
@@ -40,7 +39,7 @@ const SimpleColorCell: FC<{
   value: string;
   // onChange: (color: string) => void;
 }> = (props) => {
-  const { value, name } = props;
+  const { value } = props;
 
   return (
     <div

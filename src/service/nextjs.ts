@@ -4,20 +4,23 @@ import { CreateProjectInputs } from "./projectManager";
 import { Command } from "@tauri-apps/plugin-shell";
 import { CreateProjectIds } from "@/components/steps/types";
 import { join } from "@tauri-apps/api/path";
+import { readDir } from "@tauri-apps/plugin-fs";
+import { OrderlyConfig } from "./types";
 
 export class Nextjs extends BaseFrameworkHandler {
+  name = "next.js";
   private cssPath: string;
   constructor(
     projectPath: string,
     projectName: string,
-    options: {
+    options?: {
       paths: {
-        css: string;
+        themeCSS: string;
       };
     }
   ) {
     super(projectPath, projectName);
-    this.cssPath = options.paths.css;
+    this.cssPath = options?.paths?.themeCSS || "";
   }
   run(): void {
     throw new Error("Method not implemented.");
@@ -28,7 +31,7 @@ export class Nextjs extends BaseFrameworkHandler {
   stop(): void {
     throw new Error("Method not implemented.");
   }
-  generateFiles(config: any): Promise<any> {
+  generateFiles(): Promise<any> {
     throw new Error("Method not implemented.");
   }
 
@@ -124,7 +127,7 @@ export class Nextjs extends BaseFrameworkHandler {
 
       await this.writePkg(pkg);
 
-      await this.clearPages(inputs);
+      await this.clearPages();
       // const pkg =
     } catch (e: any) {
       throw new CustomError(
@@ -149,5 +152,58 @@ export class Nextjs extends BaseFrameworkHandler {
     return cssData;
   }
 
-  private async clearPages(inputs: CreateProjectInputs) {}
+  private async clearPages() {} // inputs: CreateProjectInputs
+
+  async collectPages() {
+    // load Next.js project app structure
+    try {
+      const appPath = `${this.fullProjectPath}/src/app`;
+      const routes: string[] = [];
+
+      const walkDir = async (dir: string, baseRoute: string = "") => {
+        const entries = await readDir(dir);
+
+        for (const entry of entries) {
+          const fullPath = await join(dir, entry.name);
+
+          // Skip hidden and special files/folders
+          if (entry.name.startsWith(".") || entry.name.startsWith("_")) {
+            continue;
+          }
+
+          if (entry.isDirectory) {
+            // Recursively walk subdirectories
+            await walkDir(fullPath, `${baseRoute}/${entry.name}`);
+          } else if (entry.name === "page.tsx" || entry.name === "page.ts") {
+            // Found a page file, add its route
+            routes.push(baseRoute || "/");
+          }
+        }
+      };
+
+      await walkDir(appPath);
+
+      console.log("routes::::", routes);
+
+      return routes;
+    } catch (e: any) {
+      console.log("e", e);
+      throw new CustomError(
+        "collect-pages",
+        "Failed to collect pages",
+        e.message
+      );
+    }
+  }
+
+  generateOrderlyConfig(/**inputs: CreateProjectInputs**/): OrderlyConfig {
+    return {
+      framework: "next.js",
+      paths: {
+        src: "src",
+        public: "public",
+        themeCSS: "src/styles/theme.css",
+      },
+    };
+  }
 }

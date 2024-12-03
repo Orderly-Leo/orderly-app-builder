@@ -2,7 +2,6 @@ import { LayoutProps } from "./props/layout";
 
 import { useAtom } from "jotai";
 import { pathsAtom } from "../page/pages.atom";
-import { ObjectFields } from "@/objectEditor/fields";
 import { ObjectEditor } from "@/objectEditor";
 
 export const PageProps = () => {
@@ -11,9 +10,11 @@ export const PageProps = () => {
   return (
     <div>
       <LayoutProps />
-      {/* <PageProps /> */}
       <ObjectEditor
         showCategory={false}
+        classes={{
+          fields: "gap-0",
+        }}
         object={{
           tradingViewConfig: {
             scriptSRC: "/tradingview/charting_library/charting_library.js",

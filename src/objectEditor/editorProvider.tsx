@@ -3,6 +3,7 @@ import { BooleanControl } from "./fieldControl/boolean";
 import { NumberControl } from "./fieldControl/number";
 import { ColorsControl } from "./fieldControl/colors";
 import { StringControl } from "./fieldControl/string";
+import { FileControl } from "./fieldControl/file";
 
 export type ObjectEditorContextState = {
   fieldControls: {
@@ -21,6 +22,7 @@ const defaultFieldControls = {
   number: NumberControl,
   colors: ColorsControl,
   string: StringControl,
+  file: FileControl,
 };
 
 export const useFieldControls = () => {

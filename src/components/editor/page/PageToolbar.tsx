@@ -1,5 +1,4 @@
 import { Plus } from "lucide-react";
-import { Window } from "@tauri-apps/api/window";
 
 interface PageToolbarProps {
   onCreateClick: () => void;

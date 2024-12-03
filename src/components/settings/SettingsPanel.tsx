@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { SettingsCategory } from "./SettingsCategory";
-import { TextField } from "@radix-ui/themes";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Input } from "../ui/input";
 
 // Group type definition

@@ -3,7 +3,6 @@ import { ColorPicker } from "./ColorPicker";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { THEME_GROUPS } from "../sidebar/ThemePanel";
 import { Typography } from "@/components/ui/typography";
-import { Card } from "@/components/ui/card";
 
 export const ThemeDetail = () => {
   const { groupId } = useParams();

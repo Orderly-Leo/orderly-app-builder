@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@radix-ui/themes";
+import { Flex, Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -36,17 +36,17 @@ export const PagesStep = ({
     );
   };
 
-  const handleCustomization = (
-    pageId: string,
-    field: "customName" | "customRoute",
-    value: string
-  ) => {
-    setPages((prev) =>
-      prev.map((page) =>
-        page.id === pageId ? { ...page, [field]: value } : page
-      )
-    );
-  };
+  // const handleCustomization = (
+  //   pageId: string,
+  //   field: "customName" | "customRoute",
+  //   value: string
+  // ) => {
+  //   setPages((prev) =>
+  //     prev.map((page) =>
+  //       page.id === pageId ? { ...page, [field]: value } : page
+  //     )
+  //   );
+  // };
 
   const handleNext = () => {
     const selectedPages = pages

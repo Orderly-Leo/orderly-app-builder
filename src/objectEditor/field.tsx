@@ -22,7 +22,7 @@ export const Field: FC<{
   const { register } = useFormContext();
   const { onChange, onBlur, ref, name } = register(path);
 
-  const { fieldControls, onFieldChange, argTypes } = useFieldControls();
+  const { fieldControls, argTypes } = useFieldControls();
 
   // const [object, setObject] = useAtom(objectAtom);
 
@@ -42,7 +42,7 @@ export const Field: FC<{
     return view(lens, argTypes);
   }, [path]);
 
-  let Control = fieldControls[field.type];
+  let Control = fieldControls[argType?.control?.type || field.type];
 
   if (!Control) {
     Control = UndefinedControl;

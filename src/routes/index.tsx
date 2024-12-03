@@ -2,18 +2,14 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { StepWizard } from "../components/StepWizard";
 import { Editor } from "../components/Editor";
 import { Layout } from "../components/Layout";
-import { BrokerStep } from "../components/steps/BrokerStep";
-import { FrameworkStep } from "../components/steps/FrameworkStep";
-import { WalletStep } from "../components/steps/WalletStep";
 import { PagesPanel } from "../components/editor/sidebar/PagesPanel";
 import { ComponentsPanel } from "../components/editor/sidebar/ComponentsPanel";
-import { SettingsPanel } from "../components/settings/SettingsPanel";
-import { PageDetail } from "../components/editor/page/PageDetail";
 import { CreatePageWizard } from "../components/editor/page/createPageWizard";
 import { ThemeConfigs } from "../components/editor/theme/ThemeConfigs";
 import { ConfigPanel } from "../components/config/configPanel";
-import { PagesStep } from "../components/steps/PagesStep";
 import { ThemesPanel } from "../components/editor/theme/ThemesPanel";
+import { CreateThemeWizard } from "../components/editor/theme/CreateThemeWizard";
+import { CreateThemeStep1 } from "@/components/editor/theme/steps/step_1";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +31,20 @@ export const router = createBrowserRouter([
       {
         path: "create/page",
         element: <CreatePageWizard />,
+      },
+      {
+        path: "create/theme",
+        element: <CreateThemeWizard />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="step_1" replace />,
+          },
+          {
+            path: "step_1",
+            element: <CreateThemeStep1 />,
+          },
+        ],
       },
       {
         path: "editor",
@@ -62,6 +72,7 @@ export const router = createBrowserRouter([
                 index: true,
                 element: <ThemesPanel />,
               },
+
               {
                 path: ":themeName",
                 element: <ThemeConfigs />,
