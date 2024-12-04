@@ -2,6 +2,7 @@ import { Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { SiNextdotjs, SiRemix, SiCreatereactapp } from "react-icons/si";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 interface FrameworkStepProps {
   onNext: (data: any) => void;
@@ -42,16 +43,11 @@ export const FrameworkStep: React.FC<FrameworkStepProps> = ({
           <div
             key={fw.id}
             onClick={() => setFramework(fw.id)}
-            className="p-4 rounded-md cursor-pointer"
-            style={{
-              padding: "16px",
-              border: `1px solid ${
-                framework === fw.id ? "#6b21a8" : "var(--gray-6)"
-              }`,
-
-              backgroundColor: framework === fw.id ? "#f3e8ff" : "transparent",
-              transition: "all 0.2s ease",
-            }}
+            className={cn(
+              "p-4 rounded-md cursor-pointer border",
+              framework === fw.id && "border-purple-600 bg-purple-50",
+              "transition-all duration-200 ease-in-out"
+            )}
           >
             <div className="flex items-center gap-3">
               {fw.icon}
@@ -62,6 +58,7 @@ export const FrameworkStep: React.FC<FrameworkStepProps> = ({
           </div>
         ))}
       </div>
+
       <div className="flex items-center justify-between gap-3">
         <Button variant="ghost" onClick={onBack}>
           Back

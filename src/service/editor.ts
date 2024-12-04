@@ -12,7 +12,7 @@ export class EditorService {
   // private orderlyFileData: any;
   // private cssData: any;
   private projectConfig: any;
-  private projectManager: ProjectManager;
+  projectManager: ProjectManager;
 
   private projectName: string;
   constructor(
@@ -101,7 +101,7 @@ export class EditorService {
   }
 
   appendTheme(theme: OrderlyTheme) {
-    this.#themes.push(theme);
+    this.#themes.unshift(theme);
     this.saveThemes();
   }
 

@@ -40,8 +40,6 @@ export const ThemesPanel: FC = () => {
     }
   };
 
-  console.log("---->>>>>themes", themes);
-
   return (
     <div className="p-6 space-y-8">
       {themes.map((theme) => (

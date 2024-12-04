@@ -21,7 +21,7 @@ export function CreateThemeWizard() {
       ...rest,
       theme: {} as ThemeItems, // copy from template
     };
-    setThemes([...themes, newTheme as Theme]);
+    setThemes([newTheme as Theme, ...themes]);
     editorService?.appendTheme(newTheme as any);
 
     // write css file if it is the default theme

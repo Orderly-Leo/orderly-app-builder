@@ -34,6 +34,7 @@ export interface ProjectManager {
   setProjectName(projectName: string): void;
   setFrameworkHandler(frameworkHandler: IFramework): void;
   frameworkHandler: IFramework | null;
+
   selectPath(): Promise<string | null>;
   createProject(
     inputs: CreateProjectInputs,

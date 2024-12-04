@@ -85,19 +85,17 @@ export const themeConfig: ThemeItems = {
 export type Theme = {
   name: string;
   // id: string;
-  theme: ThemeItems;
+  theme: Record<string, string>;
 };
 
-export const themesAtom = atom<Theme[]>([
-  { name: "default", theme: themeConfig },
-]);
+export const themesAtom = atom<Theme[]>([{ name: "default", theme: {} }]);
 
 //objectParse(themeConfig)
 // export const themeAtom = atomWithImmer({});
 
 export const currentThemeAtom = atom<Theme>({
   name: "default",
-  theme: themeConfig,
+  theme: {},
 });
 
 export const themeObjectAtom = atom((get) => {

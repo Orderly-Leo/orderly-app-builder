@@ -45,6 +45,7 @@ export const BrokerStep: React.FC<BrokerStepProps> = ({ formData, onNext }) => {
           placeholder="Enter your broker name"
         />
       </div>
+
       <div className="flex justify-end">
         <Button
           onClick={handleSubmit}

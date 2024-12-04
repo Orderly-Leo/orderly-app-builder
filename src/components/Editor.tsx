@@ -9,6 +9,7 @@ import {
 import { useAtom } from "jotai";
 import { useSetAtom } from "jotai";
 import { themesAtom } from "./editor/theme/theme.atom";
+import { path } from "ramda";
 
 export const Editor = () => {
   const [editorService, setEditorService] = useAtom(editorServiceAtom);
@@ -40,6 +41,11 @@ export const Editor = () => {
         setAppState((draft) => {
           draft.initialized = true;
         });
+
+        const cssPath = path(["config", "paths", "themeCSS"], data);
+        if (cssPath) {
+          editorService.framework?.setCSSPath(cssPath);
+        }
       });
     }
   }, []);

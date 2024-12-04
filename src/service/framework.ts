@@ -18,6 +18,7 @@ export interface IFramework {
 
   loadCSS(): Promise<any>;
   collectPages(): Promise<any>;
+  setCSSPath(cssPath: string): void;
 
   generateOrderlyConfig(inputs: CreateProjectInputs): OrderlyConfig;
 }

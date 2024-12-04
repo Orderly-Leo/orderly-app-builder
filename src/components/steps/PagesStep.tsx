@@ -4,6 +4,8 @@ import { Button } from "../ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { availablePages, SelectedPage } from "@/data/pages";
 import { Checkbox } from "../ui/checkbox";
+import { Check, CircleCheckBig } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const PagesStep = ({
   onNext,
@@ -80,8 +82,17 @@ export const PagesStep = ({
         <ScrollArea className="w-full whitespace-nowrap">
           <div className="flex w-max space-x-4 h-[240px]">
             {pages.map((page) => (
-              <div key={page.id} className="flex-none w-[calc(80%-16px)]">
-                <div className="relative h-full">
+              <div
+                key={page.id}
+                onClick={() => handleTogglePage(page.id)}
+                className={"flex-none w-[calc(80%-16px)] py-4 cursor-pointer"}
+              >
+                <div
+                  className={cn(
+                    "relative h-full",
+                    page.isSelected && "border-purple-600 bg-purple-50"
+                  )}
+                >
                   {/* Thumbnail */}
                   <div className="w-full h-full bg-gray-100 rounded-lg overflow-hidden">
                     {page.thumbnail ? (
@@ -102,12 +113,17 @@ export const PagesStep = ({
                   </div>
 
                   {/* Content */}
+                  {page.isSelected && (
+                    <div className="absolute top-2 right-2">
+                      <Check className="w-6 h-6 text-purple-600" />
+                    </div>
+                  )}
                   <Flex
                     direction="column"
                     gap="2"
                     className="absolute left-0 bottom-0 p-4"
                   >
-                    <div className="flex items-center gap-2">
+                    {/* <div className="flex items-center gap-2">
                       <Checkbox
                         checked={page.isSelected}
                         id={page.id}
@@ -119,7 +135,7 @@ export const PagesStep = ({
                       <Text weight="medium" as="label" htmlFor={page.id}>
                         {page.name}
                       </Text>
-                    </div>
+                    </div> */}
                     {/* <Text>{page.description}</Text> */}
                   </Flex>
                 </div>
