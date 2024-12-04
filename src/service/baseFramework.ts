@@ -10,19 +10,6 @@ import postcss from "postcss";
 import postcssjs from "postcss-js";
 import { OrderlyConfig } from "./types";
 
-interface GradientConfig {
-  startColor: string;
-  endColor: string;
-  start: string;
-  end: string;
-  angle?: string;
-}
-
-interface ProcessedThemeData {
-  colors: Record<string, string>;
-  gradients: Record<string, GradientConfig>;
-}
-
 export abstract class BaseFrameworkHandler implements IFramework {
   constructor(projectPath: string, projectName: string) {
     this.projectPath = projectPath;
@@ -173,98 +160,39 @@ export abstract class BaseFrameworkHandler implements IFramework {
     return obj[":root"];
   }
 
-  private convertColorToHex(data: Record<string, any>): ProcessedThemeData {
-    const result: ProcessedThemeData = {
-      colors: {},
-      gradients: {},
-    };
-
-    // 处理普通颜色变量
-    Object.keys(data).forEach((key) => {
+  private convertColorToHex(data: Record<string, any>) {
+    Object.keys(data).map((key) => {
       if (key.startsWith("--oui-color-")) {
-        try {
-          const colorValue = data[key];
-          const color =
-            typeof colorValue === "string" && colorValue.includes(" ")
-              ? chroma(colorValue.split(" ").map(Number))
-              : chroma(colorValue);
-          result.colors[key] = color.hex();
-        } catch (error) {
-          console.warn(`Failed to convert color for key ${key}:`, error);
-        }
+        const color = chroma(chroma(data[key].split(" ")));
+
+        data[key] = color.hex();
+      } else if (
+        key.startsWith("--oui-gradient") &&
+        !key.endsWith("angle") &&
+        !key.includes("stop")
+      ) {
+        const color = chroma(chroma(data[key].split(" ")));
+
+        data[key] = color.hex();
       }
     });
+    return data;
+  }
 
-    // 处理渐变变量
-    const gradientGroups = new Set(
-      Object.keys(data)
-        .filter((key) => key.startsWith("--oui-gradient-"))
-        .map((key) => key.replace("--", "").split("-")[2]) // 提取 brand, danger 等分组名称
-    );
+  private convertHexToColor(data: Record<string, any>) {
+    Object.keys(data).map((key) => {
+      if (key.startsWith("--oui-color-")) {
+        data[key] = chroma(data[key]).rgb().join(" ");
+      } else if (
+        key.startsWith("--oui-gradient") &&
+        !key.endsWith("angle") &&
+        !key.includes("stop")
+      ) {
+        const color = chroma(chroma(data[key]));
 
-    console.log("gradientGroups", gradientGroups);
-
-    gradientGroups.forEach((group) => {
-      if (!group) return;
-
-      const gradientConfig: GradientConfig = {
-        startColor: "",
-        endColor: "",
-        start: "",
-        end: "",
-      };
-
-      // 获取开始颜色
-      const startColorKey = `--oui-gradient-${group}-start`;
-      if (data[startColorKey]) {
-        try {
-          const colorValue = data[startColorKey];
-          const color =
-            typeof colorValue === "string" && colorValue.includes(" ")
-              ? chroma(colorValue.split(" ").map(Number))
-              : chroma(colorValue);
-          gradientConfig.startColor = color.hex();
-        } catch (error) {
-          console.warn(`Failed to convert start color for ${group}:`, error);
-        }
+        data[key] = color.rgb().join(" ");
       }
-
-      // 获取结束颜色
-      const endColorKey = `--oui-gradient-${group}-end`;
-      if (data[endColorKey]) {
-        try {
-          const colorValue = data[endColorKey];
-          const color =
-            typeof colorValue === "string" && colorValue.includes(" ")
-              ? chroma(colorValue.split(" ").map(Number))
-              : chroma(colorValue);
-          gradientConfig.endColor = color.hex();
-        } catch (error) {
-          console.warn(`Failed to convert end color for ${group}:`, error);
-        }
-      }
-
-      // 获取渐变起始位置
-      const startStopKey = `--oui-gradient-${group}-stop-start`;
-      if (data[startStopKey]) {
-        gradientConfig.start = data[startStopKey].replace(/['"]/g, "");
-      }
-
-      // 获取渐变结束位置
-      const endStopKey = `--oui-gradient-${group}-stop-end`;
-      if (data[endStopKey]) {
-        gradientConfig.end = data[endStopKey].replace(/['"]/g, "");
-      }
-
-      // 获取渐变角度（可选）
-      const angleKey = `--oui-gradient-${group}-angle`;
-      if (data[angleKey]) {
-        gradientConfig.angle = data[angleKey].replace(/['"]/g, "");
-      }
-
-      result.gradients[group] = gradientConfig;
     });
-
-    return result;
+    return data;
   }
 }

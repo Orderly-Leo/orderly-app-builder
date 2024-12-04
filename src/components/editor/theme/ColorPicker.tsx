@@ -1,29 +1,41 @@
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 interface ColorPickerProps {
   color: string;
   label: string;
+  direction?: "left" | "right";
   onChange: (color: string) => void;
 }
 
-export const ColorPicker = ({ color, onChange, label }: ColorPickerProps) => {
-  console.log(color);
+export const ColorPicker = (props: ColorPickerProps) => {
+  const direction = props.direction || "left";
   return (
-    <div className="flex gap-2 items-center">
+    <div
+      className={cn(
+        "flex gap-2 items-center",
+        direction === "right" && "flex-row-reverse"
+      )}
+    >
       <input
         type="color"
-        value={color}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full h-full border-0 p-0 m-0"
+        value={props.color}
+        onChange={(e) => props.onChange(e.target.value)}
+        className="border border-black  p-0 m-0"
       />
 
-      <div className="flex flex-col gap-1">
-        <div className="text-gray-500">{label}</div>
+      <div
+        className={cn(
+          "flex flex-col gap-1",
+          direction === "right" && "items-end"
+        )}
+      >
+        <div className="text-gray-500">{props.label}</div>
         <Input
-          className="flex-1"
-          value={color}
+          className={cn("flex-1", direction === "right" && "text-right")}
+          value={props.color}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            onChange(e.target.value)
+            props.onChange(e.target.value)
           }
         />
       </div>
