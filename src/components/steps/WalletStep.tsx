@@ -1,6 +1,6 @@
-import { Box, Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 interface WalletStepProps {
   onNext: (data: any) => void;
@@ -16,9 +16,17 @@ export const WalletStep: React.FC<WalletStepProps> = ({
   const [wallet, setWallet] = useState(formData.walletConnector);
 
   const wallets = [
-    { id: "metamask", name: "MetaMask" },
-    { id: "walletconnect", name: "WalletConnect" },
-    { id: "coinbase", name: "Coinbase Wallet" },
+    {
+      id: "orderly",
+      name: "Orderly Wallet Connector",
+      description:
+        "The wallet connection component provided by the SDK is built on top of BlockNative.",
+    },
+    {
+      id: "custom",
+      name: "Custom",
+      description: "Your can implement your own wallet connector",
+    },
   ];
 
   const handleSubmit = () => {
@@ -37,25 +45,29 @@ export const WalletStep: React.FC<WalletStepProps> = ({
           <div
             key={w.id}
             onClick={() => setWallet(w.id)}
-            className="p-4 rounded-md cursor-pointer"
-            style={{
-              border: `1px solid ${
-                wallet === w.id ? "#6b21a8" : "var(--gray-6)"
-              }`,
-              backgroundColor: wallet === w.id ? "#f3e8ff" : "transparent",
-              transition: "all 0.2s ease",
-            }}
+            className={cn(
+              "p-4 rounded-md cursor-pointer border transition-all duration-200 ease-in-out",
+              wallet === w.id && "border-purple-600 bg-purple-50"
+            )}
+            // style={{
+            //   border: `1px solid ${
+            //     wallet === w.id ? "#6b21a8" : "var(--gray-6)"
+            //   }`,
+            //   backgroundColor: wallet === w.id ? "#f3e8ff" : "transparent",
+            //   transition: "all 0.2s ease",
+            // }}
           >
             <div className="flex items-center gap-3">
-              <Box className="w-6 h-6">{/* 如果有图标可以在这里添加 */}</Box>
-              <Text size="3" weight={wallet === w.id ? "bold" : "regular"}>
-                {w.name}
-              </Text>
+              <div className="w-6 h-6">{/* 如果有图标可以在这里添加 */}</div>
+              <div className="flex flex-col gap-2">
+                <div>{w.name}</div>
+                <div className="text-xs text-gray-500">{w.description}</div>
+              </div>
             </div>
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 pt-5">
         <Button variant="ghost" onClick={onBack}>
           Back
         </Button>

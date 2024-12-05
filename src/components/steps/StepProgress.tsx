@@ -1,4 +1,3 @@
-import { Box, Flex, Text } from "@radix-ui/themes";
 import { motion, AnimatePresence } from "motion/react";
 import { FC, useEffect, useRef, useState } from "react";
 import {
@@ -7,7 +6,7 @@ import {
   ChevronDown,
   ChevronUp,
   CircleX,
-  ExternalLink,
+  X,
 } from "lucide-react";
 import { useAtom } from "jotai";
 import { formDataAtom } from "./atom";
@@ -21,7 +20,6 @@ import {
 } from "@/components/ui/collapsible";
 import { CreateProjectIds } from "./types";
 import { Spinner } from "../ui/spiner";
-import { Button } from "../ui/button";
 
 export enum StepState {
   COMPLETED = "completed",
@@ -37,17 +35,25 @@ interface CompletedItem {
 
 interface StepProgressProps {
   progress: number; // 0-100
+  state: "pending" | "completed" | "failed";
   completedItems: CompletedItem[];
   onBack: () => void;
 }
 
-export const CircleProgress = ({ progress }: { progress: number }) => {
+export const CircleProgress = ({
+  progress,
+  state,
+}: {
+  progress: number;
+  state: "pending" | "completed" | "failed";
+}) => {
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
+  const strokeDashoffset =
+    state === "pending" ? circumference - (progress / 100) * circumference : 0;
 
   return (
-    <Box className="relative w-32 h-32">
+    <div className="relative w-32 h-32">
       {/* Background circle */}
       <svg className="w-full h-full rotate-[-90deg]">
         <circle
@@ -75,18 +81,16 @@ export const CircleProgress = ({ progress }: { progress: number }) => {
         />
       </svg>
       {/* Center percentage text */}
-      <Flex
-        className="absolute inset-0"
-        align="center"
-        justify="center"
-        direction="column"
-      >
-        <Text size="6" className="text-white">
-          {`${progress}/3`}
-          {/* {Math.round(progress)}% */}
-        </Text>
-      </Flex>
-    </Box>
+      <div className="absolute inset-0 flex items-center justify-center flex-col text-white text-2xl">
+        {state === "completed" ? (
+          <Check size={48} color="green" />
+        ) : state === "failed" ? (
+          <X size={48} color="rgba(255,255,255,0.7)" />
+        ) : (
+          <div>{`${progress}/3`}</div>
+        )}
+      </div>
+    </div>
   );
 };
 
@@ -103,7 +107,7 @@ const CompletedItemComponent: React.FC<CompletedItemComponentProps> = ({
       <div
         className={cn(
           "flex items-center gap-x-2 py-2 px-4 my-1 text-white bg-white/10 rounded-md",
-          item.state === "error" && "bg-red-500/10"
+          item.state === "error" && "bg-red-500/10 "
         )}
       >
         <div className="text-sm flex-1">{item.text}</div>
@@ -134,14 +138,13 @@ export const StepProgress: React.FC<StepProgressProps> = ({
   progress = 0,
   completedItems = [],
   onBack,
+  state,
 }) => {
-  const [resultState] = useState<"success" | "error" | null>(null);
-
   return (
     <>
-      <div className="h-screen flex flex-col items-center gap-6">
+      <div className="h-full flex flex-col items-center gap-6">
         {/* Progress Circle */}
-        <CircleProgress progress={progress} />
+        <CircleProgress progress={progress} state={state} />
 
         {/* Completed Items List */}
         <div className="w-full max-w-sm">
@@ -161,16 +164,16 @@ export const StepProgress: React.FC<StepProgressProps> = ({
         </div>
       </div>
 
-      {resultState === "success" && (
+      {/* {state === "completed" && (
         <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-10">
           <Button variant={"ghost"}>
             <span>Open vscode</span>
             <ExternalLink />
           </Button>
         </div>
-      )}
+      )} */}
 
-      {resultState === "error" && (
+      {state === "failed" && (
         <button
           onClick={onBack}
           className="fixed bottom-5 left-5 text-white/80 flex items-center gap-1 z-10"
@@ -185,10 +188,14 @@ export const StepProgress: React.FC<StepProgressProps> = ({
 
 export const CreateProjectProgress: FC<{
   onBack: () => void;
-}> = ({ onBack }) => {
+  onComplete: (data: any) => void;
+}> = ({ onBack, onComplete }) => {
   const progressing = useRef(false);
   const [progress, setProgress] = useState(1);
   const [completedItems, setCompletedItems] = useState<CompletedItem[]>([]);
+  const [progressState, setProgressState] = useState<
+    "pending" | "completed" | "failed"
+  >("pending");
 
   const [formData] = useAtom(formDataAtom);
 
@@ -232,13 +239,13 @@ export const CreateProjectProgress: FC<{
       )
       .then(
         () => {
+          setProgressState("completed");
           //   setProgress(100);
           //   setCompletedItems(testItems);
-          // projectManager.writeOrderlyConfigFile(
-          //   projectManager.generateOrderlyConfig(formData.data)
-          // );
+          onComplete(formData.data);
         },
         (error) => {
+          setProgressState("failed");
           if (error instanceof CustomError) {
             updateCompletedItem(
               error.id,
@@ -263,6 +270,7 @@ export const CreateProjectProgress: FC<{
       progress={progress}
       completedItems={completedItems}
       onBack={onBack}
+      state={progressState}
     />
   );
 };

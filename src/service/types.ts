@@ -1,7 +1,5 @@
-import { ThemeItems } from "@/components/editor/theme/type";
-
 export type OrderlyConfig = {
-  framework: string;
+  // framework: string;
   paths: {
     src: string;
     public: string;
@@ -11,6 +9,6 @@ export type OrderlyConfig = {
 
 export type OrderlyTheme = {
   name: string;
-  description: string;
-  theme: ThemeItems;
+  description?: string;
+  theme: Record<string, string>;
 };

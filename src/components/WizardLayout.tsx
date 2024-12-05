@@ -39,7 +39,7 @@ export const WizardLayout: React.FC<WizardLayoutProps> = ({
         </ul>
       </aside>
       <main className="w-3/4">
-        <Card>
+        <Card className="h-[calc(100vh_-_64px)] shadow-md border-none overflow-auto">
           <CardHeader className="flex">
             <div className="static top-5">
               <h3 className="text-sm font-bold">

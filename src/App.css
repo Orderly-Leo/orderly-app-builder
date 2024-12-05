@@ -1,4 +1,11 @@
 .step-wizard-container {
-  background: url("/orderly-logo.svg") no-repeat -20px 110%,
-    radial-gradient(118.13% 48.07% at 7% 98.17%, #4c2945 0%, #140c35 100%);
+  background: radial-gradient(
+    118.13% 48.07% at 7% 98.17%,
+    #4c2945 0%,
+    #140c35 100%
+  );
+}
+
+body {
+  user-select: none;
 }

@@ -4,11 +4,12 @@ import { CreateProjectInputs } from "./projectManager";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { Command } from "@tauri-apps/plugin-shell";
 import { CustomError } from "@/types/customError";
+import chroma from "chroma-js";
 
 import postcss from "postcss";
 import postcssjs from "postcss-js";
-import { lensPath, view } from "ramda";
 import { OrderlyConfig } from "./types";
+import { convertColorToHex } from "./utils";
 
 export abstract class BaseFrameworkHandler implements IFramework {
   constructor(projectPath: string, projectName: string) {
@@ -31,6 +32,7 @@ export abstract class BaseFrameworkHandler implements IFramework {
   abstract loadCSS(): Promise<any>;
   abstract collectPages(): Promise<any>;
   abstract generateOrderlyConfig(inputs: CreateProjectInputs): OrderlyConfig;
+  abstract setCSSPath(cssPath: string): void;
 
   onData(data: string) {
     console.log("!!!", data);
@@ -115,14 +117,18 @@ export abstract class BaseFrameworkHandler implements IFramework {
 
       const result = await command.execute();
 
+      console.log("result", result);
+
       if (result.code !== 0) {
         throw new CustomError(
           "install-dependencies",
           "Failed to install dependencies",
-          result.stderr
+          result.stdout
         );
       }
     } catch (e: any) {
+      console.log("e", e);
+
       throw new CustomError(
         "install-dependencies",
         "Failed to install dependencies",
@@ -145,17 +151,21 @@ export abstract class BaseFrameworkHandler implements IFramework {
     return await readTextFile(path);
   }
 
+  protected async writeFile(path: string, content: string) {
+    return await writeTextFile(path, content);
+  }
+
   protected async parseCSS(css: string) {
     const root = postcss.parse(css);
     const parsed = postcssjs.objectify(root);
     // convert cssdata to object
-    const cssData = this.getCSSRoot(parsed);
+
+    let cssData = this.getCSSRoot(parsed);
+    cssData = convertColorToHex(cssData);
     return cssData;
   }
 
-  // abstract getCSSRoot(obj: Record<string, any>  ): Record<string, any>;
-
   private getCSSRoot(obj: Record<string, any>) {
-    return view(lensPath(["@layer base", ":root"]), obj);
+    return obj[":root"];
   }
 }

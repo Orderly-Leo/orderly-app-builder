@@ -23,7 +23,7 @@ export const availablePages: PageType[] = [
     id: "trading",
     name: "Trading",
     description: "Full-featured trading interface with orderbook and charts",
-    thumbnail: "/pages/trading.png",
+    thumbnail: "/pages/trading-page@2x.png",
     defaultConfig: {
       pageName: "Trading",
       route: "/perp",
@@ -62,7 +62,7 @@ export const availablePages: PageType[] = [
     id: "market",
     name: "Market Overview",
     description: "Display market data and statistics",
-    thumbnail: "/pages/market.png",
+    thumbnail: "/pages/market-page@2x.png",
     dependencies: ["@orderly.network/markets"],
     defaultConfig: {
       pageName: "Markets",
@@ -77,7 +77,7 @@ export const availablePages: PageType[] = [
     id: "portfolio",
     name: "Portfolio",
     description: "User portfolio and asset management",
-    thumbnail: "/pages/portfolio.png",
+    thumbnail: "/pages/portfolio-page@2x.png",
     dependencies: ["@orderly.network/portfolio"],
     defaultConfig: {
       pageName: "Portfolio",

@@ -9,6 +9,7 @@
     "core:default",
     "shell:allow-open",
     "core:window:allow-create",
+    "core:window:allow-set-size",
     "dialog:allow-open",
     "dialog:allow-confirm",
     "dialog:default",
@@ -35,7 +36,7 @@
           ]
         },{
           "name": "install-dependencies",
-          "cmd": "pnpm",
+          "cmd": "npm",
           "args": ["install"]
         },{
           "name":"ls",

@@ -33,6 +33,6 @@ pub fn run() {
 
 #[tauri::command]
 fn get_str_md5(str: &str) -> String {
-    let md5 = md5::compute(str.as_bytes());
-    format!("{:x}", md5)
+    let digest = md5::compute(str.as_bytes());
+    format!("{:x}", digest)
 }

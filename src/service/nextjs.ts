@@ -9,7 +9,7 @@ import { OrderlyConfig } from "./types";
 
 export class Nextjs extends BaseFrameworkHandler {
   name = "next.js";
-  private cssPath: string;
+  #cssPath: string;
   constructor(
     projectPath: string,
     projectName: string,
@@ -20,7 +20,7 @@ export class Nextjs extends BaseFrameworkHandler {
     }
   ) {
     super(projectPath, projectName);
-    this.cssPath = options?.paths?.themeCSS || "";
+    this.#cssPath = options?.paths?.themeCSS || "";
   }
   run(): void {
     throw new Error("Method not implemented.");
@@ -36,8 +36,8 @@ export class Nextjs extends BaseFrameworkHandler {
   }
 
   async getFullCSSPath() {
-    if (!this.cssPath) return null;
-    return await join(this.fullProjectPath, this.cssPath);
+    if (!this.#cssPath) return null;
+    return await join(this.fullProjectPath, this.#cssPath);
   }
   async createProject(inputs: CreateProjectInputs): Promise<any> {
     /**
@@ -54,6 +54,10 @@ export class Nextjs extends BaseFrameworkHandler {
         e.message
       );
     }
+  }
+
+  setCSSPath(path: string) {
+    this.#cssPath = path;
   }
 
   private async createAppFromTemplate(inputs: CreateProjectInputs) {
@@ -141,15 +145,21 @@ export class Nextjs extends BaseFrameworkHandler {
   async loadCSS() {
     const cssPath = await this.getFullCSSPath();
 
-    console.log("css path", cssPath);
-
     if (!cssPath) return;
 
     const css = await this.readFile(cssPath);
+
     const cssData = await this.parseCSS(css);
-    console.log("css data", cssData);
 
     return cssData;
+  }
+
+  async writeCSS(css: string) {
+    const cssPath = await this.getFullCSSPath();
+    if (!cssPath) {
+      throw new Error("CSS path not setting");
+    }
+    await this.writeFile(cssPath, css);
   }
 
   private async clearPages() {} // inputs: CreateProjectInputs
@@ -198,7 +208,7 @@ export class Nextjs extends BaseFrameworkHandler {
 
   generateOrderlyConfig(/**inputs: CreateProjectInputs**/): OrderlyConfig {
     return {
-      framework: "next.js",
+      // framework: "next.js",
       paths: {
         src: "src",
         public: "public",

@@ -5,11 +5,11 @@ import { Layout } from "../components/Layout";
 import { PagesPanel } from "../components/editor/sidebar/PagesPanel";
 import { ComponentsPanel } from "../components/editor/sidebar/ComponentsPanel";
 import { CreatePageWizard } from "../components/editor/page/createPageWizard";
-import { ThemeConfigs } from "../components/editor/theme/ThemeConfigs";
 import { ConfigPanel } from "../components/config/configPanel";
 import { ThemesPanel } from "../components/editor/theme/ThemesPanel";
 import { CreateThemeWizard } from "../components/editor/theme/CreateThemeWizard";
 import { CreateThemeStep1 } from "@/components/editor/theme/steps/step_1";
+import { ThemeEditor } from "@/components/editor/theme/ThemeEditor";
 
 export const router = createBrowserRouter([
   {
@@ -75,7 +75,8 @@ export const router = createBrowserRouter([
 
               {
                 path: ":themeName",
-                element: <ThemeConfigs />,
+                // element: <ThemeConfigs />,
+                element: <ThemeEditor />,
               },
             ],
           },
