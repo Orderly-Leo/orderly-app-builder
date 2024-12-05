@@ -9,6 +9,7 @@ import chroma from "chroma-js";
 import postcss from "postcss";
 import postcssjs from "postcss-js";
 import { OrderlyConfig } from "./types";
+import { convertColorToHex } from "./utils";
 
 export abstract class BaseFrameworkHandler implements IFramework {
   constructor(projectPath: string, projectName: string) {
@@ -116,14 +117,18 @@ export abstract class BaseFrameworkHandler implements IFramework {
 
       const result = await command.execute();
 
+      console.log("result", result);
+
       if (result.code !== 0) {
         throw new CustomError(
           "install-dependencies",
           "Failed to install dependencies",
-          result.stderr
+          result.stdout
         );
       }
     } catch (e: any) {
+      console.log("e", e);
+
       throw new CustomError(
         "install-dependencies",
         "Failed to install dependencies",
@@ -146,53 +151,21 @@ export abstract class BaseFrameworkHandler implements IFramework {
     return await readTextFile(path);
   }
 
+  protected async writeFile(path: string, content: string) {
+    return await writeTextFile(path, content);
+  }
+
   protected async parseCSS(css: string) {
     const root = postcss.parse(css);
     const parsed = postcssjs.objectify(root);
     // convert cssdata to object
 
     let cssData = this.getCSSRoot(parsed);
-    cssData = this.convertColorToHex(cssData);
+    cssData = convertColorToHex(cssData);
     return cssData;
   }
 
   private getCSSRoot(obj: Record<string, any>) {
     return obj[":root"];
-  }
-
-  private convertColorToHex(data: Record<string, any>) {
-    Object.keys(data).map((key) => {
-      if (key.startsWith("--oui-color-")) {
-        const color = chroma(chroma(data[key].split(" ")));
-
-        data[key] = color.hex();
-      } else if (
-        key.startsWith("--oui-gradient") &&
-        !key.endsWith("angle") &&
-        !key.includes("stop")
-      ) {
-        const color = chroma(chroma(data[key].split(" ")));
-
-        data[key] = color.hex();
-      }
-    });
-    return data;
-  }
-
-  private convertHexToColor(data: Record<string, any>) {
-    Object.keys(data).map((key) => {
-      if (key.startsWith("--oui-color-")) {
-        data[key] = chroma(data[key]).rgb().join(" ");
-      } else if (
-        key.startsWith("--oui-gradient") &&
-        !key.endsWith("angle") &&
-        !key.includes("stop")
-      ) {
-        const color = chroma(chroma(data[key]));
-
-        data[key] = color.rgb().join(" ");
-      }
-    });
-    return data;
   }
 }

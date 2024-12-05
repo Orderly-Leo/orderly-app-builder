@@ -21,4 +21,14 @@ export const useThemeEditor = () => {
         });
     }
   }, [editorService]);
+
+  const coverToCSS = async (theme: Record<string, any>) => {
+    const css = await editorService?.saveThemeAsCSS(theme);
+
+    return css;
+  };
+
+  return {
+    coverToCSS,
+  };
 };

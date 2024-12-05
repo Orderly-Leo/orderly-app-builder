@@ -17,6 +17,7 @@ export interface IFramework {
   installDependencies(inputs: CreateProjectInputs): Promise<any>;
 
   loadCSS(): Promise<any>;
+  writeCSS(css: string): Promise<any>;
   collectPages(): Promise<any>;
   setCSSPath(cssPath: string): void;
 

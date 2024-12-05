@@ -35,7 +35,7 @@ export const formDataAtom = atomWithImmer<{ data: CreateProjectInputs }>({
     brokerId: "orderly",
     brokerName: "Orderly",
     framework: "nextjs",
-    walletConnector: "walletconnect",
+    walletConnector: "orderly",
     pages: ["trading"],
     projectName: "test",
     projectPath: "/Users/leo/project/test",

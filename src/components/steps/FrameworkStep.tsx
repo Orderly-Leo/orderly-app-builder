@@ -34,11 +34,11 @@ export const FrameworkStep: React.FC<FrameworkStepProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 h-full">
       {/* <Text size="5" weight="bold">
         Choose React Framework
       </Text> */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 flex-1">
         {frameworks.map((fw) => (
           <div
             key={fw.id}
@@ -59,7 +59,7 @@ export const FrameworkStep: React.FC<FrameworkStepProps> = ({
         ))}
       </div>
 
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 pt-5">
         <Button variant="ghost" onClick={onBack}>
           Back
         </Button>

@@ -2,6 +2,7 @@ import { useAtom } from "jotai";
 import { WizardLayout } from "./WizardLayout";
 import { CreateProjectProgress } from "./steps/StepProgress";
 import { motion, AnimatePresence } from "motion/react";
+import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 
 import { useState } from "react";
 import {
@@ -11,6 +12,8 @@ import {
   formDataAtom,
   STEPS,
 } from "./steps/atom";
+import { projectManager } from "@/service/projectManager";
+import { useNavigate } from "react-router-dom";
 
 interface StepWizardProps {}
 
@@ -22,6 +25,8 @@ const StepWizardContent: React.FC<StepWizardProps> = ({}) => {
   const [formData, setFormData] = useAtom(formDataAtom);
   const [showProgress, setShowProgress] = useState(false);
 
+  const navigate = useNavigate();
+
   const onNext = (stepData: Record<string, any>) => {
     if (currentIndex === STEPS.length - 1) {
       setShowProgress(true);
@@ -30,6 +35,7 @@ const StepWizardContent: React.FC<StepWizardProps> = ({}) => {
     setFormData((draft) => {
       draft.data = { ...draft.data, ...stepData };
     });
+
     setCurrentIndex(currentIndex + 1);
   };
 
@@ -37,15 +43,18 @@ const StepWizardContent: React.FC<StepWizardProps> = ({}) => {
     setCurrentIndex(currentIndex - 1);
   };
 
+  const onStepComplete = async (data: any) => {
+    const config = projectManager.generateOrderlyConfig(data);
+    if (config) {
+      projectManager.writeOrderlyConfigFile(config);
+
+      // await getCurrentWindow().setSize(new LogicalSize(800, 600));
+      navigate("/editor");
+    }
+  };
+
   return (
     <div className="min-h-screen p-8 step-wizard-container">
-      {/* <div>
-        <img
-          className="w-auto h-7 relative object-contain dark:block"
-          src="https://mintlify.s3-us-west-1.amazonaws.com/orderly/logo/dark.svg"
-          alt="dark logo"
-        />
-      </div> */}
       <AnimatePresence mode="wait">
         {!showProgress ? (
           <motion.div
@@ -63,7 +72,6 @@ const StepWizardContent: React.FC<StepWizardProps> = ({}) => {
                 onNext={onNext}
                 onBack={onPrevious}
                 formData={formData.data}
-                onComplete={() => {}}
               />
             </WizardLayout>
           </motion.div>
@@ -78,6 +86,9 @@ const StepWizardContent: React.FC<StepWizardProps> = ({}) => {
               onBack={() => {
                 setCurrentIndex(0);
                 setShowProgress(false);
+              }}
+              onComplete={(data: any) => {
+                onStepComplete(data);
               }}
             />
           </motion.div>

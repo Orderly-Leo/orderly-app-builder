@@ -3,33 +3,57 @@ import { useThemeEditor } from "./useThemeEditor";
 import { currentThemeAtom } from "./theme.atom";
 import { Control, Controller, useForm } from "react-hook-form";
 import { ColorPicker } from "./ColorPicker";
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import { cn } from "@/lib/utils";
 import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { convertHexToColor, updateThemeToLocalStorage } from "@/service/utils";
 // import { useForm } from "react-hook-form";
 
 export const ThemeEditor = () => {
   // const form = useForm();
-  useThemeEditor();
+  const { coverToCSS } = useThemeEditor();
   const currentTheme = useAtomValue(currentThemeAtom);
 
-  console.log(currentTheme);
+  const onThemeChange = async (theme: Record<string, any>) => {
+    const css = convertHexToColor(theme);
+    const cssStr = await coverToCSS(css);
+    console.log(theme, css, cssStr);
+
+    if (currentTheme) {
+      updateThemeToLocalStorage({
+        ...currentTheme,
+        theme,
+      });
+    }
+  };
 
   if (!currentTheme?.theme) return null;
 
   return (
     <div className="py-5">
-      <ThemeForm theme={currentTheme?.theme} />
+      <ThemeForm theme={currentTheme?.theme} onChange={onThemeChange} />
     </div>
   );
 };
 
-const ThemeForm = (props: { theme: Record<string, string> }) => {
+const ThemeForm = (props: {
+  theme: Record<string, string>;
+  onChange: (theme: Record<string, any>) => void;
+}) => {
   const form = useForm({
     defaultValues: props.theme,
   });
+
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      // console.log(value, name, type);
+
+      props.onChange(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
 
   return (
     <Form {...form}>
@@ -37,7 +61,7 @@ const ThemeForm = (props: { theme: Record<string, string> }) => {
         <div className="text-xl font-medium mb-2 px-4">Colors</div>
         <div className="flex flex-col text-sm">
           <ColorRow name="Primary">
-            <div className="grid md:grid-cols-3 lg:md:grid-cols-3 lg:grid-cols-4 grid-cols-2 grid-cols-2 gap-2">
+            <div className="grid md:grid-cols-3 lg:md:grid-cols-3 lg:grid-cols-4 grid-cols-2 gap-2">
               <ColorItem
                 control={form.control}
                 name="--oui-color-primary-darken"

@@ -1,10 +1,8 @@
-import { Flex, Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { availablePages, SelectedPage } from "@/data/pages";
-import { Checkbox } from "../ui/checkbox";
-import { Check, CircleCheckBig } from "lucide-react";
+import { CircleCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const PagesStep = ({
@@ -69,82 +67,38 @@ export const PagesStep = ({
 
   return (
     <div>
-      {/* <Box mb="5">
-        <Text size="5" weight="bold" as="p">
-          Select Pages
-        </Text>
-        <Text size="2" color="gray" as="p">
-          Choose the pages you want to include in your project
-        </Text>
-      </Box> */}
-
-      <div>
-        <ScrollArea className="w-full whitespace-nowrap">
-          <div className="flex w-max space-x-4 h-[240px]">
-            {pages.map((page) => (
-              <div
-                key={page.id}
-                onClick={() => handleTogglePage(page.id)}
-                className={"flex-none w-[calc(80%-16px)] py-4 cursor-pointer"}
-              >
+      <ScrollArea className="w-full whitespace-nowrap">
+        <div className="flex space-x-4 h-[240px]">
+          {pages.map((page) => (
+            <div
+              key={page.id}
+              onClick={() => handleTogglePage(page.id)}
+              className={"pb-4 cursor-pointer"}
+            >
+              <div className={"relative h-full"}>
+                {/* Thumbnail */}
                 <div
                   className={cn(
-                    "relative h-full",
-                    page.isSelected && "border-purple-600 bg-purple-50"
+                    "w-[320px] h-full bg-gray-100 rounded-lg overflow-hidden bg-cover opacity-70",
+                    page.isSelected && "opacity-100"
                   )}
-                >
-                  {/* Thumbnail */}
-                  <div className="w-full h-full bg-gray-100 rounded-lg overflow-hidden">
-                    {page.thumbnail ? (
-                      <img
-                        src={page.thumbnail}
-                        alt={page.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <Flex
-                        align="center"
-                        justify="center"
-                        className="w-full h-full "
-                      >
-                        No preview
-                      </Flex>
-                    )}
-                  </div>
+                  style={{
+                    backgroundImage: `url(${page.thumbnail})`,
+                  }}
+                ></div>
 
-                  {/* Content */}
-                  {page.isSelected && (
-                    <div className="absolute top-2 right-2">
-                      <Check className="w-6 h-6 text-purple-600" />
-                    </div>
-                  )}
-                  <Flex
-                    direction="column"
-                    gap="2"
-                    className="absolute left-0 bottom-0 p-4"
-                  >
-                    {/* <div className="flex items-center gap-2">
-                      <Checkbox
-                        checked={page.isSelected}
-                        id={page.id}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleTogglePage(page.id);
-                        }}
-                      />
-                      <Text weight="medium" as="label" htmlFor={page.id}>
-                        {page.name}
-                      </Text>
-                    </div> */}
-                    {/* <Text>{page.description}</Text> */}
-                  </Flex>
-                </div>
+                {/* Content */}
+                {page.isSelected && (
+                  <div className="absolute top-2 right-2">
+                    <CircleCheck className="w-6 h-6 text-white" />
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </div>
+            </div>
+          ))}
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
 
       <div className="flex items-center justify-between mt-6 gap-3">
         <Button variant="ghost" onClick={onBack}>

@@ -3,8 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { useAtom, useAtomValue } from "jotai";
 import { ArrowLeft } from "lucide-react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Theme, themesAtom } from "./theme.atom";
-import { ThemeItems } from "./type";
+import { themesAtom } from "./theme.atom";
 
 export function CreateThemeWizard() {
   const navigate = useNavigate();
@@ -19,9 +18,9 @@ export function CreateThemeWizard() {
     const { isDefault, ...rest } = data;
     const newTheme = {
       ...rest,
-      theme: {} as ThemeItems, // copy from template
+      theme: {}, // copy from template
     };
-    setThemes([newTheme as Theme, ...themes]);
+    setThemes([newTheme, ...themes]);
     editorService?.appendTheme(newTheme as any);
 
     // write css file if it is the default theme

@@ -154,6 +154,14 @@ export class Nextjs extends BaseFrameworkHandler {
     return cssData;
   }
 
+  async writeCSS(css: string) {
+    const cssPath = await this.getFullCSSPath();
+    if (!cssPath) {
+      throw new Error("CSS path not setting");
+    }
+    await this.writeFile(cssPath, css);
+  }
+
   private async clearPages() {} // inputs: CreateProjectInputs
 
   async collectPages() {
@@ -200,7 +208,7 @@ export class Nextjs extends BaseFrameworkHandler {
 
   generateOrderlyConfig(/**inputs: CreateProjectInputs**/): OrderlyConfig {
     return {
-      framework: "next.js",
+      // framework: "next.js",
       paths: {
         src: "src",
         public: "public",

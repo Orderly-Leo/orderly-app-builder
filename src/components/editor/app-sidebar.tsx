@@ -51,18 +51,18 @@ const data = {
       icon: FileSliders,
       isActive: false,
     },
-    {
-      title: "Junk",
-      url: "#",
-      icon: ArchiveX,
-      isActive: false,
-    },
-    {
-      title: "Trash",
-      url: "#",
-      icon: Trash2,
-      isActive: false,
-    },
+    // {
+    //   title: "Junk",
+    //   url: "#",
+    //   icon: ArchiveX,
+    //   isActive: false,
+    // },
+    // {
+    //   title: "Trash",
+    //   url: "#",
+    //   icon: Trash2,
+    //   isActive: false,
+    // },
   ],
 };
 
@@ -126,18 +126,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      {/* This is the first sidebar */}
-      {/* We disable collapsible and adjust width to icon. */}
-      {/* This will make the sidebar appear as icons. */}
-      {/* <Sidebar
-        collapsible="none"
-        className="!w-[calc(var(--sidebar-width-icon)_+_1px)] border-r"
-      >
-        
-      </Sidebar> */}
-
-      {/* This is the second sidebar */}
-      {/* We disable collapsible and let it fill remaining space */}
     </Sidebar>
   );
 }

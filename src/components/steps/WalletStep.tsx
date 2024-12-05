@@ -1,4 +1,3 @@
-import { Box, Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
@@ -20,12 +19,13 @@ export const WalletStep: React.FC<WalletStepProps> = ({
     {
       id: "orderly",
       name: "Orderly Wallet Connector",
-      description: "Orderly Wallet Connector",
+      description:
+        "The wallet connection component provided by the SDK is built on top of BlockNative.",
     },
     {
       id: "custom",
       name: "Custom",
-      description: "Custom Wallet Connector",
+      description: "Your can implement your own wallet connector",
     },
   ];
 
@@ -58,7 +58,7 @@ export const WalletStep: React.FC<WalletStepProps> = ({
             // }}
           >
             <div className="flex items-center gap-3">
-              <Box className="w-6 h-6">{/* 如果有图标可以在这里添加 */}</Box>
+              <div className="w-6 h-6">{/* 如果有图标可以在这里添加 */}</div>
               <div className="flex flex-col gap-2">
                 <div>{w.name}</div>
                 <div className="text-xs text-gray-500">{w.description}</div>
@@ -67,7 +67,7 @@ export const WalletStep: React.FC<WalletStepProps> = ({
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 pt-5">
         <Button variant="ghost" onClick={onBack}>
           Back
         </Button>
