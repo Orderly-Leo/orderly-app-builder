@@ -36,7 +36,7 @@
           ]
         },{
           "name": "install-dependencies",
-          "cmd": "npm",
+          "cmd": "pnpm",
           "args": ["install"]
         },{
           "name":"ls",

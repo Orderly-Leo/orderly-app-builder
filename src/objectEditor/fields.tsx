@@ -10,6 +10,7 @@ export interface ObjectFieldsProps {
     field?: string;
     sectionHeader?: string;
   };
+  onChange?: (values: any, changed: any) => void;
 }
 
 export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
@@ -25,8 +26,8 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
   // console.log(props.object);
 
   useEffect(() => {
-    const subscription = methods.watch((value, { name, type }) =>
-      console.log(value, name, type)
+    const subscription = methods.watch((values, changed) =>
+      props.onChange?.(values, changed)
     );
     return () => subscription.unsubscribe();
   }, [methods.watch]);
@@ -38,7 +39,7 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-4 px-2">
+        <div className="flex flex-col gap-4 px-8">
           {parsedObject.map((item) => {
             return (
               <div key={item.key}>
@@ -105,10 +106,9 @@ const Fields: FC<{
   return (
     <>
       <SectionHeader title={title} id={id} />
-      <div className={`flex flex-col gap-4 ${classes?.root}`}>
+      <div className={`flex flex-col gap-2 ${classes?.root}`}>
         {fields.map((field) => {
           if (field.type === "object" && field.children) {
-            console.log("-->>>>field", field);
             return (
               <div key={field.key}>
                 {/* <div className="text-lg font-medium mb-2">{field.label}</div> */}

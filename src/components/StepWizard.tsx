@@ -2,7 +2,6 @@ import { useAtom } from "jotai";
 import { WizardLayout } from "./WizardLayout";
 import { CreateProjectProgress } from "./steps/StepProgress";
 import { motion, AnimatePresence } from "motion/react";
-import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 
 import { useState } from "react";
 import {

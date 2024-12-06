@@ -1,4 +1,5 @@
 import { Link } from "@radix-ui/themes";
+import { z } from "zod";
 
 export const configArgTypes = {
   app: {
@@ -16,6 +17,7 @@ export const configArgTypes = {
         // type: "text",
         placeholder: "Enter broker ID",
       },
+      z: z.string(),
     },
     // brokerName: {
     //   description: <h2>Description test</h2>,
@@ -28,6 +30,7 @@ export const configArgTypes = {
         control: {
           type: "file",
         },
+        z: z.string(),
       },
     },
   },

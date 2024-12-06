@@ -1,14 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  ArchiveX,
-  Command,
-  FileSliders,
-  Layers,
-  Palette,
-  Trash2,
-} from "lucide-react";
+import { Command, FileSliders, Layers, Palette } from "lucide-react";
 
 // import { NavUser } from "@/components/nav-user";
 // import { Label } from "@/components/ui/label"

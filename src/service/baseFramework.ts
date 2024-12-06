@@ -4,12 +4,12 @@ import { CreateProjectInputs } from "./projectManager";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { Command } from "@tauri-apps/plugin-shell";
 import { CustomError } from "@/types/customError";
-import chroma from "chroma-js";
 
 import postcss from "postcss";
 import postcssjs from "postcss-js";
 import { OrderlyConfig } from "./types";
 import { convertColorToHex } from "./utils";
+import {invoke} from "@tauri-apps/api/core";
 
 export abstract class BaseFrameworkHandler implements IFramework {
   constructor(projectPath: string, projectName: string) {
@@ -33,6 +33,7 @@ export abstract class BaseFrameworkHandler implements IFramework {
   abstract collectPages(): Promise<any>;
   abstract generateOrderlyConfig(inputs: CreateProjectInputs): OrderlyConfig;
   abstract setCSSPath(cssPath: string): void;
+  abstract writeCSS(css: string): Promise<any>;
 
   onData(data: string) {
     console.log("!!!", data);
@@ -153,6 +154,14 @@ export abstract class BaseFrameworkHandler implements IFramework {
 
   protected async writeFile(path: string, content: string) {
     return await writeTextFile(path, content);
+  }
+
+  protected async findComponentsByFile(components: string[]) {
+    console.log('this.fullProjectPath',this.fullProjectPath)
+   return invoke("get_route_by_component",{
+      path: this.fullProjectPath,
+      componentNames: components
+    });
   }
 
   protected async parseCSS(css: string) {

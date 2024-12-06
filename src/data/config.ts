@@ -9,13 +9,13 @@ export const config = {
       src: "",
       alt: "",
     },
-    mainMenus: [
-      {
-        id: "",
-        name: "",
-        href: "",
-      },
-    ],
+    // mainMenus: [
+    //   {
+    //     id: "",
+    //     name: "",
+    //     href: "",
+    //   },
+    // ],
   },
   walletConnector: {
     onboard: {
@@ -33,17 +33,4 @@ export const config = {
       components: "src/components",
     },
   },
-  // pages: {
-  //   trading: {
-  //     symbol: "ETH-USDC-PREP",
-  //     tradingViewConfig: {
-  //       scriptPath: "",
-  //     },
-  //     referral: {
-  //       saveRefCode: false,
-  //     },
-  //   },
-  //   market: {},
-  //   portfolio: {},
-  // },
 };

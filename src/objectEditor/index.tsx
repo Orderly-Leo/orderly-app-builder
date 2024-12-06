@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 export type ObjectEditorProps = {
   object: any;
   generateCode?: (object: any) => string;
-  onFieldChange?: (path: string, value: any) => void;
+  onFieldChange?: (values: any, changed: any) => void;
   argTypes?: any;
   showCategory?: boolean;
+  onChange?: (values: any, changed: any) => void;
   classes?: ObjectFieldsProps["classes"] & {
     category?: string;
   };
@@ -32,7 +33,11 @@ export const ObjectEditor: FC<ObjectEditorProps> = (props) => {
             }}
           />
         )}
-        <ObjectFields object={props.object} classes={props.classes} />
+        <ObjectFields
+          object={props.object}
+          classes={props.classes}
+          onChange={props.onChange}
+        />
       </div>
     </ObjectEditorProvider>
   );

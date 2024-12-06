@@ -9,6 +9,7 @@ import {
 import { useAtom } from "jotai";
 import { useSetAtom } from "jotai";
 import { themesAtom } from "./editor/theme/theme.atom";
+import { ControlBar } from "./controlBar";
 
 export const Editor = () => {
   const [editorService, setEditorService] = useAtom(editorServiceAtom);
@@ -56,7 +57,8 @@ export const Editor = () => {
   }, []);
 
   return (
-    <div className="h-screen">
+    <div className="min-h-svh">
+      <ControlBar />
       <EditorLayout />
     </div>
   );

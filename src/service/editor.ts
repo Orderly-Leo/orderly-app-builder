@@ -5,8 +5,9 @@ import {
   ProjectManagerImpl,
 } from "./projectManager";
 import { OrderlyConfig, OrderlyTheme } from "./types";
-import { invoke } from "@tauri-apps/api/core";
 import { PROJECT_THEMES_KEY } from "./utils";
+import { ConfigPipelineService } from "./configHandler/configPipeline";
+import ProjectConfigHandler from "./configHandler/projectConfigHandler";
 
 export class EditorService {
   private projectPath: string;
@@ -15,6 +16,7 @@ export class EditorService {
   projectManager: ProjectManager;
   private projectName: string;
   private cssWorker: Worker;
+  private configPipelineService: ConfigPipelineService;
 
   constructor(
     projectPath: string,
@@ -27,6 +29,10 @@ export class EditorService {
     this.projectName = projectName;
     this.projectManager = projectManager;
     this.updateProjectManager(options.framework);
+
+    this.configPipelineService = new ConfigPipelineService([
+      new ProjectConfigHandler(),
+    ]);
 
     this.cssWorker = new Worker(
       new URL("../workers/cssWorker.ts", import.meta.url),
@@ -106,12 +112,9 @@ export class EditorService {
   private async loadThemes() {
     const themes: OrderlyTheme[] = [];
     const currentTheme = await this.loadThemeFromCSSFile();
-    let currentThemeMD5: string[] = [];
 
     if (currentTheme) {
       console.log("========loadThemes current theme", currentTheme);
-
-      currentThemeMD5 = await this.getThemeMD5(currentTheme);
 
       // console.log("+++++md5++++++", md5);
 
@@ -146,29 +149,37 @@ export class EditorService {
     return themes;
   }
 
-  private async getThemeMD5(theme: Record<string, any>): Promise<string[]> {
-    const sortedTheme = this.sortTheme(theme);
-    const sortedThemeStr = JSON.stringify(sortedTheme)
-      .replace(/\s*/g, "")
-      .replace("\n", "");
+  // private async getThemeMD5(theme: Record<string, any>): Promise<string[]> {
+  //   const sortedTheme = this.sortTheme(theme);
+  //   const sortedThemeStr = JSON.stringify(sortedTheme)
+  //     .replace(/\s*/g, "")
+  //     .replace("\n", "");
 
-    const md5Str: string = await invoke("get_str_md5", { str: sortedThemeStr });
+  //   const md5Str: string = await invoke("get_str_md5", { str: sortedThemeStr });
 
-    return [md5Str, sortedThemeStr];
-  }
+  //   return [md5Str, sortedThemeStr];
+  // }
 
   private async loadThemeFromCSSFile() {
     return await this.projectManager.frameworkHandler?.loadCSS();
   }
 
-  private sortTheme(theme: Record<string, any>) {
-    // this.#themes.sort((a, b) => a.name.localeCompare(b.name));
-    const keys = Object.keys(theme);
-    keys.sort();
-    return keys.reduce((acc, key) => {
-      acc[key] = theme[key];
-      return acc;
-    }, {} as Record<string, any>);
+  // private sortTheme(theme: Record<string, any>) {
+  //   // this.#themes.sort((a, b) => a.name.localeCompare(b.name));
+  //   const keys = Object.keys(theme);
+  //   keys.sort();
+  //   return keys.reduce((acc, key) => {
+  //     acc[key] = theme[key];
+  //     return acc;
+  //   }, {} as Record<string, any>);
+  // }
+
+  handleConfig(config: any, key: string, eventName: string) {
+    this.projectConfig = this.configPipelineService.handle(
+      config,
+      key,
+      eventName
+    );
   }
 
   appendTheme(theme: OrderlyTheme) {
@@ -190,7 +201,7 @@ export class EditorService {
       ":root": theme,
     };
 
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<string>((resolve) => {
       const handleMessage = (e: MessageEvent) => {
         const { type, data } = e.data;
         if (type === "CSS_RESULT") {

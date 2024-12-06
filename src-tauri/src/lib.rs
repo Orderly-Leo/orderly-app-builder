@@ -1,3 +1,6 @@
+use std::fs;
+use std::path::Path;
+
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -11,28 +14,62 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_cli::init())
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![greet])
-        .invoke_handler(tauri::generate_handler![get_str_md5])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            get_str_md5,
+            search_file_by_text,
+            get_route_by_component,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
-
-       
 }
-
-// #[tauri::command]
-// fn parse_css_json(css: String) -> String {
-    
-// }
-
-// #[tauri::command]
-// fn get_md5(path: &str) -> String {
-//     let file = tauri::api::file::read(path).unwrap();
-//     let md5 = md5::compute(file);
-//     format!("{:x}", md5)
-// }   
 
 #[tauri::command]
 fn get_str_md5(str: &str) -> String {
     let digest = md5::compute(str.as_bytes());
     format!("{:x}", digest)
+}
+
+#[tauri::command]
+fn search_file_by_text(path: String, keyword: String) -> Option<String> {
+    fn search_in_directory(dir_path: &Path, keyword: &str) -> Option<String> {
+        let mut queue = vec![dir_path.to_path_buf()];
+
+        while let Some(current_path) = queue.pop() {
+            if let Ok(entries) = fs::read_dir(&current_path) {
+                for entry in entries {
+                    if let Ok(entry) = entry {
+                        let path = entry.path();
+
+                        if path.is_file() {
+                            if let Ok(content) = fs::read_to_string(&path) {
+                                if content.contains(keyword) {
+                                    return Some(path.to_string_lossy().into_owned());
+                                }
+                            }
+                        } else if path.is_dir() {
+                            queue.push(path);
+                        }
+                    }
+                }
+            }
+        }
+
+        None
+    }
+
+    search_in_directory(Path::new(&path), &keyword)
+}
+
+#[tauri::command]
+fn get_route_by_component(path: String, component_names: Vec<String>) -> Vec<String> {
+    let mut routes = vec![];
+
+    for component_name in component_names {
+        if let Some(route) = search_file_by_text(path.clone(), component_name) {
+            routes.push(route);
+        }
+    }
+
+    routes
 }

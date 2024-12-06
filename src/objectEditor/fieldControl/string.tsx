@@ -1,19 +1,29 @@
+import { FormField } from "@/components/ui/form";
+import { FormControl, FormLabel } from "@/components/ui/form";
+import { FormDescription, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { forwardRef } from "react";
-import { ChangeHandler } from "react-hook-form";
+import { FC } from "react";
+import { ControlProps } from "./types";
 
-type StringControlProps = {
-  value: string;
-  name: string;
-  onChange?: ChangeHandler;
+type StringControlProps = {} & ControlProps;
+
+export const StringControl: FC<StringControlProps> = (props,) => {
+  const { name, control ,label} = props;
+
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <Input placeholder="shadcn" {...field} />
+          </FormControl>
+          <FormDescription>{props.description}</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
 };
-
-export const StringControl = forwardRef<HTMLInputElement, StringControlProps>(
-  (props, ref) => {
-    const { onChange, name } = props;
-
-    return (
-      <Input autoComplete="off" name={name} onChange={onChange} ref={ref} />
-    );
-  }
-);

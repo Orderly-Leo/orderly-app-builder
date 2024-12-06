@@ -5,14 +5,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {
-  Link,
-  Outlet,
-  useLocation,
-  useMatch,
-  useMatches,
-  useNavigation,
-} from "react-router-dom";
+import { Link, Outlet, useLocation, useMatches } from "react-router-dom";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
@@ -30,7 +23,7 @@ export function EditorLayout() {
     >
       <AppSidebar />
       <SidebarInset>
-        <header className="sticky top-0 z-20 flex shrink-0 items-center border-b bg-background/80 backdrop-blur-md px-4 py-2">
+        <header className="sticky top-0 z-20 flex shrink-0 items-center border-b bg-background/80 backdrop-blur-md px-4 py-1">
           <div className="flex items-center gap-2 flex-1">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
@@ -40,12 +33,6 @@ export function EditorLayout() {
         </header>
         <div className="flex flex-1 flex-col gap-4">
           <Outlet />
-          {/* {Array.from({ length: 24 }).map((_, index) => (
-            <div
-              key={index}
-              className="aspect-video h-12 w-full rounded-lg bg-muted/50"
-            />
-          ))} */}
         </div>
       </SidebarInset>
     </SidebarProvider>
