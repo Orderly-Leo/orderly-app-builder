@@ -41,6 +41,14 @@ fn search_file_by_text(path: String, keyword: String) -> Option<String> {
                     if let Ok(entry) = entry {
                         let path = entry.path();
 
+                        if path.is_dir()
+                            && path
+                                .file_name()
+                                .map_or(false, |name| name == "node_modules")
+                        {
+                            continue;
+                        }
+
                         if path.is_file() {
                             if let Ok(content) = fs::read_to_string(&path) {
                                 if content.contains(keyword) {
@@ -63,13 +71,8 @@ fn search_file_by_text(path: String, keyword: String) -> Option<String> {
 
 #[tauri::command]
 fn get_route_by_component(path: String, component_names: Vec<String>) -> Vec<String> {
-    let mut routes = vec![];
-
-    for component_name in component_names {
-        if let Some(route) = search_file_by_text(path.clone(), component_name) {
-            routes.push(route);
-        }
-    }
-
-    routes
+    component_names
+        .into_iter()
+        .filter_map(|name| search_file_by_text(path.clone(), name))
+        .collect()
 }

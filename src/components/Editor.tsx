@@ -10,12 +10,14 @@ import { useAtom } from "jotai";
 import { useSetAtom } from "jotai";
 import { themesAtom } from "./editor/theme/theme.atom";
 import { ControlBar } from "./controlBar";
+import { pagesAtom } from "./editor/page/pages.atom";
 
 export const Editor = () => {
   const [editorService, setEditorService] = useAtom(editorServiceAtom);
   const setConfigs = useSetAtom(configsAtom);
   const setAppState = useSetAtom(appStateAtom);
   const setThemes = useSetAtom(themesAtom);
+  const setPages = useSetAtom(pagesAtom);
 
   useEffect(() => {
     if (!editorService) {
@@ -48,6 +50,8 @@ export const Editor = () => {
         setConfigs((draft) => {
           draft.config = data.config;
         });
+
+        setPages(data.routes);
 
         setAppState((draft) => {
           draft.initialized = true;

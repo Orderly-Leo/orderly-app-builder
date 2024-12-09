@@ -4,7 +4,8 @@ import { Nextjs } from "./nextjs";
 import { CreateProjectIds } from "@/components/steps/types";
 import { StepState } from "@/components/steps/StepProgress";
 import { readTextFile, writeTextFile, exists } from "@tauri-apps/plugin-fs";
-import { OrderlyConfig } from "./types";
+import { OrderlyProjectConfig } from "./types";
+import { Config } from "@/data/config";
 
 export enum NPM {
   yarn = "yarn",
@@ -40,6 +41,9 @@ export interface ProjectManager {
     inputs: CreateProjectInputs,
     onProgress: onProgressEventHandle
   ): Promise<any>;
+  generateOrderlyConfig(
+    config: Record<string, any>
+  ): OrderlyProjectConfig | null;
   readOrderlyConfigFile(): Promise<Record<string, any> | null>;
   writeOrderlyConfigFile(config: Record<string, any>): Promise<void>;
 }
@@ -134,7 +138,7 @@ export class ProjectManagerImpl implements ProjectManager {
     return this.#frameworkHandler || null;
   }
 
-  generateOrderlyConfig(inputs: CreateProjectInputs): OrderlyConfig | null {
+  generateOrderlyConfig(inputs: Partial<Config>): OrderlyProjectConfig | null {
     if (!this.frameworkHandler) {
       return null;
     }
@@ -154,7 +158,7 @@ export class ProjectManagerImpl implements ProjectManager {
     }
   }
 
-  async writeOrderlyConfigFile(config: OrderlyConfig) {
+  async writeOrderlyConfigFile(config: OrderlyProjectConfig) {
     if (!this.projectPath || !this.projectName) {
       throw new Error("Project path or project name is not set");
     }
@@ -162,7 +166,7 @@ export class ProjectManagerImpl implements ProjectManager {
     await writeTextFile(orderlyFilePath, JSON.stringify(config, null, 2));
   }
 
-  async readOrderlyConfigFile(): Promise<OrderlyConfig | null> {
+  async readOrderlyConfigFile(): Promise<OrderlyProjectConfig | null> {
     if (!this.projectPath || !this.projectName) {
       throw new Error("Project path or project name is not set");
     }

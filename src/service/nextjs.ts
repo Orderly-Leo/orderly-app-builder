@@ -4,7 +4,9 @@ import { CreateProjectInputs } from "./projectManager";
 import { Command } from "@tauri-apps/plugin-shell";
 import { CreateProjectIds } from "@/components/steps/types";
 import { join } from "@tauri-apps/api/path";
-import { OrderlyConfig } from "./types";
+import { OrderlyProjectConfig } from "./types";
+import { Config } from "@/data/config";
+import { availablePages } from "@/data/pages";
 
 export class Nextjs extends BaseFrameworkHandler {
   name = "next.js";
@@ -164,72 +166,33 @@ export class Nextjs extends BaseFrameworkHandler {
   private async clearPages() {} // inputs: CreateProjectInputs
 
   async collectPages() {
+    try {
+      const paths = await this.findComponentsByFile();
 
-    // invoke("get_route_by_component",{
-    //   path: this.fullProjectPath,
-    //   componentNames: ['<TradingPage','<OverviewModule.OverviewPage']
-    // }).then((res) => {
-    //   console.log("++++++++++++", res);
-    // },error=>{
-    //   console.log("!!!!!!!error",error);
-    // });
+      const pages = paths.map((path, index) => {
+        const route = path.replace(`${this.fullProjectPath}/src/app`, "");
+        // const pageName = route.split("/").pop();
+        return {
+          path,
+          route: route.replace("/view.tsx", ""),
+          page: route.replace("view.tsx", "page.tsx"),
+          component: availablePages[index],
+        };
+      });
 
+      // console.log("++++++++++++", pages);
 
-    try{
-      const paths = await this.findComponentsByFile(['<TradingPage','<OverviewModule.OverviewPage']);
+      // console.log(await this.groupPagesByRoute(pages));
 
-      console.log("++++++++++++", paths);
+      return pages;
 
-      return paths;
+      // return await this.groupPagesByRoute(pages);
     } catch (e: any) {
-      console.log('?????',e)
+      console.log("?????", e);
     }
-
-
-
-
-    // load Next.js project app structure
-    // try {
-    //   const appPath = `${this.fullProjectPath}/src/app`;
-    //   const routes: string[] = [];
-    //
-    //   const walkDir = async (dir: string, baseRoute: string = "") => {
-    //     const entries = await readDir(dir);
-    //
-    //     for (const entry of entries) {
-    //       const fullPath = await join(dir, entry.name);
-    //
-    //       // Skip hidden and special files/folders
-    //       if (entry.name.startsWith(".") || entry.name.startsWith("_")) {
-    //         continue;
-    //       }
-    //
-    //       if (entry.isDirectory) {
-    //         // Recursively walk subdirectories
-    //         await walkDir(fullPath, `${baseRoute}/${entry.name}`);
-    //       } else if (entry.name === "page.tsx" || entry.name === "page.ts") {
-    //         // Found a page file, add its route
-    //         routes.push(baseRoute || "/");
-    //       }
-    //     }
-    //   };
-    //
-    //   await walkDir(appPath);
-    //
-    //   console.log("routes::::", routes);
-    //
-    //   return routes;
-    // } catch (e: any) {
-    //   console.log("e", e);
-    //   throw new CustomError(
-    //     "collect-pages",
-    //     "Failed to collect pages",
-    //     e.message
-    //   );
-    // }
   }
 
-  generateOrderlyConfig(/**inputs: CreateProjectInputs**/): OrderlyConfig {
+  generateOrderlyConfig(inputs: Partial<Config>): OrderlyProjectConfig {
     return {
       // framework: "next.js",
       paths: {
@@ -237,6 +200,7 @@ export class Nextjs extends BaseFrameworkHandler {
         public: "public",
         themeCSS: "src/styles/theme.css",
       },
+      ...inputs.projectConfig,
     };
   }
 }

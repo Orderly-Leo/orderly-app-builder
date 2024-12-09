@@ -1,9 +1,11 @@
+import { Config } from "@/data/config";
 import { type CreateProjectInputs } from "./projectManager";
-import { type OrderlyConfig } from "./types";
+import { type OrderlyProjectConfig } from "./types";
 export interface IFramework {
   name: string;
   projectPath: string;
   projectName: string;
+  fullProjectPath: string;
   // new (projectPath: string, projectName: string): IFramework;
 
   run(): void;
@@ -21,5 +23,7 @@ export interface IFramework {
   collectPages(): Promise<any>;
   setCSSPath(cssPath: string): void;
 
-  generateOrderlyConfig(inputs: CreateProjectInputs): OrderlyConfig;
+  generateOrderlyConfig(inputs: Partial<Config>): OrderlyProjectConfig;
+
+  readComponentConfig(): Promise<any>;
 }

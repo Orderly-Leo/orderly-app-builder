@@ -4,7 +4,7 @@ import {
   projectManager,
   ProjectManagerImpl,
 } from "./projectManager";
-import { OrderlyConfig, OrderlyTheme } from "./types";
+import { OrderlyProjectConfig, OrderlyTheme } from "./types";
 import { PROJECT_THEMES_KEY } from "./utils";
 import { ConfigPipelineService } from "./configHandler/configPipeline";
 import ProjectConfigHandler from "./configHandler/projectConfigHandler";
@@ -17,7 +17,7 @@ export class EditorService {
   private projectName: string;
   private cssWorker: Worker;
   private configPipelineService: ConfigPipelineService;
-
+  private routes: any[] = [];
   constructor(
     projectPath: string,
     projectName: string,
@@ -29,10 +29,12 @@ export class EditorService {
     this.projectName = projectName;
     this.projectManager = projectManager;
     this.updateProjectManager(options.framework);
+    this.routes = [];
 
-    this.configPipelineService = new ConfigPipelineService([
-      new ProjectConfigHandler(),
-    ]);
+    this.configPipelineService = new ConfigPipelineService(
+      this.projectManager,
+      [new ProjectConfigHandler()]
+    );
 
     this.cssWorker = new Worker(
       new URL("../workers/cssWorker.ts", import.meta.url),
@@ -70,7 +72,11 @@ export class EditorService {
   }
 
   async restoreData(
-    cb: (data: { config: OrderlyConfig; themes: OrderlyTheme[] }) => void
+    cb: (data: {
+      config: OrderlyProjectConfig;
+      themes: OrderlyTheme[];
+      routes: any[];
+    }) => void
   ) {
     console.log("======== restore data ==========");
     // const orderlyFile = await this.loadOrderlyFile();
@@ -92,12 +98,17 @@ export class EditorService {
 
       this.#themes = await this.loadThemes();
 
-      await this.framework.collectPages();
+      const routes = await this.framework.collectPages();
+
+      if (Array.isArray(routes) && routes.length > 0) {
+        this.routes = routes;
+      }
     }
 
     cb({
       config: this.projectConfig,
       themes: this.#themes,
+      routes: this.routes,
     });
   }
 

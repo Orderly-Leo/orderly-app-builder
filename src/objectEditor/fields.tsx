@@ -3,6 +3,15 @@ import { Field } from "./field";
 import { FormProvider, useForm } from "react-hook-form";
 import { objectParse } from "./helper";
 
+// import { z } from "zod";
+import { createSchemaFromArgTypes } from "@/utils/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+// Create schema from configArgTypes
+
+// Now you can use the schema for validation
+// type ConfigType = z.infer<typeof configSchema>;
 export interface ObjectFieldsProps {
   object: any;
   classes?: {
@@ -10,12 +19,25 @@ export interface ObjectFieldsProps {
     field?: string;
     sectionHeader?: string;
   };
+  argTypes?: any;
+  extendForZod?: (argTypes: z.ZodType<any>) => z.ZodType<any>;
   onChange?: (values: any, changed: any) => void;
 }
 
 export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
+  let configSchema = createSchemaFromArgTypes(props.argTypes);
+
+  if (
+    typeof props.extendForZod === "function" &&
+    typeof (configSchema as z.AnyZodObject).merge === "function"
+  ) {
+    configSchema = props.extendForZod(configSchema);
+  }
+
   const methods = useForm({
     defaultValues: props.object,
+    resolver: zodResolver(configSchema),
+    mode: "onBlur",
   });
   const { classes } = props;
 
@@ -39,7 +61,7 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-4 px-8">
+        <div className="flex flex-col gap-4">
           {parsedObject.map((item) => {
             return (
               <div key={item.key}>
@@ -58,7 +80,6 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
                   )}
                 {item.type === "colors" && item.children && (
                   <Field
-                    name={item.key}
                     field={item}
                     label={item.label}
                     path={item.path}
@@ -68,7 +89,6 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
                 )}
                 {!item.children && (
                   <Field
-                    name={item.key}
                     field={item}
                     path={item.path}
                     label={item.label}
@@ -126,7 +146,6 @@ const Fields: FC<{
             return (
               <Field
                 key={field.key}
-                name={field.key}
                 field={field}
                 path={field.path}
                 label={field.label}
@@ -139,7 +158,6 @@ const Fields: FC<{
           return (
             <Field
               key={field.key}
-              name={field.key}
               field={field}
               path={field.path}
               label={field.label}

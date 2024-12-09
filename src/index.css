@@ -30,11 +30,17 @@ input[type="color"] {
   background: none;
   border: 0;
   cursor: pointer;
-  height: 3.5em;
-  width: 3.5em;
+  /* height: 3.5em;
+  width: 3.5em; */
   padding: 0;
   /* border-radius: 1em; */
   /* width: 3em; */
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
 }
 html {
   overscroll-behavior: none;

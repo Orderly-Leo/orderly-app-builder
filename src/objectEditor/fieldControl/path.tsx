@@ -1,7 +1,7 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FilePlus, FolderSearch2 } from "lucide-react";
+import { FolderSearch2 } from "lucide-react";
 
 import { open } from "@tauri-apps/plugin-dialog";
 import { FormDescription, FormMessage } from "@/components/ui/form";
@@ -9,22 +9,25 @@ import { FormControl, FormLabel } from "@/components/ui/form";
 import { ControlProps } from "./types";
 import { FormField, FormItem } from "@/components/ui/form";
 
-type FileControlProps = {
-  fileType?: "image" | "video" | "audio" | "file";
-} & ControlProps;
+type PathControlProps = {} & ControlProps;
 
-export const FileControl: FC<FileControlProps> = (props) => {
-  const { name, control, label } = props;
+export const PathControl: FC<PathControlProps> = (props) => {
+  const { name, control, label, transformForField } = props;
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = async (onChange: (value: string) => void) => {
-    const result = await open({
+    let result = await open({
       //   directory: true,
       multiple: false,
       title: "Your theme css file",
     });
 
+    if (typeof transformForField?.input === "function") {
+      result = transformForField.input(result);
+    }
+
     if (result) {
-      // field.onChange(result);
       onChange(result);
     }
   };
@@ -38,18 +41,21 @@ export const FileControl: FC<FileControlProps> = (props) => {
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <div className="flex items-center gap-2 relative">
-              <Input {...field} />
+              <Input {...field} ref={inputRef} />
               <Button
                 type="button"
                 variant={"ghost"}
                 className="absolute right-1 h-6 px-2"
                 onMouseDown={(event) => {
                   event.preventDefault();
+                  if (inputRef.current) {
+                    inputRef.current.focus();
+                  }
 
                   handleClick(field.onChange);
                 }}
               >
-                <FilePlus />
+                <FolderSearch2 />
               </Button>
             </div>
           </FormControl>

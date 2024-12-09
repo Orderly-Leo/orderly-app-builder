@@ -2,7 +2,6 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { StepWizard } from "../components/StepWizard";
 import { Editor } from "../components/Editor";
 import { Layout } from "../components/Layout";
-import { PagesPanel } from "../components/editor/sidebar/PagesPanel";
 import { ComponentsPanel } from "../components/editor/sidebar/ComponentsPanel";
 import { CreatePageWizard } from "../components/editor/page/createPageWizard";
 import { ConfigPanel } from "../components/config/configPanel";
@@ -10,6 +9,8 @@ import { ThemesPanel } from "../components/editor/theme/ThemesPanel";
 import { CreateThemeWizard } from "../components/editor/theme/CreateThemeWizard";
 import { CreateThemeStep1 } from "@/components/editor/theme/steps/step_1";
 import { ThemeEditor } from "@/components/editor/theme/ThemeEditor";
+import { PageDetail } from "@/components/editor/page/PageDetail";
+import {PagesPanel} from "@/components/editor/page/PagesPanel.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -55,14 +56,18 @@ export const router = createBrowserRouter([
             element: <Navigate to="/editor/pages" replace />,
           },
           {
-            path: "pages/*",
+            path: "pages",
             element: <PagesPanel />,
-            children: [
-              // {
-              //   path: ":pageId",
-              //   element: <PageDetail />,
-              // },
-            ],
+            // children: [
+            //   // {
+            //   //   path: ":pageId",
+            //   //   element: <PageDetail />,
+            //   // },
+            // ],
+          },
+          {
+            path: "page/:page",
+            element: <PageDetail />,
           },
           {
             path: "themes",

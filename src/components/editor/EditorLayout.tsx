@@ -42,9 +42,7 @@ export function EditorLayout() {
 const MainToolbar = () => {
   const location = useLocation();
   const path = location.pathname;
-  const matches = useMatches();
-
-  console.log(matches);
+  // const matches = useMatches();
 
   if (path.startsWith("/themes")) {
     return (

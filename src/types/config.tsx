@@ -4,7 +4,7 @@ import { z } from "zod";
 export const configArgTypes = {
   app: {
     brokerId: {
-      description: (
+      _description: (
         <div>
           The broker ID,
           <Link href="#" color="indigo">
@@ -13,24 +13,28 @@ export const configArgTypes = {
         </div>
       ),
 
-      control: {
+      _control: {
         // type: "text",
         placeholder: "Enter broker ID",
       },
-      z: z.string(),
+      z: z.string().min(1, "Broker ID is required"),
     },
-    // brokerName: {
-    //   description: <h2>Description test</h2>,
-    // },
   },
   projectConfig: {
     paths: {
-      themeCSS: {
-        description: "The path to the theme CSS file",
-        control: {
-          type: "file",
+      src: {
+        _description: "The path to the src directory",
+        _control: {
+          type: "path",
         },
-        z: z.string(),
+        // z: z.string().min(1, "src path is required"),
+      },
+      themeCSS: {
+        _description: "The path to the theme CSS file",
+        _control: {
+          type: "path",
+        },
+        // z: z.string().min(1, "Theme CSS path is required"),
       },
     },
   },

@@ -4,23 +4,27 @@ import { UndefinedControl } from "./fieldControl/undefined";
 
 import { view, lensPath } from "ramda";
 import { useFormContext } from "react-hook-form";
-import { cn } from "@/lib/utils";
 
 export const Field: FC<{
-  name: string;
+  // name: string;
   label: string;
   path: string;
   // description: string;
   field: any;
   level: number;
   className?: string;
+  // transformForForm?: FormTransform;
 }> = (props) => {
   const { field, path, className } = props;
 
-  const { register, control } = useFormContext();
-  const { name } = register(path);
+  const { control } = useFormContext();
+  // const { name } = register(path);
 
-  const { fieldControls, argTypes } = useFieldControls();
+  const {
+    fieldControls,
+    argTypes,
+    transformForField: transformForForm,
+  } = useFieldControls();
 
   const argType = useMemo(() => {
     if (!argTypes) return undefined;
@@ -30,20 +34,23 @@ export const Field: FC<{
     return view(lens, argTypes);
   }, [path]);
 
-  let Control = fieldControls[argType?.control?.type || field.type];
+  let Control = fieldControls[argType?._control?.type || field.type];
 
   if (!Control) {
     Control = UndefinedControl;
   }
 
+  const transform = transformForForm?.[path];
+
   return (
     <div className={className}>
       <Control
         {...field}
-        name={name}
+        name={path}
         control={control}
         label={props.label}
-        description={argType?.description}
+        description={argType?._description}
+        transformForField={transform}
       />
     </div>
   );

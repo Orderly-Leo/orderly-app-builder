@@ -1,19 +1,39 @@
 import { BaseConfigHandler } from "./interface";
-
+import { ProjectManager } from "../projectManager";
+import { Config } from "@/data/config";
 class ProjectConfigHandler extends BaseConfigHandler {
   #keys: string[] = ["projectConfig.paths.themeCSS", "projectPath"];
-  handle(
-    config: Record<string, any>,
+
+  // handle(
+  //   projectManager: ProjectManager,
+  //   config: Record<string, any>,
+  //   key: string,
+  //   eventName: string
+  // ): Record<string, any> {
+  //   // if (key === "projectConfig.paths.themeCSS") {
+  //   //   console.log("======== themeCSS", value);
+  //   // }
+
+  //   console.log("======== config", config);
+  //   console.log("======== key", key);
+  //   console.log("======== eventName", eventName);
+  //   return config;
+  // }
+
+  async update(
+    projectManager: ProjectManager,
+    config: Config,
     key: string,
     eventName: string
-  ): Record<string, any> {
-    // if (key === "projectConfig.paths.themeCSS") {
-    //   console.log("======== themeCSS", value);
-    // }
+  ): Promise<Config> {
+    console.log("project manager", projectManager);
+    const data = projectManager.generateOrderlyConfig(config);
 
-    console.log("======== config", config);
-    console.log("======== key", key);
-    console.log("======== eventName", eventName);
+    console.log("data=====>>>>>>>", data);
+    if (data) {
+      await projectManager.writeOrderlyConfigFile(data);
+    }
+
     return config;
   }
 
