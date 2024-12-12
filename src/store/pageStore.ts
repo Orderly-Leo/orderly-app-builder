@@ -8,14 +8,14 @@ export const pagesAtom = atomWithImmer<PageConfig[]>([
     id: "1",
     name: "Trading",
     route: "/trading",
-    template: "blank",
+    // template: "blank",
     props: {},
   },
   {
     id: "2",
     name: "Dashboard",
     route: "/dashboard",
-    template: "dashboard",
+    // template: "dashboard",
     props: {
       title: "My Dashboard",
       layout: "grid",

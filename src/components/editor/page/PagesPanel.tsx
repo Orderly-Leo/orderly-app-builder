@@ -1,27 +1,15 @@
 import { PageList } from "../page/pageList";
 import { PageToolbar } from "../page/PageToolbar";
 import { useNavigate, useParams } from "react-router-dom";
-import { currentPagesAtom, pathsAtom } from "../page/pages.atom";
-import { useAtom } from "jotai";
-import { useEffect } from "react";
+import { pagesAtom } from "../page/pages.atom";
+import { useAtomValue } from "jotai";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 export const PagesPanel = () => {
   const navigate = useNavigate();
   const params = useParams();
 
-  const [pages] = useAtom(currentPagesAtom);
-
-  const [_, setPaths] = useAtom(pathsAtom);
-
-  useEffect(() => {
-    if (params["*"]) {
-      setPaths(params["*"].split("/"));
-    } else {
-      setPaths([]);
-    }
-  }, [params]);
-
-  // return <PageList />;
+  const pages = useAtomValue(pagesAtom);
 
   const onPageNavigate = (path: string) => {
     const encodedPath = encodeURIComponent(path);
@@ -29,19 +17,22 @@ export const PagesPanel = () => {
   };
 
   return (
-    <div className="flex flex-col bg-gray-100">
+    <div className="bg-gray-100">
       <PageToolbar
         onCreateClick={function (): void {
           // throw new Error("Function not implemented.");
-          navigate("/create/page");
+          navigate("/editor/create/page");
         }}
       />
-      <PageList
-        pages={pages}
-        parentPath={params["*"]}
-        onNavigate={onPageNavigate}
-      />
-
+      <div className="absolute top-[64px] left-0 right-0 bottom-0">
+        <ScrollArea className="h-full">
+          <PageList
+            pages={pages}
+            parentPath={params["*"]}
+            onNavigate={onPageNavigate}
+          />
+        </ScrollArea>
+      </div>
     </div>
   );
 };

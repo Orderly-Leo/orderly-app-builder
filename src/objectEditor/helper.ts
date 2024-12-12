@@ -1,5 +1,3 @@
-import { WritableDraft } from "immer";
-
 const getValueFromConfig = (config: any, path: string[]) => {
   let current: any = config;
   for (const key of path) {

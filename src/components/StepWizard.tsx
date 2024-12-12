@@ -53,7 +53,7 @@ const StepWizardContent: React.FC<StepWizardProps> = ({}) => {
   };
 
   return (
-    <div className="min-h-screen p-8 step-wizard-container">
+    <div className="min-h-screen p-8 step-wizard-container tauri-drag-region">
       <AnimatePresence mode="wait">
         {!showProgress ? (
           <motion.div

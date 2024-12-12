@@ -1,60 +1,17 @@
 import { atom } from "jotai";
-import { atomWithImmer } from "jotai-immer";
+import { mergeDeepRight } from "ramda";
 
-export const pagesAtom = atomWithImmer<any[]>([
-  // {
-  //   id: "trading",
-  //   name: "Trading",
-  //   route: "perp",
-  // },
-  // {
-  //   id: "portfolio",
-  //   name: "Portfolio",
-  //   route: "portfolio",
-  //   children: [
-  //     {
-  //       id: "portfolio-overview",
-  //       name: "Overview",
-  //       route: "overview",
-  //     },
-  //     {
-  //       id: "portfolio-positions",
-  //       name: "Positions",
-  //       route: "positions",
-  //     },
-  //     {
-  //       id: "portfolio-history",
-  //       name: "History",
-  //       route: "history",
-  //     },
-  //     {
-  //       id: "portfolio-orders",
-  //       name: "Orders",
-  //       route: "orders",
-  //     },
-  //   ],
-  // },
-]);
+export const pagesAtom = atom<any[]>([]);
 
-export const pathsAtom = atom<string[]>([]);
+// export const pathsAtom = atom<string[]>([]);
 
-export const currentPagesAtom = atom((get) => {
-  const pages = get(pagesAtom);
-  const paths = get(pathsAtom);
-
-  const currentPages = paths.reduce((acc, path) => {
-    const page = acc.find((page) => page.route === path);
-
-    if (page?.children) {
-      return page.children;
-    }
-    return page;
-  }, pages);
-
-  return currentPages;
+export const routesAtom = atom<any[]>((get) => {
+  return get(pagesAtom).map((page) => page.route);
 });
 
 export const currentPagePathAtom = atom<string | null>(null);
+
+export const componentConfigAtom = atom<any>({});
 
 export const currentPageAtom = atom((get) => {
   if (!get(currentPagePathAtom)) {
@@ -63,6 +20,7 @@ export const currentPageAtom = atom((get) => {
 
   const currentPagePath = get(currentPagePathAtom);
   const pages = get(pagesAtom);
+  const componentConfig = get(componentConfigAtom);
 
   // Helper function to recursively search through pages and their children
   const findPageByPath = (pages: any[]): any => {
@@ -78,5 +36,18 @@ export const currentPageAtom = atom((get) => {
     return null;
   };
 
-  return findPageByPath(pages);
+  const component = findPageByPath(pages);
+
+  if (component) {
+    const currentComponentConfig = componentConfig[component.component.id];
+    if (currentComponentConfig) {
+      // component.config = currentComponentConfig;
+      component.component.props = mergeDeepRight(
+        component.component.props,
+        currentComponentConfig
+      );
+    }
+  }
+
+  return component;
 });

@@ -1,6 +1,7 @@
 import chroma from "chroma-js";
 import { OrderlyTheme } from "./types";
 import { parse } from "@babel/parser";
+import { readTextFile } from "@tauri-apps/plugin-fs";
 
 export const PROJECT_THEMES_KEY = "__orderly_themes__";
 
@@ -94,13 +95,17 @@ export async function groupPagesByRoute(pages: any[]) {
 
   // Convert Map to Array recursively
   const mapToArray = (map: Map<string, any>): any[] => {
-    return Array.from(map.entries()).map(([key, value]) => ({
+    return Array.from(map.entries()).map(([_, value]) => ({
       ...value,
       children: mapToArray(value.children),
     }));
   };
 
   return mapToArray(routes);
+}
+
+export async function readFile(path: string) {
+  return await readTextFile(path);
 }
 
 export function getTradingProps(code: string) {

@@ -23,7 +23,7 @@ export interface SelectedPage extends PageType {
 
 export const availablePages: PageType[] = [
   {
-    id: "trading",
+    id: "tradingPage",
     name: "Trading",
     identifier: "<TradingPage",
     description: "Full-featured trading interface with orderbook and charts",
@@ -34,17 +34,12 @@ export const availablePages: PageType[] = [
     },
     props: {
       tradingViewConfig: {
-        scriptSRC: "/tradingview/charting_library/charting_library.js",
-        library_path: "/tradingview/charting_library/",
-        customCssUrl: "/tradingview/chart.css",
+        scriptSRC: "",
+        library_path: "",
+        customCssUrl: "",
       },
       sharePnLConfig: {
-        backgroundImages: [
-          "/pnl/poster_bg_1.png",
-          "/pnl/poster_bg_2.png",
-          "/pnl/poster_bg_3.png",
-          "/pnl/poster_bg_4.png",
-        ],
+        backgroundImages: [],
 
         color: "rgba(255, 255, 255, 0.98)",
         profitColor: "rgba(41, 223, 169, 1)",

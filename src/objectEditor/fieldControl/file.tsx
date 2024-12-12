@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { FilePlus, FolderSearch2 } from "lucide-react";
+import { FilePlus } from "lucide-react";
 
 import { open } from "@tauri-apps/plugin-dialog";
 import { FormDescription, FormMessage } from "@/components/ui/form";

@@ -1,5 +1,3 @@
-import { Box, Text } from "@radix-ui/themes";
-
 interface SettingItemProps {
   id: string;
   label: string;
@@ -51,14 +49,10 @@ SettingItemProps) => {
   };
 
   return (
-    <Box>
-      <Text as="label" size="2" weight="medium">
-        {label}
-      </Text>
-      <Text as="p" size="1" color="gray">
-        {description}
-      </Text>
-      <Box mt="2">{renderControl()}</Box>
-    </Box>
+    <div>
+      <div className="text-lg font-bold">{label}</div>
+      <div className="text-sm text-gray-500">{description}</div>
+      <div className="mt-2">{renderControl()}</div>
+    </div>
   );
 };

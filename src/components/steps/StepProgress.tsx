@@ -50,7 +50,9 @@ export const CircleProgress = ({
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset =
-    state === "pending" ? circumference - (progress / 100) * circumference : 0;
+    state === "pending"
+      ? circumference - ((progress * 33) / 100) * circumference
+      : 0;
 
   return (
     <div className="relative w-32 h-32">
@@ -147,7 +149,7 @@ export const StepProgress: React.FC<StepProgressProps> = ({
         <CircleProgress progress={progress} state={state} />
 
         {/* Completed Items List */}
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-lg select-auto">
           <AnimatePresence mode="popLayout">
             {completedItems.map((item, index) => (
               <motion.div
@@ -191,7 +193,7 @@ export const CreateProjectProgress: FC<{
   onComplete: (data: any) => void;
 }> = ({ onBack, onComplete }) => {
   const progressing = useRef(false);
-  const [progress, setProgress] = useState(1);
+  const [progress, setProgress] = useState(0);
   const [completedItems, setCompletedItems] = useState<CompletedItem[]>([]);
   const [progressState, setProgressState] = useState<
     "pending" | "completed" | "failed"
@@ -262,7 +264,16 @@ export const CreateProjectProgress: FC<{
             );
           }
         }
-      );
+      )
+      .catch((error) => {
+        // console.error("CreateProjectProgress", error);
+        updateCompletedItem(
+          "UNKNOW_ERROR",
+          "Unknow error",
+          StepState.ERROR,
+          error instanceof Error ? error.message : error
+        );
+      });
   }, []);
 
   return (

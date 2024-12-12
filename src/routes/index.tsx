@@ -10,7 +10,7 @@ import { CreateThemeWizard } from "../components/editor/theme/CreateThemeWizard"
 import { CreateThemeStep1 } from "@/components/editor/theme/steps/step_1";
 import { ThemeEditor } from "@/components/editor/theme/ThemeEditor";
 import { PageDetail } from "@/components/editor/page/PageDetail";
-import {PagesPanel} from "@/components/editor/page/PagesPanel.tsx";
+import { PagesPanel } from "@/components/editor/page/PagesPanel.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -29,24 +29,7 @@ export const router = createBrowserRouter([
         path: "bootstrap",
         element: <StepWizard />,
       },
-      {
-        path: "create/page",
-        element: <CreatePageWizard />,
-      },
-      {
-        path: "create/theme",
-        element: <CreateThemeWizard />,
-        children: [
-          {
-            index: true,
-            element: <Navigate to="step_1" replace />,
-          },
-          {
-            path: "step_1",
-            element: <CreateThemeStep1 />,
-          },
-        ],
-      },
+
       {
         path: "editor",
         element: <Editor />,
@@ -68,6 +51,15 @@ export const router = createBrowserRouter([
           {
             path: "page/:page",
             element: <PageDetail />,
+            loader: async ({ request }) => {
+              const url = new URL(request.url);
+              const path = url.searchParams.get("path");
+              // console.log("!!!!!!!!!", path);
+              // if (!path) return null;
+              // const file = await readFile(path);
+              // console.log("!!!!!!!!!", file);
+              return { path };
+            },
           },
           {
             path: "themes",
@@ -92,6 +84,24 @@ export const router = createBrowserRouter([
           {
             path: "config",
             element: <ConfigPanel />,
+          },
+          {
+            path: "create/page",
+            element: <CreatePageWizard />,
+          },
+          {
+            path: "create/theme",
+            element: <CreateThemeWizard />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to="step_1" replace />,
+              },
+              {
+                path: "step_1",
+                element: <CreateThemeStep1 />,
+              },
+            ],
           },
           // {
           //   path: "settings",

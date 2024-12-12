@@ -37,8 +37,8 @@ export const ColorPicker = (props: ColorPickerProps) => {
         {/* <div className="text-gray-500">{props.label}</div> */}
         <Input
           className={cn(
-            "w-full text-xs pl-8 text-gray-600",
-            direction === "right" && "text-right pl-0 pr-8"
+            "w-full text-xs pl-10 text-gray-600",
+            direction === "right" && "text-right pl-0 pr-10"
           )}
           value={props.color}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

@@ -27,7 +27,7 @@ export const PageToolbar = ({ onCreateClick }: PageToolbarProps) => {
   // };
 
   return (
-    <div className="flex px-4 py-2 justify-between text-sm">
+    <div className="flex px-4 py-2 justify-between text-xs sticky top-[32px]">
       {/* <div className="flex-1">Pages</div> */}
       {/* <div> */}
       <button className="flex items-center gap-1" onClick={onCreateClick}>

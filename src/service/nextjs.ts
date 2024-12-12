@@ -7,6 +7,7 @@ import { join } from "@tauri-apps/api/path";
 import { OrderlyProjectConfig } from "./types";
 import { Config } from "@/data/config";
 import { availablePages } from "@/data/pages";
+import { PageConfig } from "@/types/page";
 
 export class Nextjs extends BaseFrameworkHandler {
   name = "next.js";
@@ -202,5 +203,9 @@ export class Nextjs extends BaseFrameworkHandler {
       },
       ...inputs.projectConfig,
     };
+  }
+
+  async createRoute(page: PageConfig): Promise<any> {
+    console.log("create route: Nextjs", page);
   }
 }

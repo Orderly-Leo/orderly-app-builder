@@ -1,7 +1,6 @@
 // import { pagesAtom, selectedPageIdAtom } from "../../../store/pageStore";
 import { Card } from "@/components/ui/card";
 import { FC } from "react";
-import { PageDetail } from "./PageDetail";
 import { useAtom } from "jotai";
 import { cn } from "@/lib/utils";
 import { currentPagePathAtom } from "./pages.atom";
@@ -22,9 +21,9 @@ export const PageList: FC<{
     );
   }
 
-  if (!Array.isArray(pages)) {
-    return <PageDetail />;
-  }
+  // if (!Array.isArray(pages)) {
+  //   return <PageDetail />;
+  // }
 
   return <PagesGridStyle pages={pages} onNavigate={onNavigate} />;
 
@@ -103,7 +102,7 @@ const Page = (props: PageProps) => {
         }}
       >
         <div
-          className="w-full bg-cover bg-no-repeat bg-top aspect-video rounded-tl-lg rounded-tr-lg"
+          className="w-full bg-cover bg-no-repeat bg-top aspect-video"
           style={{ backgroundImage: `url(${component?.thumbnail})` }}
         />
         <div className="text-xs text-gray-500">{component?.id}</div>

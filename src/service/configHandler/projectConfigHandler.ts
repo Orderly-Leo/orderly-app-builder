@@ -22,9 +22,9 @@ class ProjectConfigHandler extends BaseConfigHandler {
 
   async update(
     projectManager: ProjectManager,
-    config: Config,
-    key: string,
-    eventName: string
+    config: Config
+    // key: string,
+    // eventName: string
   ): Promise<Config> {
     console.log("project manager", projectManager);
     const data = projectManager.generateOrderlyConfig(config);
@@ -37,7 +37,7 @@ class ProjectConfigHandler extends BaseConfigHandler {
     return config;
   }
 
-  filter(config: Record<string, any>, key: string, value: any): boolean {
+  filter(_config: Record<string, any>, key: string, _value: any): boolean {
     return this.#keys.includes(key);
   }
 }

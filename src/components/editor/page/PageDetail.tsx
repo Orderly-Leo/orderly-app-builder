@@ -4,11 +4,15 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { PageProps } from "./pageProps";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { path } from "ramda";
+import { editorServiceAtom } from "@/components/config/configs.atom";
 
 export const PageDetail = () => {
   const currentPage = useAtomValue(currentPageAtom);
   const setCurrentPagePath = useSetAtom(currentPagePathAtom);
   const location = useLocation();
+  const editorService = useAtomValue(editorServiceAtom);
+  console.log("currentPage", currentPage);
 
   useEffect(() => {
     if (currentPage) return;
@@ -17,9 +21,17 @@ export const PageDetail = () => {
       decodeURIComponent(location.search)
     );
     const path = searchParams.get("path");
-    // console.log("path", path);
+
     setCurrentPagePath(path);
   }, [currentPage, location.search]);
+
+  const onChange = (values: any, changed: any) => {
+    console.log(values, changed);
+    const value = path(changed.name.split("."), changed.values);
+    console.log(value);
+
+    editorService?.updateComponentConfig(`tradingPage.${changed.name}`, value);
+  };
 
   if (!currentPage) return null;
 
@@ -32,6 +44,7 @@ export const PageDetail = () => {
         <PageProps
           propTypes={currentPage.component.propTypes}
           props={currentPage.component.props}
+          onChange={onChange}
         />
       </div>
     </div>

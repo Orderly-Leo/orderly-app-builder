@@ -6,6 +6,7 @@ import { StepState } from "@/components/steps/StepProgress";
 import { readTextFile, writeTextFile, exists } from "@tauri-apps/plugin-fs";
 import { OrderlyProjectConfig } from "./types";
 import { Config } from "@/data/config";
+import { PageConfig } from "@/types/page";
 
 export enum NPM {
   yarn = "yarn",
@@ -24,7 +25,7 @@ export type CreateProjectInputs = {
   npm: NPM;
 };
 
-type onProgressEventHandle = (
+export type onProgressEventHandle = (
   id: CreateProjectIds,
   state: StepState,
   message: string
@@ -41,6 +42,7 @@ export interface ProjectManager {
     inputs: CreateProjectInputs,
     onProgress: onProgressEventHandle
   ): Promise<any>;
+  addPage(page: PageConfig, onProgress: onProgressEventHandle): Promise<any>;
   generateOrderlyConfig(
     config: Record<string, any>
   ): OrderlyProjectConfig | null;
@@ -100,7 +102,7 @@ export class ProjectManagerImpl implements ProjectManager {
         StepState.PENDING,
         "Installing dependencies"
       );
-      await this.frameworkHandler.installDependencies(inputs);
+      await this.frameworkHandler.installDependencies();
 
       onProgress(
         CreateProjectIds.INSTALL_DEPENDENCIES,
@@ -113,6 +115,66 @@ export class ProjectManagerImpl implements ProjectManager {
       throw e;
     }
   }
+
+  async addPage(page: PageConfig, onProgress: onProgressEventHandle) {
+    if (!this.#frameworkHandler && typeof page.framework === "undefined") {
+      throw new Error("Framework handler is not set");
+    }
+
+    this.setFrameworkHandler(
+      ProjectManagerImpl.getFrameworkHandler({
+        framework: page.framework || "",
+        projectPath: this.projectPath || "",
+        projectName: this.projectName || "",
+      })
+    );
+
+    onProgress(
+      CreateProjectIds.CREATE_PAGE,
+      StepState.PENDING,
+      "Creating a new page"
+    );
+
+    await this.frameworkHandler?.addPage(page);
+
+    onProgress(
+      CreateProjectIds.CREATE_PAGE,
+      StepState.COMPLETED,
+      "Page created"
+    );
+
+    if (Array.isArray(page.template?.dependencies)) {
+      onProgress(
+        CreateProjectIds.APPEND_DEPENDENCIES,
+        StepState.PENDING,
+        "Appending dependencies"
+      );
+      await this.frameworkHandler?.appendDependencies(
+        page.template.dependencies
+      );
+
+      onProgress(
+        CreateProjectIds.APPEND_DEPENDENCIES,
+        StepState.COMPLETED,
+        "Dependencies appended"
+      );
+    }
+
+    onProgress(
+      CreateProjectIds.INSTALL_DEPENDENCIES,
+      StepState.PENDING,
+      "Installing dependencies"
+    );
+
+    await this.frameworkHandler?.installDependencies();
+
+    onProgress(
+      CreateProjectIds.INSTALL_DEPENDENCIES,
+      StepState.COMPLETED,
+      "Dependencies installed"
+    );
+  }
+
   async selectPath(): Promise<string | null> {
     const file = await open({
       multiple: false,

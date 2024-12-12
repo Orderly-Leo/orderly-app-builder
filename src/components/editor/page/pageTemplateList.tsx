@@ -1,11 +1,9 @@
-import { Flex } from "@radix-ui/themes";
-
 export const PageTemplateList = () => {
   return (
-    <Flex gap="3">
+    <div className="flex flex-col gap-3">
       <PageTemplateItem />
       <PageTemplateItem />
-    </Flex>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Link } from "@radix-ui/themes";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 
 export const configArgTypes = {
@@ -7,7 +7,7 @@ export const configArgTypes = {
       _description: (
         <div>
           The broker ID,
-          <Link href="#" color="indigo">
+          <Link to="#" className="text-indigo-500">
             how to get brokerId?
           </Link>
         </div>

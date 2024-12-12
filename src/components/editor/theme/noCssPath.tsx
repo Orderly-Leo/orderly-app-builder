@@ -9,7 +9,7 @@ export const NoCssPath = () => {
         <div>The Theme CSS file was not found.</div>
         <div>
           You can set it in the{" "}
-          <Link to={"/settings"} className="underline text-primary">
+          <Link to={"/editor/config"} className="underline text-primary">
             Settings
           </Link>
           .

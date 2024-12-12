@@ -8,8 +8,10 @@
   "permissions": [
     "core:default",
     "shell:allow-open",
+    "core:window:default",
     "core:window:allow-create",
     "core:window:allow-set-size",
+    "core:window:allow-start-dragging",
     "dialog:allow-open",
     "dialog:allow-confirm",
     "dialog:default",

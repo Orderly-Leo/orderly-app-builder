@@ -1,4 +1,6 @@
-import { Box, Card, Flex, Text, TextField, Checkbox } from "@radix-ui/themes";
+import { Card } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
 interface PageType {
@@ -121,11 +123,9 @@ export const SelectPages = ({ onPagesChange }: SelectPagesProps) => {
   };
 
   return (
-    <Box p="4">
-      <Text size="3" weight="medium" mb="4">
-        Select Pages to Include
-      </Text>
-      <Flex direction="column" gap="4">
+    <div className="p-4">
+      <div className="text-2xl font-bold mb-4">Select Pages to Include</div>
+      <div className="flex flex-col gap-4">
         {pages.map((page) => (
           <Card
             key={page.id}
@@ -135,9 +135,9 @@ export const SelectPages = ({ onPagesChange }: SelectPagesProps) => {
                 : "hover:border-blue-300"
             }`}
           >
-            <Flex gap="4">
+            <div className="flex gap-4">
               {/* Thumbnail */}
-              <Box className="w-[200px] aspect-video bg-gray-100 rounded-lg overflow-hidden">
+              <div className="w-[200px] aspect-video bg-gray-100 rounded-lg overflow-hidden">
                 {page.thumbnail ? (
                   <img
                     src={page.thumbnail}
@@ -145,37 +145,28 @@ export const SelectPages = ({ onPagesChange }: SelectPagesProps) => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <Flex
-                    align="center"
-                    justify="center"
-                    className="w-full h-full text-gray-400"
-                  >
+                  <div className="flex items-center justify-center w-full h-full text-gray-400">
                     No preview
-                  </Flex>
+                  </div>
                 )}
-              </Box>
+              </div>
 
               {/* Content */}
-              <Flex direction="column" className="flex-1" gap="2">
-                <Flex align="center" gap="2">
+              <div className="flex-1 flex flex-col gap-2">
+                <div className="flex items-center gap-2">
                   <Checkbox
                     checked={page.isSelected}
                     onClick={() => handleTogglePage(page.id)}
                   />
-                  <Text weight="medium">{page.name}</Text>
-                </Flex>
-                <Text size="1" color="gray">
-                  {page.description}
-                </Text>
+                  <div className="font-medium">{page.name}</div>
+                </div>
+                <div className="text-sm text-gray-500">{page.description}</div>
 
                 {page.isSelected && (
-                  <Flex direction="column" gap="2" mt="2">
-                    <Box>
-                      <Text as="label" size="1" weight="medium">
-                        Page Name
-                      </Text>
-                      <TextField.Root
-                        size="1"
+                  <div className="flex flex-col gap-2 mt-2">
+                    <div>
+                      <div className="font-medium">Page Name</div>
+                      <Input
                         value={page.customName}
                         onChange={(e) =>
                           handleCustomization(
@@ -185,13 +176,10 @@ export const SelectPages = ({ onPagesChange }: SelectPagesProps) => {
                           )
                         }
                       />
-                    </Box>
-                    <Box>
-                      <Text as="label" size="1" weight="medium">
-                        Route
-                      </Text>
-                      <TextField.Root
-                        size="1"
+                    </div>
+                    <div>
+                      <div className="font-medium">Route</div>
+                      <Input
                         value={page.customRoute}
                         onChange={(e) =>
                           handleCustomization(
@@ -201,14 +189,14 @@ export const SelectPages = ({ onPagesChange }: SelectPagesProps) => {
                           )
                         }
                       />
-                    </Box>
-                  </Flex>
+                    </div>
+                  </div>
                 )}
-              </Flex>
-            </Flex>
+              </div>
+            </div>
           </Card>
         ))}
-      </Flex>
-    </Box>
+      </div>
+    </div>
   );
 };

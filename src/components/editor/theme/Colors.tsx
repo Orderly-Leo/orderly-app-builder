@@ -1,17 +1,16 @@
 import { FC } from "react";
 import { ThemeItems } from "./type";
-import { Flex, Text } from "@radix-ui/themes";
 
 export const Colors: FC<{
   colors: ThemeItems["colors"];
 }> = (props) => {
   return (
-    <Flex direction="column" gap="4">
+    <div className="flex flex-col gap-4">
       {Object.entries(props.colors).map(([key, value]) => {
         console.log(key, value);
         return <ColorRow key={key} name={key} colors={value as any} />;
       })}
-    </Flex>
+    </div>
   );
 };
 
@@ -21,15 +20,13 @@ const ColorRow: FC<{
 }> = (props) => {
   return (
     <div>
-      <Text size={"2"} weight="bold" as="div">
-        {props.name}
-      </Text>
-      <Flex direction="row" justify={"start"} wrap={"wrap"} mt={"1"}>
+      <div className="text-lg font-bold">{props.name}</div>
+      <div className="flex flex-row justify-start flex-wrap mt-1">
         {Object.entries(props.colors).map(([key, value]) => {
           return <SimpleColorCell key={key} name={key} value={value} />;
           // return <ColorCell key={key} name={key} value={value} />;
         })}
-      </Flex>
+      </div>
     </div>
   );
 };

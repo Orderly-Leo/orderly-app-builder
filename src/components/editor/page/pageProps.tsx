@@ -6,7 +6,8 @@ import { ObjectEditor } from "@/objectEditor";
 export const PageProps: FC<{
   props: any;
   propTypes: any;
-}> = ({ props, propTypes }) => {
+  onChange?: (values: any, changed: any) => void;
+}> = ({ props, propTypes, onChange }) => {
   return (
     <div>
       <LayoutProps />
@@ -17,6 +18,7 @@ export const PageProps: FC<{
         }}
         object={props}
         argTypes={propTypes}
+        onChange={onChange}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { Button, Select, Flex } from "@radix-ui/themes";
+import { Button } from "@/components/ui/button";
 import { ReloadIcon } from "@radix-ui/react-icons";
 
 interface PreviewToolbarProps {
@@ -9,14 +9,14 @@ interface PreviewToolbarProps {
 }
 
 export const PreviewToolbar = ({
-  currentUrl,
-  urls,
-  onUrlChange,
+  // currentUrl,
+  // urls,
+  // onUrlChange,
   onRefresh,
 }: PreviewToolbarProps) => {
   return (
-    <Flex gap="2" p="2" className="border-b border-gray-200">
-      <Select.Root value={currentUrl} onValueChange={onUrlChange}>
+    <div className="flex gap-2 p-2 border-b border-gray-200">
+      {/* <Select.Root value={currentUrl} onValueChange={onUrlChange}>
         <Select.Trigger className="flex-1" />
         <Select.Content>
           {urls.map((url) => (
@@ -25,11 +25,11 @@ export const PreviewToolbar = ({
             </Select.Item>
           ))}
         </Select.Content>
-      </Select.Root>
+      </Select.Root> */}
 
       <Button variant="ghost" onClick={onRefresh} title="Refresh preview">
         <ReloadIcon />
       </Button>
-    </Flex>
+    </div>
   );
 };

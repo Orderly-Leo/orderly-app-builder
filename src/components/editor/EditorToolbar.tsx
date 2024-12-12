@@ -1,4 +1,3 @@
-import { Button, Flex } from "@radix-ui/themes";
 import { EyeOpenIcon, EyeNoneIcon } from "@radix-ui/react-icons";
 
 interface EditorToolbarProps {
@@ -15,13 +14,13 @@ export const EditorToolbar = ({
   onToggleRight,
 }: EditorToolbarProps) => {
   return (
-    <Flex align="center" p="2" className="border-b border-[#333333]">
-      <Button variant="ghost" onClick={onToggleLeft}>
+    <div className="flex items-center p-2 border-b border-[#333333]">
+      <button onClick={onToggleLeft}>
         {showLeft ? <EyeOpenIcon /> : <EyeNoneIcon />}
-      </Button>
-      <Button variant="ghost" onClick={onToggleRight}>
+      </button>
+      <button onClick={onToggleRight}>
         {showRight ? <EyeOpenIcon /> : <EyeNoneIcon />}
-      </Button>
-    </Flex>
+      </button>
+    </div>
   );
 };

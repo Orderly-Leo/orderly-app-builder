@@ -106,8 +106,8 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
 
 const SectionHeader: FC<{ title: string; id: string }> = (props) => {
   return (
-    <div className="sticky top-[60px] bg-white py-3 mb-3" id={props.id}>
-      <div className="text-xl font-medium">{props.title}</div>
+    <div className="sticky top-[30px] bg-white py-3 px-3" id={props.id}>
+      <div className="font-medium">{props.title}</div>
     </div>
   );
 };

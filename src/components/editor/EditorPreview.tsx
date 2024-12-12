@@ -1,4 +1,3 @@
-import { Text, Flex } from "@radix-ui/themes";
 import { PreviewToolbar } from "./preview/PreviewToolbar";
 import { useState, useRef } from "react";
 
@@ -15,7 +14,7 @@ export const EditorPreview = () => {
   };
 
   return (
-    <Flex direction="column" className="h-full w-full">
+    <div className="flex flex-col h-full w-full">
       <PreviewToolbar
         currentUrl={currentUrl}
         urls={urls}
@@ -31,17 +30,11 @@ export const EditorPreview = () => {
           title="Preview"
         />
       ) : (
-        <Flex
-          align="center"
-          justify="center"
-          direction="column"
-          gap="2"
-          className="h-full"
-        >
-          <Text size="5">No Preview Available</Text>
-          <Text color="gray">Select a page to preview</Text>
-        </Flex>
+        <div className="flex h-full items-center justify-center flex-col gap-2">
+          <div className="text-2xl font-bold">No Preview Available</div>
+          <div className="text-sm text-gray-500">Select a page to preview</div>
+        </div>
       )}
-    </Flex>
+    </div>
   );
 };

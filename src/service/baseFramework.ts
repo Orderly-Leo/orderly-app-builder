@@ -11,6 +11,7 @@ import { OrderlyProjectConfig } from "./types";
 import { convertColorToHex } from "./utils";
 import { invoke } from "@tauri-apps/api/core";
 import { Config } from "@/data/config";
+import { PageConfig } from "@/types/page";
 
 export abstract class BaseFrameworkHandler implements IFramework {
   constructor(projectPath: string, projectName: string) {
@@ -35,7 +36,8 @@ export abstract class BaseFrameworkHandler implements IFramework {
   abstract generateOrderlyConfig(inputs: Partial<Config>): OrderlyProjectConfig;
   abstract setCSSPath(cssPath: string): void;
   abstract writeCSS(css: string): Promise<any>;
-  // abstract readComponentConfig(): Promise<any>;
+
+  abstract createRoute(page: PageConfig): Promise<any>;
 
   onData(data: string) {
     console.log("!!!", data);
@@ -232,5 +234,26 @@ export abstract class BaseFrameworkHandler implements IFramework {
     const config = await this.readFile(configPath);
     console.log("config", config);
     return config;
+  }
+
+  async writeComponentConfig(config: string) {
+    const configPath = `${this.fullProjectPath}/src/config.tsx`;
+    await this.writeFile(configPath, config);
+    // console.log("writeComponentConfig success");
+  }
+
+  async appendDependencies(dependencies: string[]) {
+    const pkg = await this.readPkg();
+    pkg.dependencies = {
+      ...pkg.dependencies,
+      ...dependencies,
+    };
+    await this.writePkg(pkg);
+  }
+
+  async addPage(page: PageConfig): Promise<any> {
+    console.log("addPage", page);
+
+    await this.createRoute(page);
   }
 }

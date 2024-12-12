@@ -1,4 +1,3 @@
-import { Flex } from "@radix-ui/themes";
 import { Link, Outlet } from "react-router-dom";
 
 export const Layout = () => {
@@ -12,9 +11,9 @@ export const Layout = () => {
 
 const TestBar = () => {
   return (
-    <Flex className="fixed bottom-0 right-0 text-white">
+    <div className="fixed bottom-0 right-0 text-white">
       <Link to={"/bootstrap"}>Bootstrap</Link>
       <Link to={"/editor"}>Editor</Link>
-    </Flex>
+    </div>
   );
 };
