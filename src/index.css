@@ -23,6 +23,11 @@
   font-style: normal;
 }
 
+.tauri-drag-region {
+  -webkit-app-region: drag;
+  /* cursor: grab; */
+}
+
 input[type="color"] {
   appearance: none;
   -moz-appearance: none;
@@ -30,11 +35,18 @@ input[type="color"] {
   background: none;
   border: 0;
   cursor: pointer;
-  height: 3.5em;
-  width: 3.5em;
+  /* height: 3.5em;
+   */
   padding: 0;
+  width: 2.1rem;
   /* border-radius: 1em; */
   /* width: 3em; */
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
 }
 html {
   overscroll-behavior: none;

@@ -1,14 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  ArchiveX,
-  Command,
-  FileSliders,
-  Layers,
-  Palette,
-  Trash2,
-} from "lucide-react";
+import { FileSliders, Languages, Layers, Palette } from "lucide-react";
 
 // import { NavUser } from "@/components/nav-user";
 // import { Label } from "@/components/ui/label"
@@ -45,18 +38,19 @@ const data = {
       icon: Palette,
       isActive: false,
     },
+
+    {
+      title: "Intl",
+      url: "#",
+      icon: Languages,
+      isActive: false,
+    },
     {
       title: "Settings",
       url: "/editor/config",
       icon: FileSliders,
       isActive: false,
     },
-    // {
-    //   title: "Junk",
-    //   url: "#",
-    //   icon: ArchiveX,
-    //   isActive: false,
-    // },
     // {
     //   title: "Trash",
     //   url: "#",
@@ -78,14 +72,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   //!w-[calc(var(--sidebar-width-icon)_+_1px)]
 
   return (
-    <Sidebar collapsible="icon" className="overflow-hidden flex-row" {...props}>
+    <Sidebar
+      collapsible="icon"
+      className="overflow-hidden flex-row pt-[30px]"
+      {...props}
+    >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
               <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg ">
+                  {/* <Command className="size-4" /> */}
+                  <img
+                    src="/orderly-logo-svg.svg"
+                    alt="logo"
+                    className="size-8"
+                  />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Acme Inc</span>

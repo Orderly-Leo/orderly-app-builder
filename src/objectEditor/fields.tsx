@@ -3,6 +3,15 @@ import { Field } from "./field";
 import { FormProvider, useForm } from "react-hook-form";
 import { objectParse } from "./helper";
 
+// import { z } from "zod";
+import { createSchemaFromArgTypes } from "@/utils/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+// Create schema from configArgTypes
+
+// Now you can use the schema for validation
+// type ConfigType = z.infer<typeof configSchema>;
 export interface ObjectFieldsProps {
   object: any;
   classes?: {
@@ -10,11 +19,25 @@ export interface ObjectFieldsProps {
     field?: string;
     sectionHeader?: string;
   };
+  argTypes?: any;
+  extendForZod?: (argTypes: z.ZodType<any>) => z.ZodType<any>;
+  onChange?: (values: any, changed: any) => void;
 }
 
 export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
+  let configSchema = createSchemaFromArgTypes(props.argTypes);
+
+  if (
+    typeof props.extendForZod === "function" &&
+    typeof (configSchema as z.AnyZodObject).merge === "function"
+  ) {
+    configSchema = props.extendForZod(configSchema);
+  }
+
   const methods = useForm({
     defaultValues: props.object,
+    resolver: zodResolver(configSchema),
+    mode: "onBlur",
   });
   const { classes } = props;
 
@@ -25,8 +48,8 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
   // console.log(props.object);
 
   useEffect(() => {
-    const subscription = methods.watch((value, { name, type }) =>
-      console.log(value, name, type)
+    const subscription = methods.watch((values, changed) =>
+      props.onChange?.(values, changed)
     );
     return () => subscription.unsubscribe();
   }, [methods.watch]);
@@ -38,7 +61,7 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-4 px-2">
+        <div className="flex flex-col gap-4">
           {parsedObject.map((item) => {
             return (
               <div key={item.key}>
@@ -57,7 +80,6 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
                   )}
                 {item.type === "colors" && item.children && (
                   <Field
-                    name={item.key}
                     field={item}
                     label={item.label}
                     path={item.path}
@@ -67,7 +89,6 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
                 )}
                 {!item.children && (
                   <Field
-                    name={item.key}
                     field={item}
                     path={item.path}
                     label={item.label}
@@ -85,8 +106,8 @@ export const ObjectFields: FC<ObjectFieldsProps> = (props) => {
 
 const SectionHeader: FC<{ title: string; id: string }> = (props) => {
   return (
-    <div className="sticky top-[60px] bg-white py-3 mb-3" id={props.id}>
-      <div className="text-xl font-medium">{props.title}</div>
+    <div className="sticky top-[30px] bg-white py-3 px-3" id={props.id}>
+      <div className="font-medium">{props.title}</div>
     </div>
   );
 };
@@ -105,10 +126,9 @@ const Fields: FC<{
   return (
     <>
       <SectionHeader title={title} id={id} />
-      <div className={`flex flex-col gap-4 ${classes?.root}`}>
+      <div className={`flex flex-col gap-2 ${classes?.root}`}>
         {fields.map((field) => {
           if (field.type === "object" && field.children) {
-            console.log("-->>>>field", field);
             return (
               <div key={field.key}>
                 {/* <div className="text-lg font-medium mb-2">{field.label}</div> */}
@@ -126,7 +146,6 @@ const Fields: FC<{
             return (
               <Field
                 key={field.key}
-                name={field.key}
                 field={field}
                 path={field.path}
                 label={field.label}
@@ -139,7 +158,6 @@ const Fields: FC<{
           return (
             <Field
               key={field.key}
-              name={field.key}
               field={field}
               path={field.path}
               label={field.label}

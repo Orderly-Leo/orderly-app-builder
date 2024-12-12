@@ -1,4 +1,4 @@
-export type OrderlyConfig = {
+export type OrderlyProjectConfig = {
   // framework: string;
   paths: {
     src: string;

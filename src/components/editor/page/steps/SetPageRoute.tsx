@@ -1,5 +1,5 @@
-import { Card, Flex, Text, Box } from "@radix-ui/themes";
 import { PageComponent } from "../../../../types/page";
+import { Card } from "@/components/ui/card";
 
 const components: PageComponent[] = [
   {
@@ -42,11 +42,9 @@ export const SetPageRoute = ({
   onComponentSelect,
 }: SetPageRouteProps) => {
   return (
-    <Box p="4">
-      <Text size="3" weight="medium" mb="4">
-        Select Components
-      </Text>
-      <Flex wrap="wrap" gap="4">
+    <div className="p-4">
+      <div className="text-2xl font-bold mb-4">Select Components</div>
+      <div className="flex flex-wrap gap-4">
         {components.map((component) => (
           <Card
             key={component.id}
@@ -57,7 +55,7 @@ export const SetPageRoute = ({
             }`}
             onClick={() => onComponentSelect(component.id)}
           >
-            <Box className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden">
+            <div className="aspect-video bg-gray-100 rounded-t-lg overflow-hidden">
               {component.thumbnail ? (
                 <img
                   src={component.thumbnail}
@@ -65,29 +63,25 @@ export const SetPageRoute = ({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <Flex
-                  align="center"
-                  justify="center"
-                  className="w-full h-full text-gray-400"
-                >
+                <div className="flex items-center justify-center w-full h-full text-gray-400">
                   No preview
-                </Flex>
+                </div>
               )}
-            </Box>
-            <Box p="3">
-              <Flex justify="between" align="center" mb="2">
-                <Text weight="medium">{component.name}</Text>
+            </div>
+            <div className="p-3">
+              <div className="flex justify-between items-center mb-2">
+                <div className="font-medium">{component.name}</div>
                 {/* <Text size="1" color="gray">
                   {component.category}
                 </Text> */}
-              </Flex>
-              <Text size="1" color="gray">
+              </div>
+              <div className="text-sm text-gray-500">
                 {component.description}
-              </Text>
-            </Box>
+              </div>
+            </div>
           </Card>
         ))}
-      </Flex>
-    </Box>
+      </div>
+    </div>
   );
 };

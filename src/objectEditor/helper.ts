@@ -1,5 +1,3 @@
-import { WritableDraft } from "immer";
-
 const getValueFromConfig = (config: any, path: string[]) => {
   let current: any = config;
   for (const key of path) {
@@ -113,6 +111,10 @@ export const objectParse = (
   parentPath: string[] = [],
   level: number = 0
 ): ParsedNode[] => {
+  if (typeof obj !== "object" || obj === null) {
+    return [];
+  }
+
   return Object.entries(obj).map(([key, value]) => {
     const currentPath = [...parentPath, key];
     const label = key
@@ -208,42 +210,6 @@ export const objectParse = (
     };
   });
 };
-
-export function updateObject(
-  draft: WritableDraft<ParsedNode>[],
-  path: string,
-  value: any
-) {
-  const pathArray = path.split(".");
-  let target = draft;
-
-  while (pathArray.length > 1 && Array.isArray(target)) {
-    const key = pathArray.shift()!;
-
-    let index = target.findIndex((item) => item.key === key);
-
-    if (index === -1) {
-      throw new Error(`Key ${key} not found`);
-    }
-
-    if (Array.isArray(target[index].children)) {
-      target = target[index].children;
-    }
-  }
-
-  const finalKey = pathArray[0];
-  let finalIndex = target.findIndex((item) => item.key === finalKey);
-
-  if (finalIndex === -1) {
-    throw new Error(`Key ${finalKey} not found`);
-  }
-
-  if (Array.isArray(target)) {
-    target[finalIndex].value = value;
-  } else {
-    console.warn("Cant find target");
-  }
-}
 
 interface TreeNode {
   id: number;

@@ -1,10 +1,10 @@
 import { EditorService } from "@/service/editor";
-import { OrderlyConfig } from "@/service/types";
+import { OrderlyProjectConfig } from "@/service/types";
 import { atom } from "jotai";
 import { atomWithImmer } from "jotai-immer";
 
 export type AppConfig = {
-  config: OrderlyConfig | null;
+  config: OrderlyProjectConfig | null;
 };
 
 export type AppState = {

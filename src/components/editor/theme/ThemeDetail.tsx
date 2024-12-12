@@ -13,6 +13,7 @@ export const ThemeDetail = () => {
     if (group.id === "colors") {
       return (
         <ColorPicker
+          label=""
           color={theme.colors[item as keyof typeof theme.colors]}
           onChange={(color) =>
             updateTheme({

@@ -4,6 +4,10 @@ import { NumberControl } from "./fieldControl/number";
 import { ColorsControl } from "./fieldControl/colors";
 import { StringControl } from "./fieldControl/string";
 import { FileControl } from "./fieldControl/file";
+import { PathControl } from "./fieldControl/path";
+import { z } from "zod";
+import { FieldTransform } from "./fieldControl/types";
+import { ColorControl } from "./fieldControl/color";
 
 export type ObjectEditorContextState = {
   fieldControls: {
@@ -11,6 +15,8 @@ export type ObjectEditorContextState = {
   };
   onFieldChange?: (key: string, value: any) => void;
   argTypes: any;
+  extendForZod?: (argTypes: z.ZodType<any>) => z.ZodType<any>;
+  transformForField?: Record<string, FieldTransform>;
 };
 
 export const ObjectEditorContext = createContext<ObjectEditorContextState>(
@@ -21,8 +27,10 @@ const defaultFieldControls = {
   boolean: BooleanControl,
   number: NumberControl,
   colors: ColorsControl,
+  color: ColorControl,
   string: StringControl,
   file: FileControl,
+  path: PathControl,
 };
 
 export const useFieldControls = () => {
@@ -31,16 +39,18 @@ export const useFieldControls = () => {
 
 export const ObjectEditorProvider: FC<
   PropsWithChildren<{
-    // onFieldChange?: (key: string, value: any) => void;
     argTypes?: any;
+    extendForZod?: (argTypes: z.ZodType<any>) => z.ZodType<any>;
+    transformForField?: Record<string, FieldTransform>;
   }>
 > = (props) => {
   return (
     <ObjectEditorContext.Provider
       value={{
         fieldControls: defaultFieldControls,
-        // onFieldChange: props.onFieldChange,
         argTypes: props.argTypes,
+        extendForZod: props.extendForZod,
+        transformForField: props.transformForField,
       }}
     >
       {props.children}

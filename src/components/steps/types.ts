@@ -20,4 +20,7 @@ export enum CreateProjectIds {
   // CREATE_ENV_FILE = "create-env-file",
   // CREATE_ROUTES = "create-routes",
   // CREATE_PAGES = "create-pages",
+
+  CREATE_PAGE = "create-page",
+  APPEND_DEPENDENCIES = "append-dependencies",
 }

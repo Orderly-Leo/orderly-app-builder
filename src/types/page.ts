@@ -9,6 +9,7 @@ export interface PageComponent {
     route: string;
   };
   props?: Record<string, any>;
+  dependencies?: string[];
 }
 
 // export interface PageComponent {
@@ -23,12 +24,15 @@ export interface PageConfig {
   id: string;
   name: string;
   route: string;
-  template: string;
-  components?: string[];
-  pages?: Array<{
-    type: string;
-    name: string;
-    route: string;
-  }>;
+  parentRoute?: string;
+  framework?: string;
+  template?: PageComponent;
+  // components?: string[];
+  inheritLayout?: boolean;
+  // pages?: Array<{
+  //   type: string;
+  //   name: string;
+  //   route: string;
+  // }>;
   props: Record<string, any>;
 }

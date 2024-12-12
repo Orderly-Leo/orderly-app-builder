@@ -1,44 +1,24 @@
+import { FC } from "react";
 import { LayoutProps } from "./props/layout";
 
-import { useAtom } from "jotai";
-import { pathsAtom } from "../page/pages.atom";
 import { ObjectEditor } from "@/objectEditor";
 
-export const PageProps = () => {
-  const [paths] = useAtom(pathsAtom);
-  console.log(paths);
+export const PageProps: FC<{
+  props: any;
+  propTypes: any;
+  onChange?: (values: any, changed: any) => void;
+}> = ({ props, propTypes, onChange }) => {
   return (
     <div>
       <LayoutProps />
       <ObjectEditor
         showCategory={false}
         classes={{
-          fields: "gap-0",
+          fields: "gap-0 px-5",
         }}
-        object={{
-          tradingViewConfig: {
-            scriptSRC: "/tradingview/charting_library/charting_library.js",
-            library_path: "/tradingview/charting_library/",
-            customCssUrl: "/tradingview/chart.css",
-          },
-          sharePnLConfig: {
-            backgroundImages: [
-              "/pnl/poster_bg_1.png",
-              "/pnl/poster_bg_2.png",
-              "/pnl/poster_bg_3.png",
-              "/pnl/poster_bg_4.png",
-            ],
-
-            color: "rgba(255, 255, 255, 0.98)",
-            profitColor: "rgba(41, 223, 169, 1)",
-            lossColor: "rgba(245, 97, 139, 1)",
-            brandColor: "rgba(255, 255, 255, 0.98)",
-
-            // ref
-            refLink: "https://orderly.network",
-            refSlogan: "Orderly referral",
-          },
-        }}
+        object={props}
+        argTypes={propTypes}
+        onChange={onChange}
       />
     </div>
   );

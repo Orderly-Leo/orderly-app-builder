@@ -126,8 +126,9 @@ export const ProjectPathStep: React.FC<ProjectPathStepProps> = ({
             Back
           </Button>
           <Button
+            type="submit"
             // disabled={!projectPath.trim() || !projectName.trim()}
-            onClick={handleNext}
+            // onClick={handleNext}
           >
             Create Project
             <ArrowRight />

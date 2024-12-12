@@ -58,10 +58,10 @@ const ThemeForm = (props: {
   return (
     <Form {...form}>
       <form>
-        <div className="text-xl font-medium mb-2 px-4">Colors</div>
+        <div className="text-lg font-medium mb-2 px-4">Colors</div>
         <div className="flex flex-col text-sm">
           <ColorRow name="Primary">
-            <div className="grid md:grid-cols-3 lg:md:grid-cols-3 lg:grid-cols-4 grid-cols-2 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               <ColorItem
                 control={form.control}
                 name="--oui-color-primary-darken"
@@ -79,7 +79,7 @@ const ThemeForm = (props: {
             </div>
           </ColorRow>
           <ColorRow name="Success">
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               <ColorItem
                 control={form.control}
                 name="--oui-color-success-darken"
@@ -97,7 +97,7 @@ const ThemeForm = (props: {
             </div>
           </ColorRow>
           <ColorRow name="Danger">
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               <ColorItem
                 control={form.control}
                 name="--oui-color-danger-darken"
@@ -115,7 +115,7 @@ const ThemeForm = (props: {
             </div>
           </ColorRow>
           <ColorRow name="Warning">
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 grid-cols-2 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               <ColorItem
                 control={form.control}
                 name="--oui-color-warning-darken"
@@ -133,7 +133,7 @@ const ThemeForm = (props: {
             </div>
           </ColorRow>
           <ColorRow name="Trading - Profit">
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               <ColorItem
                 control={form.control}
                 name="--oui-color-trading-profit"
@@ -145,8 +145,9 @@ const ThemeForm = (props: {
               />
             </div>
           </ColorRow>
+
           <ColorRow name="Trading - Loss">
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               <ColorItem
                 control={form.control}
                 name="--oui-color-trading-loss"
@@ -158,8 +159,18 @@ const ThemeForm = (props: {
               />
             </div>
           </ColorRow>
+          <ColorRow name="Base foreground / Line">
+            <div className="grid grid-cols-4 gap-2">
+              <ColorItem
+                control={form.control}
+                name="--oui-color-base-foreground"
+              />
+
+              <ColorItem control={form.control} name="--oui-color-line" />
+            </div>
+          </ColorRow>
           <ColorRow name="Base">
-            <div className="grid grid-cols-3">
+            <div className="grid grid-cols-4 gap-2">
               <ColorItem control={form.control} name="--oui-color-base-1" />
               <ColorItem control={form.control} name="--oui-color-base-2" />
               <ColorItem control={form.control} name="--oui-color-base-3" />
@@ -177,7 +188,7 @@ const ThemeForm = (props: {
             start={form.watch("--oui-gradient-brand-start")}
             end={form.watch("--oui-gradient-brand-end")}
           >
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-2">
               <ColorItem
                 control={form.control}
                 name="--oui-gradient-brand-start"
@@ -196,7 +207,7 @@ const ThemeForm = (props: {
             start={form.watch("--oui-gradient-primary-start")}
             end={form.watch("--oui-gradient-primary-end")}
           >
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-2">
               <ColorItem
                 control={form.control}
                 name="--oui-gradient-primary-start"
@@ -213,7 +224,7 @@ const ThemeForm = (props: {
             start={form.watch("--oui-gradient-success-start")}
             end={form.watch("--oui-gradient-success-end")}
           >
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-2">
               <ColorItem
                 control={form.control}
                 name="--oui-gradient-success-start"
@@ -230,7 +241,7 @@ const ThemeForm = (props: {
             start={form.watch("--oui-gradient-warning-start")}
             end={form.watch("--oui-gradient-warning-end")}
           >
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-2">
               <ColorItem
                 control={form.control}
                 name="--oui-gradient-warning-start"
@@ -247,7 +258,7 @@ const ThemeForm = (props: {
             start={form.watch("--oui-gradient-danger-start")}
             end={form.watch("--oui-gradient-danger-end")}
           >
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-2">
               <ColorItem
                 control={form.control}
                 name="--oui-gradient-danger-start"
@@ -261,7 +272,7 @@ const ThemeForm = (props: {
             </div>
           </GradientRow>
         </div>
-        <div className="text-xl font-medium mb-2 mt-5 px-4">Spacing</div>
+        <div className="text-lg font-medium mb-2 mt-5 px-4">Spacing</div>
         <div className="grid grid-cols-3 gap-4 px-4">
           <FormField
             control={form.control}
@@ -314,6 +325,14 @@ const ThemeForm = (props: {
             )}
           />
         </div>
+        <div className="text-lg font-medium mb-2 mt-5 px-4">Typography</div>
+        <div className="grid grid-cols-2 gap-4 px-4">
+          <FormField
+            control={form.control}
+            name="--oui-font-family"
+            render={({ field }) => <Input {...field} />}
+          />
+        </div>
       </form>
     </Form>
   );
@@ -343,7 +362,7 @@ const ColorItem = (props: {
 const ColorRow: FC<PropsWithChildren<{ name: string }>> = (props) => {
   return (
     <div className="odd:bg-white even:bg-gray-50 px-5 py-3">
-      <div className="text-lg font-medium mb-2">{props.name}</div>
+      <div className="text-sm font-medium mb-2">{props.name}</div>
       {props.children}
     </div>
   );
@@ -354,7 +373,7 @@ const GradientRow: FC<
 > = (props) => {
   return (
     <div className="odd:bg-white even:bg-gray-50 px-5 py-3">
-      <div className="text-lg font-medium mb-2">{props.name}</div>
+      <div className="text-sm font-medium mb-2">{props.name}</div>
       <SliderPrimitive.Root
         className={cn(
           "relative flex w-full touch-none select-none items-center"

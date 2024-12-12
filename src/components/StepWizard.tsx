@@ -2,7 +2,6 @@ import { useAtom } from "jotai";
 import { WizardLayout } from "./WizardLayout";
 import { CreateProjectProgress } from "./steps/StepProgress";
 import { motion, AnimatePresence } from "motion/react";
-import { getCurrentWindow, LogicalSize } from "@tauri-apps/api/window";
 
 import { useState } from "react";
 import {
@@ -54,7 +53,7 @@ const StepWizardContent: React.FC<StepWizardProps> = ({}) => {
   };
 
   return (
-    <div className="min-h-screen p-8 step-wizard-container">
+    <div className="min-h-screen p-8 step-wizard-container tauri-drag-region">
       <AnimatePresence mode="wait">
         {!showProgress ? (
           <motion.div

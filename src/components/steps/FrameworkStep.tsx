@@ -1,4 +1,3 @@
-import { Text } from "@radix-ui/themes";
 import { useState } from "react";
 import { SiNextdotjs, SiRemix, SiCreatereactapp } from "react-icons/si";
 import { Button } from "../ui/button";
@@ -51,9 +50,14 @@ export const FrameworkStep: React.FC<FrameworkStepProps> = ({
           >
             <div className="flex items-center gap-3">
               {fw.icon}
-              <Text size="3" weight={framework === fw.id ? "bold" : "regular"}>
+              <div
+                className={cn(
+                  "text-2xl font-bold",
+                  framework === fw.id ? "text-purple-600" : "text-gray-500"
+                )}
+              >
                 {fw.name}
-              </Text>
+              </div>
             </div>
           </div>
         ))}

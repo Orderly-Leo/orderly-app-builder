@@ -1,5 +1,3 @@
-
-import { Heading } from "@radix-ui/themes";
 import { SettingItem } from "./SettingItem";
 
 interface SettingsCategoryProps {
@@ -22,7 +20,7 @@ export const SettingsCategory = ({
 }: SettingsCategoryProps) => {
   return (
     <div className="mb-6">
-      <Heading className="mb-4">{title}</Heading>
+      <div className="mb-4">{title}</div>
       <div className="space-y-4">
         {settings.map((setting) => (
           <SettingItem

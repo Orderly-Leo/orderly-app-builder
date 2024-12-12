@@ -1,10 +1,13 @@
-import { Plus } from "lucide-react";
+import { useAtomValue } from "jotai";
+import { Plus, Trash2 } from "lucide-react";
+import { currentPageAtom } from "./pages.atom";
 
 interface PageToolbarProps {
   onCreateClick: () => void;
 }
 
 export const PageToolbar = ({ onCreateClick }: PageToolbarProps) => {
+  const currentPage = useAtomValue(currentPageAtom);
   // const handleOpenWindow = () => {
   //   const appWindow = new Window("tauri", {
   //     // url: "https://tauri.app",
@@ -24,20 +27,24 @@ export const PageToolbar = ({ onCreateClick }: PageToolbarProps) => {
   // };
 
   return (
-    <div className="flex px-4 ">
+    <div className="flex px-4 py-2 justify-between text-xs sticky top-[32px]">
       {/* <div className="flex-1">Pages</div> */}
-      <div>
-        <button
-          className="flex items-center gap-1 text-sm"
-          onClick={onCreateClick}
-        >
-          <Plus size={14} />
-          Create
+      {/* <div> */}
+      <button className="flex items-center gap-1" onClick={onCreateClick}>
+        <Plus size={14} />
+        Create
+      </button>
+      {currentPage && (
+        <button className="flex items-center gap-1">
+          <Trash2 size={14} />
+          Delete
         </button>
-        {/* <Button size="1" variant="outline" onClick={handleOpenWindow} ml="2">
+      )}
+
+      {/* <Button size="1" variant="outline" onClick={handleOpenWindow} ml="2">
           Create new window
         </Button> */}
-      </div>
+      {/* </div> */}
     </div>
   );
 };

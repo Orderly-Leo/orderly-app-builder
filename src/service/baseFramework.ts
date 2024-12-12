@@ -1,15 +1,17 @@
-import { availablePages } from "@/data/pages";
+import { availableComponents, availablePages } from "@/data/pages";
 import { IFramework } from "./framework";
 import { CreateProjectInputs } from "./projectManager";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { Command } from "@tauri-apps/plugin-shell";
 import { CustomError } from "@/types/customError";
-import chroma from "chroma-js";
 
 import postcss from "postcss";
 import postcssjs from "postcss-js";
-import { OrderlyConfig } from "./types";
+import { OrderlyProjectConfig } from "./types";
 import { convertColorToHex } from "./utils";
+import { invoke } from "@tauri-apps/api/core";
+import { Config } from "@/data/config";
+import { PageConfig } from "@/types/page";
 
 export abstract class BaseFrameworkHandler implements IFramework {
   constructor(projectPath: string, projectName: string) {
@@ -31,8 +33,11 @@ export abstract class BaseFrameworkHandler implements IFramework {
   abstract updateProjectFiles(inputs: CreateProjectInputs): Promise<any>;
   abstract loadCSS(): Promise<any>;
   abstract collectPages(): Promise<any>;
-  abstract generateOrderlyConfig(inputs: CreateProjectInputs): OrderlyConfig;
+  abstract generateOrderlyConfig(inputs: Partial<Config>): OrderlyProjectConfig;
   abstract setCSSPath(cssPath: string): void;
+  abstract writeCSS(css: string): Promise<any>;
+
+  abstract createRoute(page: PageConfig): Promise<any>;
 
   onData(data: string) {
     console.log("!!!", data);
@@ -64,7 +69,7 @@ export abstract class BaseFrameworkHandler implements IFramework {
     return `${this.projectPath}/${this.projectName}/package.json`;
   }
 
-  protected get fullProjectPath() {
+  get fullProjectPath() {
     return `${this.projectPath}/${this.projectName}`;
   }
 
@@ -155,6 +160,57 @@ export abstract class BaseFrameworkHandler implements IFramework {
     return await writeTextFile(path, content);
   }
 
+  protected async findComponentsByFile(): Promise<string[]> {
+    return invoke("get_route_by_component", {
+      path: this.fullProjectPath,
+      componentNames: availableComponents,
+    });
+  }
+
+  protected async groupPagesByRoute(pages: any[]) {
+    const routes = new Map();
+
+    // First build the tree structure using Map
+    pages.forEach((page) => {
+      const route = page.route;
+      const segments: string[] = route.split("/").filter(Boolean);
+
+      if (segments.length === 0) return;
+
+      let currentLevel = routes;
+      let parentPage = null;
+
+      segments.forEach((segment, index) => {
+        if (!currentLevel.has(segment)) {
+          if (index === segments.length - 1) {
+            currentLevel.set(segment, {
+              ...page,
+              children: new Map(),
+            });
+          } else {
+            currentLevel.set(segment, {
+              route: segments.slice(0, index + 1).join("/"),
+              children: new Map(),
+            });
+          }
+        }
+
+        parentPage = currentLevel.get(segment);
+        currentLevel = parentPage.children;
+      });
+    });
+
+    // Convert Map to Array recursively
+    const mapToArray = (map: Map<string, any>): any[] => {
+      return Array.from(map.entries()).map(([_, value]) => ({
+        ...value,
+        children: mapToArray(value.children),
+      }));
+    };
+
+    return mapToArray(routes);
+  }
+
   protected async parseCSS(css: string) {
     const root = postcss.parse(css);
     const parsed = postcssjs.objectify(root);
@@ -167,5 +223,37 @@ export abstract class BaseFrameworkHandler implements IFramework {
 
   private getCSSRoot(obj: Record<string, any>) {
     return obj[":root"];
+  }
+
+  protected async collectPageComponents() {
+    return [];
+  }
+
+  async readComponentConfig() {
+    const configPath = `${this.fullProjectPath}/src/config.tsx`;
+    const config = await this.readFile(configPath);
+    console.log("config", config);
+    return config;
+  }
+
+  async writeComponentConfig(config: string) {
+    const configPath = `${this.fullProjectPath}/src/config.tsx`;
+    await this.writeFile(configPath, config);
+    // console.log("writeComponentConfig success");
+  }
+
+  async appendDependencies(dependencies: string[]) {
+    const pkg = await this.readPkg();
+    pkg.dependencies = {
+      ...pkg.dependencies,
+      ...dependencies,
+    };
+    await this.writePkg(pkg);
+  }
+
+  async addPage(page: PageConfig): Promise<any> {
+    console.log("addPage", page);
+
+    await this.createRoute(page);
   }
 }

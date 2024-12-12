@@ -1,57 +1,42 @@
 import { useState } from "react";
-import { Box } from "@radix-ui/themes";
-import { PageComponent, PageConfig } from "../../../types/page";
+
+import { PageConfig } from "../../../types/page";
 import { SelectTemplate } from "./steps/SelectTemplate";
 import { ConfigureTemplate } from "./steps/ConfigureTemplate";
-import { useAtom } from "jotai";
-import { pagesAtom, pageActions } from "../../../store/pageStore";
 import { useNavigate } from "react-router-dom";
-import { CreatePageProcesse } from "./steps/CreatePageProcesse";
-import { SelectPages } from "./steps/SelectPages";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { CreatePageProcess } from "./steps/CreatePageProcess";
 
 export const CreatePageWizard = () => {
   const navigate = useNavigate();
-  const [, setPages] = useAtom(pagesAtom);
-  const [step, setStep] = useState(0);
-  const [selectedTemplate, setSelectedTemplate] =
-    useState<PageComponent | null>(null);
-  const [selectedComponents] = useState<string[]>([]);
-  const [pageConfig, setPageConfig] = useState<Partial<PageConfig>>({});
-  const [selectedPages, setSelectedPages] = useState<
-    Array<{
-      type: string;
-      name: string;
-      route: string;
-    }>
-  >([]);
 
-  const handleNext = () => {
-    if (step === 0 && selectedTemplate) {
-      setPageConfig({
-        template: selectedTemplate.id,
-        props: {},
-        name: selectedTemplate.defaultConfig?.pageName || "",
-        route: selectedTemplate.defaultConfig?.route || "",
-      });
-      setStep(1);
-    } else if (step === 1) {
-      setStep(2);
-    } else if (step === 2) {
-      setStep(3);
+  const [step, setStep] = useState(0);
+
+  const [pageConfig, setPageConfig] = useState<Partial<PageConfig>>({
+    framework: "nextjs",
+    props: {},
+  });
+
+  const handleNext = (data: any) => {
+    setPageConfig((config) => ({
+      ...config,
+      ...data,
+    }));
+    if (step < 2) {
+      setStep(step + 1);
     }
   };
 
   const handleBack = () => {
-    if (step === 3) {
-      setStep(2);
-    } else if (step === 2) {
-      setStep(1);
-    } else {
-      setStep(0);
-    }
+    // if (step === 3) {
+    //   setStep(2);
+    // } else if (step === 2) {
+    //   setStep(1);
+    // } else {
+    //   setStep(0);
+    // }
+    setStep((step) => step - 1);
   };
 
   const handleCancel = () => {
@@ -60,21 +45,7 @@ export const CreatePageWizard = () => {
   };
 
   const handleComplete = () => {
-    const finalConfig: PageConfig = {
-      id: crypto.randomUUID(),
-      name: pageConfig.name || "Untitled Page",
-      route: pageConfig.route || "/",
-      template: selectedTemplate!.id,
-      components: selectedComponents,
-      pages: selectedPages,
-      props: pageConfig.props || {},
-    };
-
-    setPages((pages) => {
-      pageActions.addPage(pages, finalConfig);
-    });
-
-    navigate(`/editor/pages/${finalConfig.id}`);
+    // navigate(`/editor/pages/${pageConfig.route}`);
   };
 
   const renderStep = () => {
@@ -82,25 +53,26 @@ export const CreatePageWizard = () => {
       case 0:
         return (
           <SelectTemplate
-            selectedTemplate={selectedTemplate}
-            onSelect={setSelectedTemplate}
+            selectedTemplate={pageConfig.template}
+            onCancel={handleCancel}
+            onNext={handleNext}
           />
         );
+
       case 1:
-        return <SelectPages onPagesChange={setSelectedPages} />;
-      case 2:
         return (
           <ConfigureTemplate
-            template={selectedTemplate!}
+            template={pageConfig.template!}
             config={pageConfig}
             onChange={setPageConfig}
+            onBack={handleBack}
+            onNext={handleNext}
           />
         );
-      case 3:
+      case 2:
         return (
-          <CreatePageProcesse
-            template={selectedTemplate!.id}
-            components={selectedComponents}
+          <CreatePageProcess
+            config={pageConfig as PageConfig}
             onComplete={(success) => {
               if (success) {
                 handleComplete();
@@ -129,35 +101,7 @@ export const CreatePageWizard = () => {
         <Separator />
       </div>
 
-      <div className="flex-1 overflow-y-auto">
-        <Box>{renderStep()}</Box>
-      </div>
-
-      <div className="shrink-0">
-        <Separator />
-        <div className="p-3">
-          <div className="flex justify-between gap-3">
-            {step === 0 && (
-              <Button variant="ghost" onClick={handleCancel}>
-                Cancel
-              </Button>
-            )}
-
-            {step > 0 && (
-              <Button variant="ghost" onClick={handleBack}>
-                Back
-              </Button>
-            )}
-            {step < 3 ? (
-              <Button onClick={handleNext} disabled={!selectedTemplate}>
-                Next
-              </Button>
-            ) : (
-              <Button onClick={handleComplete}>Create</Button>
-            )}
-          </div>
-        </div>
-      </div>
+      <div className="flex-1">{renderStep()}</div>
     </div>
   );
 };

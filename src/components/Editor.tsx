@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { EditorLayout } from "./editor/EditorLayout";
 import { EditorService } from "@/service/editor";
 import {
@@ -6,19 +6,24 @@ import {
   configsAtom,
   editorServiceAtom,
 } from "./config/configs.atom";
-import { useAtom } from "jotai";
 import { useSetAtom } from "jotai";
 import { themesAtom } from "./editor/theme/theme.atom";
+import { ControlBar } from "./controlBar";
+import { componentConfigAtom, pagesAtom } from "./editor/page/pages.atom";
 
 export const Editor = () => {
-  const [editorService, setEditorService] = useAtom(editorServiceAtom);
+  const setEditorService = useSetAtom(editorServiceAtom);
   const setConfigs = useSetAtom(configsAtom);
   const setAppState = useSetAtom(appStateAtom);
   const setThemes = useSetAtom(themesAtom);
+  const setPages = useSetAtom(pagesAtom);
+  const setComponentConfig = useSetAtom(componentConfigAtom);
+
+  const editorServiceRef = useRef<EditorService | null>(null);
 
   useEffect(() => {
-    if (!editorService) {
-      const editorService = new EditorService(
+    if (!editorServiceRef.current) {
+      editorServiceRef.current = new EditorService(
         "/Users/leo/project/test",
         "test",
         {
@@ -26,9 +31,9 @@ export const Editor = () => {
         }
       );
 
-      setEditorService(editorService);
+      setEditorService(editorServiceRef.current);
 
-      editorService.restoreData((data) => {
+      editorServiceRef.current.restoreData((data) => {
         console.log("======== data", data);
 
         if (data.themes.length === 1) {
@@ -48,6 +53,10 @@ export const Editor = () => {
           draft.config = data.config;
         });
 
+        setPages(data.routes);
+
+        setComponentConfig(data.componentConfig);
+
         setAppState((draft) => {
           draft.initialized = true;
         });
@@ -56,8 +65,11 @@ export const Editor = () => {
   }, []);
 
   return (
-    <div className="h-screen">
-      <EditorLayout />
+    <div className="min-h-svh flex flex-col">
+      <ControlBar />
+      <div className="flex-1 relative overflow-hidden">
+        <EditorLayout />
+      </div>
     </div>
   );
 };

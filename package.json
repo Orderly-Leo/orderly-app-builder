@@ -11,6 +11,10 @@
     "tailwind": "tailwindcss -i ./src/index.css -o ./src/styles/tailwind.css --watch"
   },
   "dependencies": {
+    "@babel/generator": "^7.26.3",
+    "@babel/parser": "^7.26.3",
+    "@babel/traverse": "^7.26.4",
+    "@babel/types": "^7.26.3",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-collapsible": "^1.1.1",
@@ -24,7 +28,6 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.4",
-    "@radix-ui/themes": "^3.1.5",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-cli": "~2",
     "@tauri-apps/plugin-dialog": "~2",
@@ -58,6 +61,8 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",
+    "@types/babel__generator": "^7.6.8",
+    "@types/babel__traverse": "^7.20.6",
     "@types/chroma-js": "^2.4.4",
     "@types/ejs": "^3.1.5",
     "@types/node": "^22.9.1",
